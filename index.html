@@ -1145,6 +1145,39 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
 .cl{min-width:36px;height:36px;font-size:16px;border-width:2.5px;padding:0 8px}
 .mov .pn__c{width:38px;height:38px}
 
+/* --- repères de la carte : étiquettes lisibles --- */
+.mk{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;z-index:2;padding:0;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mk__b{display:flex;align-items:center;gap:7px;background:var(--blanc);border:2px solid var(--noir);border-radius:99px;padding:2px 11px 2px 2px;box-shadow:0 2.5px 0 var(--noir);position:relative;max-width:190px}
+.mk__b::after{content:"";position:absolute;left:50%;bottom:-9px;width:12px;height:12px;background:inherit;border-right:2px solid var(--noir);border-bottom:2px solid var(--noir);transform:translateX(-50%) rotate(45deg);border-radius:0 0 3px 0}
+.mk__c{flex:none;width:33px;height:33px;border-radius:50%;border:2px solid var(--noir);background:var(--jaune) center 65%/cover no-repeat;display:grid;place-items:center;position:relative}
+.mk__c img{width:26px}
+.mk__ck{position:absolute;top:-5px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--cyan);border:2px solid var(--noir);display:grid;place-items:center}
+.mk__ck svg{width:10px;height:10px}
+.mk__t{display:flex;flex-direction:column;align-items:flex-start;min-width:0;text-align:left;line-height:1.1}
+.mk__t b{font:900 italic 12.5px/1.1 var(--f-title);color:var(--noir);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:134px;letter-spacing:-.01em}
+.mk__t small{font:700 10.5px/1.2 var(--f-title);color:#6B5A3E;white-space:nowrap;margin-top:2px}
+.mk__dot{width:9px;height:9px;border-radius:50%;background:var(--noir);border:2px solid var(--blanc);margin-top:9px;box-shadow:0 0 0 1.5px var(--noir)}
+.mk__tag{position:absolute;top:-11px;right:6px;z-index:2;background:var(--rouge);color:var(--blanc);font:900 italic 10px/1 var(--f-title);text-transform:uppercase;padding:3px 7px;border-radius:99px;border:1.5px solid var(--noir);letter-spacing:.02em}
+.mk.is-week .mk__b{border-color:var(--rouge);box-shadow:0 3px 0 var(--rouge)}
+.mk.is-week .mk__b::after{border-color:var(--rouge)}
+.mk.is-own .mk__b{background:#E9FFF9}
+.mk.is-sel{z-index:6}
+.mk.is-sel .mk__b{background:var(--noir);box-shadow:0 3px 0 var(--rouge);transform:scale(1.08);transform-origin:50% 100%}
+.mk.is-sel .mk__t b{color:var(--jaune)}
+.mk.is-sel .mk__t small{color:#E8DCC2}
+.mk.is-sel .mk__b::after{border-color:var(--noir)}
+.mk--mini{z-index:1}
+.mk--mini .mk__b{padding:3px;gap:0}
+.mk--mini .mk__c{width:28px;height:28px}
+.mk--mini .mk__c img{width:19px}
+.mk--mini .mk__b::after{bottom:-8px;width:10px;height:10px}
+.mk--mini .mk__dot{margin-top:8px}
+.cl2{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:6px;background:var(--noir);color:var(--blanc);border:2.5px solid var(--noir);border-radius:99px;padding:3px 11px 3px 3px;box-shadow:0 3px 0 rgba(0,0,0,.35);z-index:3;white-space:nowrap;cursor:pointer}
+.cl2__st{display:flex}
+.cl2__st i{width:28px;height:28px;border-radius:50%;border:2px solid var(--noir);background:var(--jaune) center 65%/cover no-repeat;margin-left:-11px;box-shadow:0 0 0 1.5px var(--jaune)}
+.cl2__st i:first-child{margin-left:0}
+.cl2 b{font:800 19px/1 var(--f-cond);color:var(--jaune)}
+
 /* iOS 26, app installée + barre d'état transparente : l'écran est raccourci de la hauteur de la barre d'état
    tant que la page est plus courte que l'écran (WebKit 301108). On rend la page juste assez haute. */
 @media (display-mode: standalone){
@@ -1607,14 +1640,32 @@ function draw(fast){
       h+=`<button class="cb ${c==="Paris"?"is-me":""} ${small?"is-small":""}" data-cityz="${esc(c)}" style="left:${x}px;top:${y}px" aria-label="${esc(c)}, ${a.length} adresses"><b>${a.length}</b>${small?"":`<span>${esc(c)}</span>`}</button>`; });
   } else {
     // vue ville : épingles regroupées si elles se chevauchent
-    const cell=GL.on?62:56, grid={}; const items=[];
+    const cell=GL.on?84:76, grid={}; const items=[];
     L.forEach(p=>{ const [x,y]=toS(p.wx,p.wy); if(!inView(x,y)) return; if(p.id===M.sel){ items.push({one:p,x,y,sel:true}); return; } const k=Math.floor(x/cell)+":"+Math.floor(y/cell); (grid[k]=grid[k]||[]).push({p,x,y}); });
+    // fusionne les groupes trop proches (évite les pastilles qui se chevauchent)
+    const gs=Object.values(grid).map(g=>({m:g,x:g.reduce((a,o)=>a+o.x,0)/g.length,y:g.reduce((a,o)=>a+o.y,0)/g.length}));
+    for(let i=0;i<gs.length;i++) for(let j=i+1;j<gs.length;j++){ const A=gs[i],B=gs[j]; if(!B.m.length||!A.m.length) continue; if(Math.abs(A.x-B.x)<74&&Math.abs(A.y-B.y)<46){ A.m=A.m.concat(B.m); B.m=[]; A.x=A.m.reduce((a,o)=>a+o.x,0)/A.m.length; A.y=A.m.reduce((a,o)=>a+o.y,0)/A.m.length; j=i; } }
+    Object.keys(grid).forEach(k=>delete grid[k]); gs.filter(g=>g.m.length).forEach((g,i)=>grid[i]=g.m);
     Object.values(grid).forEach(g=>{ if(g.length===1) items.push({one:g[0].p,x:g[0].x,y:g[0].y}); else items.push({many:g.map(o=>o.p),x:g.reduce((a,o)=>a+o.x,0)/g.length,y:g.reduce((a,o)=>a+o.y,0)/g.length}); });
-    items.sort((a,b)=>(a.sel?1:0)-(b.sel?1:0)).forEach(it=>{
-      if(it.many){ h+=`<button class="cl" data-cl="${it.many.map(p=>p.id).join(",")}" style="left:${it.x}px;top:${it.y}px">${it.many.length}</button>`; return; }
-      const p=it.one, own=isOwnedPlace(p.id), ill=ILL[p.c]||PLAQUE_ART[p.c];
-      h+=`<button class="pn ${it.sel?"is-sel":""}" data-pid="${p.id}" style="left:${it.x}px;top:${it.y}px" aria-label="${esc(p.n)}"><span class="pn__c" style="${ill?`background-image:url(${IMG[ill]})`:""}">${ill?"":`<img src="${IMG.badge}" alt="">`}${own?`<span class="pn__ck">${icon("check")}</span>`:""}</span>${it.sel?`<span class="pn__l">${esc(p.n)}</span>`:""}</button>`;
+    // repères lisibles : étiquette « illustration + nom + catégorie » quand il y a la place, sinon pastille ronde
+    const {W:VW,H:VH}=V(), week=new Set(S.booster.ids||[]); const placed=[{x:-99,y:-99,w:VW+200,h:TOPH+6},{x:VW-64,y:TOPH,w:80,h:300},{x:-99,y:VH-sheetPx()-4,w:VW+200,h:999}];
+    const fits=(x,y,w,hh)=>x>4&&x+w<VW-4&&!placed.some(r=>x<r.x+r.w+6&&x+w>r.x-6&&y<r.y+r.h+6&&y+hh>r.y-6);
+    const prio=it=>it.sel?-1e9:(it.many?-1e8:0)+(it.one&&week.has(it.one.id)?-1e6:0)+Math.hypot(it.x-VW/2,it.y-visY());
+    items.sort((a,b)=>prio(a)-prio(b));
+    const out=[];
+    items.forEach(it=>{
+      if(it.many){ const g=it.many; const ills=[...new Set(g.map(p=>ILL[p.c]||PLAQUE_ART[p.c]).filter(Boolean))].slice(0,2); const w=36+ills.length*17+String(g.length).length*10; placed.push({x:it.x-w/2,y:it.y-19,w,h:38});
+        out.push({z:1,h:`<button class="cl2" data-cl="${g.map(p=>p.id).join(",")}" style="left:${it.x}px;top:${it.y}px" aria-label="${g.length} adresses, zoomer"><span class="cl2__st">${(ills.length?ills:["badge"]).map(k=>`<i style="background-image:url(${IMG[k]})"></i>`).join("")}</span><b>${g.length}</b></button>`}); return; }
+      const p=it.one, own=isOwnedPlace(p.id), ill=ILL[p.c]||PLAQUE_ART[p.c], wk=week.has(p.id)&&!own;
+      const nm=p.n.length>22?p.n.slice(0,21)+"…":p.n, sub=`${p.c} · ${p.p}`;
+      const w=Math.min(190,52+Math.max(nm.length*6.9,sub.length*5.8)), hh=44;
+      const full = it.sel || fits(it.x-w/2,it.y-hh-8,w,hh);
+      const art=`<span class="mk__c" style="${ill?`background-image:url(${IMG[ill]})`:""}">${ill?"":`<img src="${IMG.badge}" alt="">`}${own?`<span class="mk__ck">${icon("check")}</span>`:""}</span>`;
+      if(full){ placed.push({x:it.x-w/2,y:it.y-hh-8,w,h:hh});
+        out.push({z:it.sel?3:2,h:`<button class="mk ${it.sel?"is-sel":""} ${wk?"is-week":""} ${own?"is-own":""}" data-pid="${p.id}" style="left:${it.x}px;top:${it.y}px" aria-label="${esc(p.n)}, ${esc(p.c)}">${wk?`<em class="mk__tag">Pour toi</em>`:""}<span class="mk__b">${art}<span class="mk__t"><b>${esc(nm)}</b><small>${esc(sub)}</small></span></span><i class="mk__dot"></i></button>`}); }
+      else out.push({z:0,h:`<button class="mk mk--mini ${wk?"is-week":""}" data-pid="${p.id}" style="left:${it.x}px;top:${it.y}px" aria-label="${esc(p.n)}, ${esc(p.c)}"><span class="mk__b">${art}</span><i class="mk__dot"></i></button>`});
     });
+    out.sort((a,b)=>a.z-b.z).forEach(o=>h+=o.h);
     if(GL.on){} else if(M.s>=40){ ARR.forEach(a=>{ const [x,y]=toS(a.x,a.y); if(inView(x,y)) h+=`<span class="arr" style="left:${x}px;top:${y}px">${a.l}</span>`; }); }
     else CITY_W.forEach(c=>{ const [x,y]=toS(c.x,c.y); if(inView(x,y)) h+=`<span class="cname" style="left:${x}px;top:${y-34}px">${esc(c.n)}</span>`; });
   }
