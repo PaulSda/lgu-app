@@ -13,7 +13,8 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
-<style>html,body{margin:0;padding:0;height:100%;background:#FFD200}html.pwa,html.pwa body{position:fixed;inset:0;overflow:hidden;overscroll-behavior:none}[hidden]{display:none!important}img{max-width:100%}</style>
+<script>(function(){var d=document.documentElement,s=navigator.standalone||matchMedia("(display-mode: standalone)").matches;if(s)d.classList.add("standalone");function f(){var h=Math.max(innerHeight,d.clientHeight);if(s){var p=matchMedia("(orientation: portrait)").matches,sh=p?Math.max(screen.height,screen.width):Math.min(screen.height,screen.width);h=Math.max(h,sh);}d.style.setProperty("--appH",h+"px");}f();addEventListener("resize",f);addEventListener("orientationchange",function(){setTimeout(f,300);});})();</script>
+<style>html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none;background:#FFD200}[hidden]{display:none!important}img{max-width:100%}</style>
 </head>
 <body>
 
@@ -1127,6 +1128,7 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
 
 /* ===================== PLEIN ÉCRAN (app installée) ===================== */
 @media (max-width:820px){
+  .pwa #stage{position:fixed;top:0;left:0;right:0;height:var(--appH,100%)}
   .pwa #app{--top:calc(env(safe-area-inset-top,0px) + 8px)}
   .pwa #nav{bottom:calc(env(safe-area-inset-bottom,0px) + 6px)}
   .pwa .rs__body{padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
@@ -1134,11 +1136,15 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
   .pwa .full__body{padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
   .pwa .sheet__body{padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
 }
-
-@media (max-width:820px){
-  html.pwa,html.pwa body{height:100vh;height:100lvh}
-  .pwa #stage{height:100vh;height:100lvh;min-height:100%}
-}
+#glwrap{position:absolute;inset:0}
+.map.is-gl #msvg{display:none}
+.map.is-gl .mgrain{opacity:.22}
+.map.is-gl .mgrain::after{display:none}
+.osm{display:none;position:absolute;left:8px;top:calc(var(--top) + 112px);font:600 9.5px -apple-system,system-ui,sans-serif;color:rgba(42,29,12,.55);z-index:4;pointer-events:none}
+.map.is-gl .osm{display:block}
+.maplibregl-canvas{outline:none}
+.cl{min-width:36px;height:36px;font-size:16px;border-width:2.5px;padding:0 8px}
+.mov .pn__c{width:38px;height:38px}
 
 </style>
 
@@ -1538,11 +1544,12 @@ function applyQ(q){
 
 // --- vue : centre (cx,cy) en unités monde, échelle s = px écran par unité ---
 const V = () => { const m=$("#map"); return {W:m.clientWidth,H:m.clientHeight}; };
-const toS = (x,y) => { const {W,H}=V(); return [(x-M.cx)*M.s+W/2,(y-M.cy)*M.s+H/2]; };
+const toS = (x,y) => { if(GL.on){ const p=GL.map.project(w2ll(x,y)); return [p.x,p.y]; } const {W,H}=V(); return [(x-M.cx)*M.s+W/2,(y-M.cy)*M.s+H/2]; };
 const S_MIN=.28, S_MAX=260, S_CITY=9;
 const TOPH=118;
 function visY(){ const {H}=V(); return (TOPH + H - sheetPx())/2; }   // milieu de la zone visible
 function setView(x,y,s,anim){
+  if(GL.on){ GL.map[anim?"flyTo":"jumpTo"]({center:w2ll(x,y),zoom:Math.min(17,Math.max(3.5,s2z(s))),offset:glOff(),duration:anim?650:0,essential:true}); if(!anim){ glSync(); draw(); } return; }
   const {H}=V(); s=Math.min(S_MAX,Math.max(S_MIN,s)); const tcx=x, tcy=y-(visY()-H/2)/s;
   if(!anim){ M.cx=tcx; M.cy=tcy; M.s=s; draw(); return; }
   const a={cx:M.cx,cy:M.cy,ls:Math.log(M.s)}, b={cx:tcx,cy:tcy,ls:Math.log(s)}; const t0=performance.now(), D=520;
@@ -1551,13 +1558,14 @@ function setView(x,y,s,anim){
 }
 function fitTo(L){
   if(!L.length) return;
+  if(GL.on){ const lo=L.map(p=>p.lon), la=L.map(p=>p.lat); GL.map.fitBounds([[Math.min(...lo),Math.min(...la)],[Math.max(...lo),Math.max(...la)]],{padding:{top:TOPH+50,bottom:sheetPx()+50,left:46,right:76},maxZoom:15.5,duration:650}); return; }
   const xs=L.map(p=>p.wx), ys=L.map(p=>p.wy); const {W,H}=V(); const vh=H-TOPH-sheetPx()-20;
   const bw=Math.max(...xs)-Math.min(...xs), bh=Math.max(...ys)-Math.min(...ys);
   const s=Math.min(60,(W-90)/Math.max(bw,.4),vh/Math.max(bh,.4));
   setView((Math.max(...xs)+Math.min(...xs))/2,(Math.max(...ys)+Math.min(...ys))/2,s*.9,true);
 }
-function franceView(anim){ const {W,H}=V(); const vh=H-TOPH-sheetPx(); setView(wx(2.4),wy(46.6),Math.min((W-30)/950,vh/1000),anim); }
-function zoomAt(f,sx,sy){ const {W,H}=V(); const ns=Math.min(S_MAX,Math.max(S_MIN,M.s*f)); const x=(sx-W/2)/M.s+M.cx, y=(sy-H/2)/M.s+M.cy; M.s=ns; M.cx=x-(sx-W/2)/ns; M.cy=y-(sy-H/2)/ns; draw(); }
+function franceView(anim){ if(GL.on){ GL.map.fitBounds([[-4.9,41.3],[9.6,51.1]],{padding:{top:TOPH+10,bottom:sheetPx()+10,left:12,right:60},duration:anim?650:0}); return; } const {W,H}=V(); const vh=H-TOPH-sheetPx(); setView(wx(2.4),wy(46.6),Math.min((W-30)/950,vh/1000),anim); }
+function zoomAt(f,sx,sy){ if(GL.on){ GL.map.easeTo({zoom:GL.map.getZoom()+Math.log2(f),around:GL.map.unproject([sx,sy]),duration:280}); return; } const {W,H}=V(); const ns=Math.min(S_MAX,Math.max(S_MIN,M.s*f)); const x=(sx-W/2)/M.s+M.cx, y=(sy-H/2)/M.s+M.cy; M.s=ns; M.cx=x-(sx-W/2)/ns; M.cy=y-(sy-H/2)/ns; draw(); }
 
 // --- fond de carte (vectoriel, sobre) ---
 const FR_OUT=[[2.55,51.08],[1.85,50.95],[1.6,50.7],[1.55,50.2],[1.08,49.93],[.1,49.5],[-.3,49.33],[-1.1,49.4],[-1.27,49.7],[-1.94,49.72],[-1.6,49.2],[-1.55,48.65],[-2,48.65],[-2.8,48.5],[-3.5,48.83],[-4.3,48.68],[-4.78,48.4],[-4.3,48.1],[-4.7,47.95],[-4.2,47.8],[-3.4,47.7],[-2.7,47.5],[-2.2,47.25],[-2.1,46.8],[-1.8,46.5],[-1.2,46.2],[-1.25,45.7],[-1.15,45.2],[-1.25,44.6],[-1.35,44],[-1.5,43.4],[-1.75,43.35],[-.7,42.9],[.7,42.8],[1.45,42.6],[2.2,42.4],[3.17,42.45],[3.05,43],[3.5,43.3],[4.2,43.45],[4.85,43.35],[5.4,43.2],[6,43.1],[6.7,43.4],[7.25,43.7],[7.5,43.78],[7.65,44.15],[6.9,44.4],[7,45.1],[6.8,45.8],[6.85,46.4],[6.1,46.25],[6.15,46.6],[6.9,47.4],[7.6,47.6],[7.55,48.1],[8.2,48.95],[7.3,49.15],[6.7,49.2],[6.1,49.5],[5.5,49.5],[4.85,50.15],[4.2,49.95],[3.7,50.35],[3.1,50.78]];
@@ -1592,7 +1600,7 @@ function draw(fast){
       h+=`<button class="cb ${c==="Paris"?"is-me":""} ${small?"is-small":""}" data-cityz="${esc(c)}" style="left:${x}px;top:${y}px" aria-label="${esc(c)}, ${a.length} adresses"><b>${a.length}</b>${small?"":`<span>${esc(c)}</span>`}</button>`; });
   } else {
     // vue ville : épingles regroupées si elles se chevauchent
-    const cell=52, grid={}; const items=[];
+    const cell=GL.on?62:56, grid={}; const items=[];
     L.forEach(p=>{ const [x,y]=toS(p.wx,p.wy); if(!inView(x,y)) return; if(p.id===M.sel){ items.push({one:p,x,y,sel:true}); return; } const k=Math.floor(x/cell)+":"+Math.floor(y/cell); (grid[k]=grid[k]||[]).push({p,x,y}); });
     Object.values(grid).forEach(g=>{ if(g.length===1) items.push({one:g[0].p,x:g[0].x,y:g[0].y}); else items.push({many:g.map(o=>o.p),x:g.reduce((a,o)=>a+o.x,0)/g.length,y:g.reduce((a,o)=>a+o.y,0)/g.length}); });
     items.sort((a,b)=>(a.sel?1:0)-(b.sel?1:0)).forEach(it=>{
@@ -1600,7 +1608,7 @@ function draw(fast){
       const p=it.one, own=isOwnedPlace(p.id), ill=ILL[p.c]||PLAQUE_ART[p.c];
       h+=`<button class="pn ${it.sel?"is-sel":""}" data-pid="${p.id}" style="left:${it.x}px;top:${it.y}px" aria-label="${esc(p.n)}"><span class="pn__c" style="${ill?`background-image:url(${IMG[ill]})`:""}">${ill?"":`<img src="${IMG.badge}" alt="">`}${own?`<span class="pn__ck">${icon("check")}</span>`:""}</span>${it.sel?`<span class="pn__l">${esc(p.n)}</span>`:""}</button>`;
     });
-    if(M.s>=40){ ARR.forEach(a=>{ const [x,y]=toS(a.x,a.y); if(inView(x,y)) h+=`<span class="arr" style="left:${x}px;top:${y}px">${a.l}</span>`; }); }
+    if(GL.on){} else if(M.s>=40){ ARR.forEach(a=>{ const [x,y]=toS(a.x,a.y); if(inView(x,y)) h+=`<span class="arr" style="left:${x}px;top:${y}px">${a.l}</span>`; }); }
     else CITY_W.forEach(c=>{ const [x,y]=toS(c.x,c.y); if(inView(x,y)) h+=`<span class="cname" style="left:${x}px;top:${y-34}px">${esc(c.n)}</span>`; });
   }
   const [mx,my]=toS(ME_W.x,ME_W.y); if(M.s>=S_CITY&&inView(mx,my)) h+=`<span class="me" style="left:${mx}px;top:${my}px"></span>`;
@@ -1674,17 +1682,80 @@ function setupPan(){
   map.ondblclick=e=>{ const r=map.getBoundingClientRect(); zoomAt(2,e.clientX-r.left,e.clientY-r.top); };
 }
 
+// ---------- VRAIE CARTE (MapLibre + OpenFreeMap) : rues, noms, précision. Repli sur la carte dessinée si indisponible ----------
+const GL={map:null,on:false,tried:false,wrap:null};
+const z2s = z => 0.02067*Math.pow(2,z), s2z = s => Math.log2(s/0.02067);
+const w2ll = (x,y) => [x/68.8-5.5, 51.5-y/100];
+const GL_OK = location.protocol.startsWith("http") && !/claude|anthropic/.test(location.hostname);
+function glPad(){ return {top:TOPH+8,bottom:sheetPx()+8,left:8,right:62}; }
+function glOff(){ return [-27,Math.round((TOPH-sheetPx())/2)]; }
+function glSync(){ const m=GL.map, cc=m.getCenter(); M.cx=wx(cc.lng); M.cy=wy(cc.lat); M.s=z2s(m.getZoom()); }
+function initGL(){
+  if(GL.tried||!GL_OK) return; GL.tried=true;
+  const css=document.createElement("link"); css.rel="stylesheet"; css.href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"; document.head.appendChild(css);
+  const s=document.createElement("script"); s.src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js";
+  s.onload=()=>{ try{ startGL(); }catch(e){ GL.on=false; } };
+  document.head.appendChild(s);
+}
+function startGL(){
+  const wrap=document.createElement("div"); wrap.id="glwrap"; GL.wrap=wrap;
+  const host=$("#map"); if(!host) return; host.insertBefore(wrap,host.querySelector(".mgrain"));
+  const c=w2ll(M.cx,M.cy);
+  const map=new maplibregl.Map({container:wrap,style:"https://tiles.openfreemap.org/styles/positron",center:[ME_LL.lon,ME_LL.lat],zoom:14,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,maxZoom:18,minZoom:3.5,fadeDuration:0});
+  map.touchZoomRotate.disableRotation(); map.keyboard.disableRotation();
+  GL.map=map; let loaded=false;
+  const fail=()=>{ if(loaded) return; try{ map.remove(); }catch(e){} wrap.remove(); GL.map=null; GL.on=false; };
+  setTimeout(fail,9000);
+  map.on("error",()=>{ if(!loaded) fail(); });
+  map.on("load",()=>{
+    loaded=true; styleLGU(map); GL.on=true;
+    const m=$("#map"); if(m){ m.onpointerdown=null; m.onwheel=null; m.ondblclick=null; m.classList.add("is-gl"); } window.onpointermove=null;
+    map.jumpTo({center:[ME_LL.lon,ME_LL.lat],zoom:13.1,offset:glOff()}); glSync();
+    map.on("move",()=>{ glSync(); draw(true); });
+    map.on("moveend",()=>{ draw(); setTimeout(()=>PAN.moved=false,80); });
+    map.on("dragstart",()=>{ PAN.moved=true; });
+    map.on("zoomstart",()=>{ PAN.moved=true; });
+    draw();
+  });
+}
+function styleLGU(m){
+  const set=(id,p,v)=>{ try{ m.setPaintProperty(id,p,v); }catch(e){} };
+  const lay=(id,p,v)=>{ try{ m.setLayoutProperty(id,p,v); }catch(e){} };
+  m.getStyle().layers.forEach(l=>{ const id=l.id;
+    if(l.type==="background") set(id,"background-color","#FFF3D2");
+    else if(l.type==="fill"){
+      if(/water/.test(id)) set(id,"fill-color","#A8CBFF");
+      else if(/park|wood|grass|landcover/.test(id)) set(id,"fill-color","#C9EBC0");
+      else if(/building/.test(id)){ set(id,"fill-color","#F7E4B5"); set(id,"fill-outline-color","#E9CD8C"); }
+      else if(/residential|landuse/.test(id)) set(id,"fill-color","#FFEDC2");
+      else if(/aeroway|pier/.test(id)) set(id,"fill-color","#F1E2BD");
+    } else if(l.type==="line"){
+      if(/water/.test(id)) set(id,"line-color","#A8CBFF");
+      else if(/casing/.test(id)) set(id,"line-color","#E2BE73");
+      else if(/highway|road|motorway|tunnel|bridge|path|aeroway/.test(id)) set(id,"line-color","#FFFFFF");
+      else if(/rail/.test(id)) set(id,"line-color","#D3BE93");
+      else if(/boundary/.test(id)) set(id,"line-color","#B99456");
+    } else if(l.type==="symbol"){
+      set(id,"text-color",/water/.test(id)?"#2F63B8":"#2A1D0C"); set(id,"text-halo-color","#FFF6DF"); set(id,"text-halo-width",1.6);
+      if(/shield/.test(id)) lay(id,"visibility","none");
+    }
+  });
+  // routes un peu plus épaisses pour la lisibilité
+  ["highway_minor","highway_major_inner","highway_major_casing"].forEach(id=>{ try{ const w=m.getPaintProperty(id,"line-width"); if(typeof w==="number") set(id,"line-width",w*1.4); }catch(e){} });
+}
+
 function renderMap(){
   const t=$("#t-map");
-  t.innerHTML=`<div class="map" id="map"><svg id="msvg" class="msvg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${BASE}</svg><div class="mgrain"></div><div class="mov" id="mov"></div></div>
+  t.innerHTML=`<div class="map" id="map"><svg id="msvg" class="msvg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${BASE}</svg><div class="mgrain"></div><div class="mov" id="mov"></div><span class="osm">© OpenStreetMap · OpenFreeMap</span></div>
   <div class="topbar">
     <div class="sbar">${icon("search")}<button class="sbar__q ${M.q?"is-set":""}" data-search>${M.q?esc(M.q.label):"Un plat, un resto, une ville…"}</button>${M.q?`<button class="sbar__x" data-clear aria-label="Effacer la recherche">${icon("x")}</button>`:""}</div>
     <div class="qrow" id="qrow"></div>
   </div>
   <div class="mctrl"><div class="zoom"><button data-zin aria-label="Zoomer">+</button><button data-zout aria-label="Dézoomer">−</button></div><button class="fab" data-loc aria-label="Me recentrer">${icon("locate")}</button><button class="fab" data-fr aria-label="Voir toute la France">${icon("france")}</button></div>
   <div class="rs" id="rs"><button class="rs__h" id="rsh" aria-label="Agrandir la liste"><div class="rs__grab"></div><div class="rs__t" id="rst"></div></button><div class="rs__body" id="rsb"></div></div>`;
-  drawQrow(); setupPan(); setupSheet(); setSheet(M.rs,true);
-  if(!M.inited){ M.inited=true; setView(ME_W.x,ME_W.y,75,false); } else draw();
+  drawQrow(); setupSheet(); setSheet(M.rs,true);
+  if(GL.wrap&&GL.map){ const m=$("#map"); m.classList.add("is-gl"); m.insertBefore(GL.wrap,m.querySelector(".mgrain")); GL.map.resize(); draw(); }
+  else { setupPan(); if(!M.inited){ M.inited=true; setView(ME_W.x,ME_W.y,75,false); } else draw(); initGL(); }
   t.onclick=mapClick;
 }
 function refreshMap(){ if(!$("#msvg")) return renderMap(); drawQrow(); const b=$(".sbar__q"); if(b){ b.textContent=M.q?M.q.label:"Un plat, un resto, une ville…"; b.classList.toggle("is-set",!!M.q); const x=$(".sbar__x"); if(!M.q&&x) x.remove(); if(M.q&&!x) b.insertAdjacentHTML("afterend",`<button class="sbar__x" data-clear aria-label="Effacer la recherche">${icon("x")}</button>`); } setSheet(M.rs); draw(); }
@@ -1695,7 +1766,7 @@ function drawQrow(){
 }
 function selectPlace(id){
   const p=PL(id); M.sel=id; if(TAB!=="map") go("map");
-  setSheet("sel"); setView(p.wx,p.wy,Math.max(M.s,60),true); $("#rsb").scrollTop=0;
+  setSheet("sel"); setView(p.wx,p.wy,Math.max(M.s,GL.on?z2s(14.6):60),true); $("#rsb").scrollTop=0;
 }
 function mapClick(e){
   const b=e.target.closest("button");
@@ -1714,7 +1785,7 @@ function mapClick(e){
   if(b.hasAttribute("data-me")){ openProfile(); return; }
   if(b.hasAttribute("data-zin")){ zoomAt(2,W/2,visY()); return; }
   if(b.hasAttribute("data-zout")){ zoomAt(.5,W/2,visY()); return; }
-  if(b.hasAttribute("data-loc")){ M.sel=null; setSheet("peek"); setView(ME_W.x,ME_W.y,Math.max(M.s,75),true); return; }
+  if(b.hasAttribute("data-loc")){ M.sel=null; setSheet("peek"); setView(ME_W.x,ME_W.y,Math.max(M.s,GL.on?z2s(13.1):75),true); return; }
   if(b.hasAttribute("data-fr")){ M.sel=null; setSheet("peek"); franceView(true); return; }
   if(b.hasAttribute("data-filters")){ openFilters(); return; }
   if(b.hasAttribute("data-topen")){ M.open=!M.open; M.sel=null; refreshMap(); return; }
@@ -1738,7 +1809,7 @@ function openFilters(){
     if(b.hasAttribute("data-fok")){ popLayer(d); M.sel=null; refreshMap(); return; }
     upd(); };
 }
-function goCity(c){ M.sel=null; M.rs="peek"; if(TAB!=="map") go("map"); setSheet("peek"); if(c==="France") franceView(true); else if(c==="me") setView(ME_W.x,ME_W.y,75,true); else fitTo(placesIn(c)); }
+function goCity(c){ M.sel=null; M.rs="peek"; if(TAB!=="map") go("map"); setSheet("peek"); if(c==="France") franceView(true); else if(c==="me") setView(ME_W.x,ME_W.y,GL.on?z2s(13.1):75,true); else fitTo(placesIn(c)); }
 
 // --- écran de recherche ---
 function addRecent(t){ t=(t||"").trim(); if(!t) return; S.recent=[t,...(S.recent||[]).filter(x=>x!==t)].slice(0,6); save(); }
@@ -2164,7 +2235,7 @@ function openGroup(pre=[]){
   const gb=d.querySelector("#gb");
   const setup=()=>{
     gb.innerHTML=`<div class="sect" style="padding-top:0"><h1 class="h1 outline" style="font-size:42px">On mange<br>où ?</h1><p class="sub">Chacun swipe 10 plaqués, l'appli tranche. Fini les 40 messages pour choisir un resto.</p></div>
-    <div class="sect"><div class="blk__h"><b>Avec qui ?</b><span>${G.who.size+1} PERSONNES</span></div><div class="recent">${FRIENDS.map((f,k)=>`<button class="chip ${G.who.has(k)?"is-on":""}" data-who="${k}"><i class="dotc" style="background:${f.c}"></i>${esc(f.n)}</button>`).join("")}</div>
+    <div class="sect"><div class="blk__h"><b>Avec qui ?</b><span class="eyebrow">${G.who.size?`TOI + ${G.who.size}`:"QUE TOI ?"}</span></div><div class="recent">${FRIENDS.map((f,k)=>`<button class="chip ${G.who.has(k)?"is-on":""}" data-who="${k}"><i class="dotc" style="background:${f.c}"></i>${esc(f.n)}</button>`).join("")}</div>
       <button class="link" data-glink>${icon("copy")} <span>Ou envoie le lien au groupe : <b>lgu.app/g/XK42</b></span></button></div>
     <div class="sect"><div class="blk__h"><b>Budget</b></div><div class="recent">${["€","€€","€€€","€€€€"].map(x=>`<button class="chip ${G.price.includes(x)?"is-on":""}" data-gp="${x}">${x}</button>`).join("")}</div></div>
     <div class="sect"><div class="blk__h"><b>Une envie ?</b><span>FACULTATIF</span></div><div class="recent"><button class="chip ${!G.envie?"is-on":""}" data-ge="">Tout me va</button>${ENVIES.filter(e=>e.cats).map(e=>`<button class="chip ${G.envie===e.k?"is-on":""}" data-ge="${e.k}">${esc(e.t)}</button>`).join("")}</div></div>
@@ -2190,11 +2261,12 @@ function openGroup(pre=[]){
     render();
   };
   const result=(L)=>{
-    gb.innerHTML=`<div class="ok-big" style="padding-top:60px"><div class="dots3"><i></i><i></i><i></i></div><h2 class="h2">On attend la bande…</h2><p class="sub">${[...G.who].map(w=>FRIENDS[w].n).join(", ")} swipent encore.</p></div>`;
+    const names=[...G.who].map(w=>FRIENDS[w].n); const one=names.length===1;
+    gb.innerHTML=`<div class="ok-big" style="padding-top:60px"><div class="dots3"><i></i><i></i><i></i></div><h2 class="h2">On attend ${one?esc(names[0]):names.length===2?esc(names.join(" et ")):"ta bande"}…</h2><p class="sub">${esc(listFr(names))} ${one?"swipe":"swipent"} encore.</p></div>`;
     setTimeout(()=>{
       const score=L.map(p=>{ const voters=[{n:S.name,c:"var(--jaune)",y:likes.me.has(p.id)}].concat([...G.who].map(w=>({n:FRIENDS[w].n,c:FRIENDS[w].c,y:(hash(FRIENDS[w].n+p.id)%100)<(FR_COMPAT[w]-(likes.me.has(p.id)?0:35))}))); return {p,voters,n:voters.filter(v=>v.y).length}; }).sort((a,b)=>b.n-a.n||distM(a.p)-distM(b.p));
       const w=score[0], tot=G.who.size+1;
-      gb.innerHTML=`<div class="sect" style="padding-top:0;align-items:center;text-align:center"><span class="ed">Le verdict de la bande</span><div style="width:190px;margin:10px auto 0">${cardHTML(w.p.c,{resto:w.p.n,cls:"pop is-live"})}</div><h1 class="h1" style="margin-top:8px">${esc(w.p.n)}</h1><p class="sub">${esc(title(w.p.c))} · ${fmtD(distM(w.p))} · ${esc(w.p.p)}</p>
+      gb.innerHTML=`<div class="sect" style="padding-top:0;align-items:center;text-align:center"><span class="ed">${one?`Ton verdict avec ${esc(names[0])}`:names.length===2?`Votre verdict à trois`:"Le verdict de la bande"}</span><div style="width:190px;margin:10px auto 0">${cardHTML(w.p.c,{resto:w.p.n,cls:"pop is-live"})}</div><h1 class="h1" style="margin-top:8px">${esc(w.p.n)}</h1><p class="sub">${esc(title(w.p.c))} · ${fmtD(distM(w.p))} · ${esc(w.p.p)}</p>
         <div class="row" style="justify-content:center;gap:8px"><div class="avs">${w.voters.filter(v=>v.y).map(v=>avatar(v.n,v.c)).join("")}</div><b class="h3">${w.n}/${tot} chauds</b></div>
         <div style="display:flex;gap:10px;width:100%;margin-top:6px"><button class="btn btn--white" style="flex:1" data-gshare>${icon("share")} Partager</button><button class="btn btn--red" style="flex:1.3" data-ggo>${icon("route")} On y va</button></div></div>
         <div class="sect"><div class="blk__h"><b>Juste derrière</b></div>${score.slice(1,4).map(s=>`<button class="rr" data-gpl="${s.p.id}">${cardHTML(s.p.c,{resto:s.p.n})}<div class="grow"><div class="rr__t">${esc(s.p.n)}</div><div class="rr__s">${esc(title(s.p.c))}</div><div class="rr__m"><span>${s.n}/${tot} chauds</span><span>${fmtD(distM(s.p))}</span></div></div></button>`).join("")}
@@ -2208,12 +2280,13 @@ function openGroup(pre=[]){
     else if(b.dataset.ge!==undefined){ G.envie=b.dataset.ge||null; setup(); }
     else if(b.hasAttribute("data-glink")) copyText("lgu.app/g/XK42","Lien copié : colle-le dans ton groupe");
     else if(b.hasAttribute("data-go2")){ if(!pool().length){ toast("Rien avec ces critères. Élargis le budget."); return; } swipe(); }
-    else if(b.hasAttribute("data-gshare")) toast("Envoyé dans le groupe : « Ce soir c'est Forno ? »");
+    else if(b.hasAttribute("data-gshare")) toast(G.who.size===1?`Envoyé à ${FRIENDS[[...G.who][0]].n}`:"Envoyé dans le groupe");
     else if(b.hasAttribute("data-ggo")) toast("Dans l'appli, ça ouvre ton GPS préféré");
     else if(b.dataset.gpl){ openPlace(+b.dataset.gpl); }
     else if(b.hasAttribute("data-again")){ likes.me.clear(); setup(); } };
   setup();
 }
+const listFr = a => a.length<=1?(a[0]||""):a.slice(0,-1).join(", ")+" et "+a[a.length-1];
 function copyText(t,msg){ try{ navigator.clipboard.writeText(t).then(()=>toast(msg),()=>toast(t)); }catch(_){ toast(t); } }
 
 // ---------- APRÈS LE SCAN : avis (classement) puis verdict vidéo ----------
