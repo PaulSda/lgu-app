@@ -13,7 +13,6 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
-<script>(function(){var d=document.documentElement,s=navigator.standalone||matchMedia("(display-mode: standalone)").matches;if(s)d.classList.add("standalone");function f(){var h=Math.max(innerHeight,d.clientHeight);if(s){var p=matchMedia("(orientation: portrait)").matches,sh=p?Math.max(screen.height,screen.width):Math.min(screen.height,screen.width);h=Math.max(h,sh);}d.style.setProperty("--appH",h+"px");}f();addEventListener("resize",f);addEventListener("orientationchange",function(){setTimeout(f,300);});})();</script>
 <style>html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none;background:#FFD200}[hidden]{display:none!important}img{max-width:100%}</style>
 </head>
 <body>
@@ -1128,7 +1127,7 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
 
 /* ===================== PLEIN ÉCRAN (app installée) ===================== */
 @media (max-width:820px){
-  .pwa #stage{position:fixed;top:0;left:0;right:0;height:var(--appH,100%)}
+  .pwa #stage{position:fixed;top:0;left:0;right:0;bottom:0;height:auto}
   .pwa #app{--top:calc(env(safe-area-inset-top,0px) + 8px)}
   .pwa #nav{bottom:calc(env(safe-area-inset-bottom,0px) + 6px)}
   .pwa .rs__body{padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
@@ -1145,6 +1144,13 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
 .maplibregl-canvas{outline:none}
 .cl{min-width:36px;height:36px;font-size:16px;border-width:2.5px;padding:0 8px}
 .mov .pn__c{width:38px;height:38px}
+
+/* iOS 26, app installée + barre d'état transparente : l'écran est raccourci de la hauteur de la barre d'état
+   tant que la page est plus courte que l'écran (WebKit 301108). On rend la page juste assez haute. */
+@media (display-mode: standalone){
+  html{height:auto!important;min-height:min(100lvh,calc(100% + env(safe-area-inset-top,0px)))!important;overflow:visible!important}
+  body{height:auto!important;min-height:100%;overflow:hidden}
+}
 
 </style>
 
