@@ -1147,8 +1147,8 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
 
 /* --- repères de la carte : étiquettes lisibles --- */
 .mk{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;z-index:2;padding:0;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.mk__b{display:flex;align-items:center;gap:7px;background:var(--blanc);border:2px solid var(--noir);border-radius:99px;padding:2px 11px 2px 2px;box-shadow:0 2.5px 0 var(--noir);position:relative;max-width:190px}
-.mk__b::after{content:"";position:absolute;left:50%;bottom:-9px;width:12px;height:12px;background:inherit;border-right:2px solid var(--noir);border-bottom:2px solid var(--noir);transform:translateX(-50%) rotate(45deg);border-radius:0 0 3px 0}
+.mk__b{transform:translateX(var(--sh,0px));display:flex;align-items:center;gap:7px;background:var(--blanc);border:2px solid var(--noir);border-radius:99px;padding:2px 11px 2px 2px;box-shadow:0 2.5px 0 var(--noir);position:relative;max-width:190px}
+.mk__b::after{content:"";position:absolute;left:50%;bottom:-9px;width:12px;height:12px;background:inherit;border-right:2px solid var(--noir);border-bottom:2px solid var(--noir);transform:translateX(calc(-50% - var(--sh,0px))) rotate(45deg);border-radius:0 0 3px 0}
 .mk__c{flex:none;width:33px;height:33px;border-radius:50%;border:2px solid var(--noir);background:var(--jaune) center 65%/cover no-repeat;display:grid;place-items:center;position:relative}
 .mk__c img{width:26px}
 .mk__ck{position:absolute;top:-5px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--cyan);border:2px solid var(--noir);display:grid;place-items:center}
@@ -1157,12 +1157,12 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
 .mk__t b{font:900 italic 12.5px/1.1 var(--f-title);color:var(--noir);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:134px;letter-spacing:-.01em}
 .mk__t small{font:700 10.5px/1.2 var(--f-title);color:#6B5A3E;white-space:nowrap;margin-top:2px}
 .mk__dot{width:9px;height:9px;border-radius:50%;background:var(--noir);border:2px solid var(--blanc);margin-top:9px;box-shadow:0 0 0 1.5px var(--noir)}
-.mk__tag{position:absolute;top:-11px;right:6px;z-index:2;background:var(--rouge);color:var(--blanc);font:900 italic 10px/1 var(--f-title);text-transform:uppercase;padding:3px 7px;border-radius:99px;border:1.5px solid var(--noir);letter-spacing:.02em}
+.mk__tag{position:absolute;top:-11px;right:6px;transform:translateX(var(--sh,0px));z-index:2;background:var(--rouge);color:var(--blanc);font:900 italic 10px/1 var(--f-title);text-transform:uppercase;padding:3px 7px;border-radius:99px;border:1.5px solid var(--noir);letter-spacing:.02em}
 .mk.is-week .mk__b{border-color:var(--rouge);box-shadow:0 3px 0 var(--rouge)}
 .mk.is-week .mk__b::after{border-color:var(--rouge)}
 .mk.is-own .mk__b{background:#E9FFF9}
 .mk.is-sel{z-index:6}
-.mk.is-sel .mk__b{background:var(--noir);box-shadow:0 3px 0 var(--rouge);transform:scale(1.08);transform-origin:50% 100%}
+.mk.is-sel .mk__b{background:var(--noir);box-shadow:0 3px 0 var(--rouge);transform:translateX(var(--sh,0px)) scale(1.08);transform-origin:50% 100%}
 .mk.is-sel .mk__t b{color:var(--jaune)}
 .mk.is-sel .mk__t small{color:#E8DCC2}
 .mk.is-sel .mk__b::after{border-color:var(--noir)}
@@ -1563,18 +1563,20 @@ distM = p => { const dx=(p.lon-ME_LL.lon)*73000, dy=(p.lat-ME_LL.lat)*111000; re
 
 const isOpen = p => !["14h","16h","18h"].includes(p.h);
 function matchesQ(p){ const q=M.q; if(!q) return true; if(q.ids && !q.ids.includes(p.id)) return false; if(q.cats && !q.cats.includes(p.c)) return false; if(q.price && p.p!==q.price) return false; return true; }
-function passFilter(p){ return (!M.band||bandLiked(p.id)) && matchesQ(p) && (!M.open||isOpen(p)) && (!M.todo||!isOwnedPlace(p.id)) && (!M.price.length||M.price.includes(p.p)); }
+// pour l'instant : seuls les plaqués dont la catégorie a son illustration sont affichés
+const hasArt = c => !!(ILL[c]||PLAQUE_ART[c]), shown = p => hasArt(p.c);
+function passFilter(p){ return shown(p) && (!M.band||bandLiked(p.id)) && matchesQ(p) && (!M.open||isOpen(p)) && (!M.todo||!isOwnedPlace(p.id)) && (!M.price.length||M.price.includes(p.p)); }
 const filtered = () => PLACES.filter(passFilter);
 const placesIn = city => PLACES.filter(p=>p.city===city);
 
 function searchAll(t){
   const q=norm(t.trim()); if(!q) return null;
-  const cats=ALL.filter(c=>norm(c).includes(q)||norm(title(c)).includes(q));
+  const cats=ALL.filter(hasArt).filter(c=>norm(c).includes(q)||norm(title(c)).includes(q));
   const syn=new Set(); Object.entries(SYN).forEach(([k,v])=>{ if(k.startsWith(q)||(q.length>3&&q.includes(k))) v.forEach(c=>syn.add(c)); });
   const price=/pas cher|budget|cheap|petit prix/.test(q);
-  const places=PLACES.filter(p=>norm(p.n).includes(q)||norm(p.c).includes(q)||norm(title(p.c)).includes(q)||norm(p.q).includes(q)||norm(p.city).includes(q)||syn.has(p.c)||(price&&p.p==="€"));
-  const cities=[...new Set(PLACES.map(p=>p.city))].filter(c=>norm(c).includes(q));
-  return {cats:[...cats,...[...syn].filter(c=>!cats.includes(c))],places,cities};
+  const places=PLACES.filter(shown).filter(p=>norm(p.n).includes(q)||norm(p.c).includes(q)||norm(title(p.c)).includes(q)||norm(p.q).includes(q)||norm(p.city).includes(q)||syn.has(p.c)||(price&&p.p==="€"));
+  const cities=[...new Set(PLACES.filter(shown).map(p=>p.city))].filter(c=>norm(c).includes(q));
+  return {cats:[...cats,...[...syn].filter(c=>hasArt(c)&&!cats.includes(c))],places,cities};
 }
 function applyQ(q){
   M.q=q; M.sel=null; M.rs="half";
@@ -1659,10 +1661,12 @@ function draw(fast){
       const p=it.one, own=isOwnedPlace(p.id), ill=ILL[p.c]||PLAQUE_ART[p.c], wk=week.has(p.id)&&!own;
       const nm=p.n.length>22?p.n.slice(0,21)+"…":p.n, sub=`${p.c} · ${p.p}`;
       const w=Math.min(190,52+Math.max(nm.length*6.9,sub.length*5.8)), hh=44;
-      const full = it.sel || fits(it.x-w/2,it.y-hh-8,w,hh);
+      if(!it.sel && it.y<TOPH+10) return;
+      const bx=Math.max(8,Math.min(VW-8-w,it.x-w/2)), sh=Math.round(bx+w/2-it.x);
+      const full = it.sel || (Math.abs(sh)<w/2-22 && fits(bx,it.y-hh-8,w,hh));
       const art=`<span class="mk__c" style="${ill?`background-image:url(${IMG[ill]})`:""}">${ill?"":`<img src="${IMG.badge}" alt="">`}${own?`<span class="mk__ck">${icon("check")}</span>`:""}</span>`;
-      if(full){ placed.push({x:it.x-w/2,y:it.y-hh-8,w,h:hh});
-        out.push({z:it.sel?3:2,h:`<button class="mk ${it.sel?"is-sel":""} ${wk?"is-week":""} ${own?"is-own":""}" data-pid="${p.id}" style="left:${it.x}px;top:${it.y}px" aria-label="${esc(p.n)}, ${esc(p.c)}">${wk?`<em class="mk__tag">Pour toi</em>`:""}<span class="mk__b">${art}<span class="mk__t"><b>${esc(nm)}</b><small>${esc(sub)}</small></span></span><i class="mk__dot"></i></button>`}); }
+      if(full){ placed.push({x:bx,y:it.y-hh-8,w,h:hh});
+        out.push({z:it.sel?3:2,h:`<button class="mk ${it.sel?"is-sel":""} ${wk?"is-week":""} ${own?"is-own":""}" data-pid="${p.id}" aria-label="${esc(p.n)}, ${esc(p.c)}" style="left:${it.x}px;top:${it.y}px;--sh:${it.sel?0:sh}px">${wk?`<em class="mk__tag">Pour toi</em>`:""}<span class="mk__b">${art}<span class="mk__t"><b>${esc(nm)}</b><small>${esc(sub)}</small></span></span><i class="mk__dot"></i></button>`}); }
       else out.push({z:0,h:`<button class="mk mk--mini ${wk?"is-week":""}" data-pid="${p.id}" style="left:${it.x}px;top:${it.y}px" aria-label="${esc(p.n)}, ${esc(p.c)}"><span class="mk__b">${art}</span><i class="mk__dot"></i></button>`});
     });
     out.sort((a,b)=>a.z-b.z).forEach(o=>h+=o.h);
@@ -1768,7 +1772,7 @@ function startGL(){
   map.on("load",()=>{
     loaded=true; styleLGU(map); GL.on=true;
     const m=$("#map"); if(m){ m.onpointerdown=null; m.onwheel=null; m.ondblclick=null; m.classList.add("is-gl"); } window.onpointermove=null;
-    map.jumpTo({center:[ME_LL.lon,ME_LL.lat],zoom:13.1,offset:glOff()}); glSync();
+    map.jumpTo({center:[ME_LL.lon,ME_LL.lat],zoom:12.5,offset:glOff()}); glSync();
     map.on("move",()=>{ glSync(); draw(true); });
     map.on("moveend",()=>{ draw(); setTimeout(()=>PAN.moved=false,80); });
     map.on("dragstart",()=>{ PAN.moved=true; });
@@ -1813,7 +1817,7 @@ function renderMap(){
   <div class="rs" id="rs"><button class="rs__h" id="rsh" aria-label="Agrandir la liste"><div class="rs__grab"></div><div class="rs__t" id="rst"></div></button><div class="rs__body" id="rsb"></div></div>`;
   drawQrow(); setupSheet(); setSheet(M.rs,true);
   if(GL.wrap&&GL.map){ const m=$("#map"); m.classList.add("is-gl"); m.insertBefore(GL.wrap,m.querySelector(".mgrain")); GL.map.resize(); draw(); }
-  else { setupPan(); if(!M.inited){ M.inited=true; setView(ME_W.x,ME_W.y,75,false); } else draw(); initGL(); }
+  else { setupPan(); if(!M.inited){ M.inited=true; setView(ME_W.x,ME_W.y,50,false); } else draw(); initGL(); }
   t.onclick=mapClick;
 }
 function refreshMap(){ if(!$("#msvg")) return renderMap(); drawQrow(); const b=$(".sbar__q"); if(b){ b.textContent=M.q?M.q.label:"Un plat, un resto, une ville…"; b.classList.toggle("is-set",!!M.q); const x=$(".sbar__x"); if(!M.q&&x) x.remove(); if(M.q&&!x) b.insertAdjacentHTML("afterend",`<button class="sbar__x" data-clear aria-label="Effacer la recherche">${icon("x")}</button>`); } setSheet(M.rs); draw(); }
@@ -1843,7 +1847,7 @@ function mapClick(e){
   if(b.hasAttribute("data-me")){ openProfile(); return; }
   if(b.hasAttribute("data-zin")){ zoomAt(2,W/2,visY()); return; }
   if(b.hasAttribute("data-zout")){ zoomAt(.5,W/2,visY()); return; }
-  if(b.hasAttribute("data-loc")){ M.sel=null; setSheet("peek"); setView(ME_W.x,ME_W.y,Math.max(M.s,GL.on?z2s(13.1):75),true); return; }
+  if(b.hasAttribute("data-loc")){ M.sel=null; setSheet("peek"); setView(ME_W.x,ME_W.y,Math.max(M.s,GL.on?z2s(12.5):50),true); return; }
   if(b.hasAttribute("data-fr")){ M.sel=null; setSheet("peek"); franceView(true); return; }
   if(b.hasAttribute("data-filters")){ openFilters(); return; }
   if(b.hasAttribute("data-topen")){ M.open=!M.open; M.sel=null; refreshMap(); return; }
@@ -1867,25 +1871,25 @@ function openFilters(){
     if(b.hasAttribute("data-fok")){ popLayer(d); M.sel=null; refreshMap(); return; }
     upd(); };
 }
-function goCity(c){ M.sel=null; M.rs="peek"; if(TAB!=="map") go("map"); setSheet("peek"); if(c==="France") franceView(true); else if(c==="me") setView(ME_W.x,ME_W.y,GL.on?z2s(13.1):75,true); else fitTo(placesIn(c)); }
+function goCity(c){ M.sel=null; M.rs="peek"; if(TAB!=="map") go("map"); setSheet("peek"); if(c==="France") franceView(true); else if(c==="me") setView(ME_W.x,ME_W.y,GL.on?z2s(12.5):50,true); else fitTo(placesIn(c)); }
 
 // --- écran de recherche ---
 function addRecent(t){ t=(t||"").trim(); if(!t) return; S.recent=[t,...(S.recent||[]).filter(x=>x!==t)].slice(0,6); save(); }
 function openSearch(){
   const d=pushLayer(`<div class="srch"><div class="srch__bar"><button class="iconbtn" data-back aria-label="Retour">${icon("back")}</button><label class="srch__f">${icon("search")}<input id="q" placeholder="Un plat, un resto, une ville…" autocomplete="off" enterkeyhint="search" value="${M.q&&M.q.text?esc(M.q.text):""}"><button class="sbar__x" data-qx aria-label="Effacer" hidden>${icon("x")}</button></label></div><div class="srch__body" id="sb"></div></div>`,"ov",{hideNav:true});
   const q=d.querySelector("#q"), sb=d.querySelector("#sb"), qx=d.querySelector("[data-qx]");
-  let tab="sale"; const counts={}; PLACES.forEach(p=>counts[p.c]=(counts[p.c]||0)+1);
-  const byCity={}; PLACES.forEach(p=>byCity[p.city]=(byCity[p.city]||0)+1);
+  let tab="sale"; const counts={}; PLACES.filter(shown).forEach(p=>counts[p.c]=(counts[p.c]||0)+1);
+  const byCity={}; PLACES.filter(shown).forEach(p=>byCity[p.city]=(byCity[p.city]||0)+1);
   const tile=c=>{ const ill=ILL[c]||PLAQUE_ART[c], n=counts[c]||0; return ill?`<button class="ct ${n?"":"is-zero"}" data-cat="${esc(c)}" style="background-image:url(${IMG[ill]})">${n?`<em>${n}</em>`:""}<span>${esc(c)}</span></button>`:`<button class="ct typo ${n?"":"is-zero"}" data-cat="${esc(c)}" style="background:${TYPO_G[hash(c)%TYPO_G.length]}">${n?`<em>${n}</em>`:""}<b>${esc(c)}</b></button>`; };
   const hl=(s,v)=>{ const i=norm(s).indexOf(norm(v.trim())); const L=v.trim().length; return (i<0||!L)?esc(s):esc(s.slice(0,i))+"<mark>"+esc(s.slice(i,i+L))+"</mark>"+esc(s.slice(i+L)); };
   let R=null;
   const draw2=()=>{ const v=q.value; qx.hidden=!v; R=searchAll(v);
     if(!R){ sb.innerHTML=`
       ${(S.recent||[]).length?`<div class="blk"><div class="blk__h"><b>Récentes</b><button class="skip" data-clr>Effacer</button></div><div class="recent">${S.recent.map(r=>`<button class="chip" data-recent="${esc(r)}">${icon("clock")}${esc(r)}</button>`).join("")}</div></div>`:""}
-      <div class="blk"><div class="blk__h"><b>T'as envie de quoi ?</b></div><div class="env6">${ENVIES.map(e=>`<button class="env" data-env="${e.k}" style="background:${e.g}">${e.img?`<i style="background-image:url(${IMG[e.img]})"></i>`:""}<b>${esc(e.t)}</b></button>`).join("")}</div></div>
+      <div class="blk"><div class="blk__h"><b>T'as envie de quoi ?</b></div><div class="env6">${ENVIES.filter(e=>!e.cats||e.cats.some(hasArt)).map(e=>`<button class="env" data-env="${e.k}" style="background:${e.g}">${e.img?`<i style="background-image:url(${IMG[e.img]})"></i>`:""}<b>${esc(e.t)}</b></button>`).join("")}</div></div>
       <div class="blk"><div class="blk__h"><b>Les listes des créateurs</b><span>SUIS CEUX QUI SAVENT</span></div>${creatorListsHTML()}</div>
-      <div class="blk"><div class="blk__h"><b>Aller à…</b><span>${PLACES.length} ADRESSES EN FRANCE</span></div><div class="recent"><button class="chip is-on" data-go="me">${icon("locate")} Autour de moi</button><button class="chip" data-go="France">Toute la France</button>${Object.entries(byCity).filter(([c])=>c!=="Paris").sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<button class="chip" data-go="${esc(c)}">${esc(c)} · ${n}</button>`).join("")}</div></div>
-      <div class="blk"><div class="blk__h"><b>Les 93 catégories</b><span>DU KEBAB À L'ÉTOILÉ</span></div><div class="seg">${Object.keys(SECT).map(k=>`<button class="${tab===k?"is-on":""}" data-tab="${k}">${SECT_NAME[k]} · ${SECT[k].length}</button>`).join("")}</div><div class="cg">${SECT[tab].map(tile).join("")}</div></div>`; return; }
+      <div class="blk"><div class="blk__h"><b>Aller à…</b><span>${PLACES.filter(shown).length} ADRESSES EN FRANCE</span></div><div class="recent"><button class="chip is-on" data-go="me">${icon("locate")} Autour de moi</button><button class="chip" data-go="France">Toute la France</button>${Object.entries(byCity).filter(([c])=>c!=="Paris").sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<button class="chip" data-go="${esc(c)}">${esc(c)} · ${n}</button>`).join("")}</div></div>
+      <div class="blk"><div class="blk__h"><b>Les ${ALL.filter(hasArt).length} catégories</b><span>DU KEBAB À L'ÉTOILÉ</span></div><div class="seg">${Object.keys(SECT).filter(k=>SECT[k].some(hasArt)).map(k=>`<button class="${tab===k?"is-on":""}" data-tab="${k}">${SECT_NAME[k]} · ${SECT[k].filter(hasArt).length}</button>`).join("")}</div><div class="cg">${SECT[tab].filter(hasArt).map(tile).join("")}</div></div>`; return; }
     sb.innerHTML=`
       ${R.cities.length?`<div class="blk"><div class="blk__h"><b>Villes</b></div><div class="hits">${R.cities.map(c=>`<button class="hit" data-go="${esc(c)}"><span class="ic">${icon("map")}</span><span class="grow"><b>${hl(c,v)}</b><small>${byCity[c]} adresses</small></span></button>`).join("")}</div></div>`:""}
       ${R.cats.length?`<div class="blk"><div class="blk__h"><b>Catégories</b></div><div class="recent">${R.cats.slice(0,12).map(c=>`<button class="qc" data-cat="${esc(c)}"><i style="${ILL[c]?`background-image:url(${IMG[ILL[c]]})`:`background:${TYPO_G[hash(c)%TYPO_G.length]}`}"></i>${hl(c,v)} <span style="font:800 13px var(--f-cond);opacity:.5">${counts[c]||0}</span></button>`).join("")}</div></div>`:""}
@@ -1965,7 +1969,7 @@ function openWhere(cat){
 // SCAN NFC
 // =========================================================
 function scanCandidates(){
-  const notOwned=PLACES.filter(p=>p.city==="Paris"&&!isOwnedPlace(p.id)).sort((a,b)=>distM(a)-distM(b));
+  const notOwned=PLACES.filter(p=>shown(p)&&p.city==="Paris"&&!isOwnedPlace(p.id)).sort((a,b)=>distM(a)-distM(b));
   const boost=S.booster.ids.filter(id=>!isOwnedPlace(id)).map(PL);
   const rest=notOwned.filter(p=>!S.booster.ids.includes(p.id));
   return [...boost,...rest.slice(0,10),PL(0)];
@@ -2296,10 +2300,10 @@ function openGroup(pre=[]){
     <div class="sect"><div class="blk__h"><b>Avec qui ?</b><span class="eyebrow">${G.who.size?`TOI + ${G.who.size}`:"QUE TOI ?"}</span></div><div class="recent">${FRIENDS.map((f,k)=>`<button class="chip ${G.who.has(k)?"is-on":""}" data-who="${k}"><i class="dotc" style="background:${f.c}"></i>${esc(f.n)}</button>`).join("")}</div>
       <button class="link" data-glink>${icon("copy")} <span>Ou envoie le lien au groupe : <b>lgu.app/g/XK42</b></span></button></div>
     <div class="sect"><div class="blk__h"><b>Budget</b></div><div class="recent">${["€","€€","€€€","€€€€"].map(x=>`<button class="chip ${G.price.includes(x)?"is-on":""}" data-gp="${x}">${x}</button>`).join("")}</div></div>
-    <div class="sect"><div class="blk__h"><b>Une envie ?</b><span>FACULTATIF</span></div><div class="recent"><button class="chip ${!G.envie?"is-on":""}" data-ge="">Tout me va</button>${ENVIES.filter(e=>e.cats).map(e=>`<button class="chip ${G.envie===e.k?"is-on":""}" data-ge="${e.k}">${esc(e.t)}</button>`).join("")}</div></div>
+    <div class="sect"><div class="blk__h"><b>Une envie ?</b><span>FACULTATIF</span></div><div class="recent"><button class="chip ${!G.envie?"is-on":""}" data-ge="">Tout me va</button>${ENVIES.filter(e=>e.cats&&e.cats.some(hasArt)).map(e=>`<button class="chip ${G.envie===e.k?"is-on":""}" data-ge="${e.k}">${esc(e.t)}</button>`).join("")}</div></div>
     <div class="sect" style="padding-bottom:30px"><button class="btn btn--red btn--block" data-go2>C'est parti · ${pool().length} adresses</button><p class="note" style="text-align:center;margin:0">Ouverts maintenant, autour de toi.</p></div>`;
   };
-  const pool=()=>{ const en=ENVIES.find(e=>e.k===G.envie); return PLACES.filter(p=>p.city==="Paris"&&isOpen(p)&&G.price.includes(p.p)&&(!en||en.cats.includes(p.c))).sort((a,b)=>distM(a)-distM(b)).slice(0,10); };
+  const pool=()=>{ const en=ENVIES.find(e=>e.k===G.envie); return PLACES.filter(p=>shown(p)&&p.city==="Paris"&&isOpen(p)&&G.price.includes(p.p)&&(!en||en.cats.includes(p.c))).sort((a,b)=>distM(a)-distM(b)).slice(0,10); };
   const likes={me:new Set()};
   const swipe=()=>{
     const L=pool(); let k=0;
@@ -2474,8 +2478,8 @@ function openSharePf(){
 }
 
 // ---------- LISTES DES CRÉATEURS ----------
-function creatorListsHTML(){ return `<div class="hscroll">${CREATOR_LISTS.map((l,i)=>{const c=CREATORS[l.cr];return `<button class="clist" data-clist="${i}"><span class="clist__art" style="${l.ill?`background-image:url(${IMG[l.ill]})`:`background:${TYPO_G[0]}`}"><em>${l.ids.length}</em></span><b>${esc(l.t)}</b><span class="row" style="gap:6px">${avatar(c.n,c.c).replace('class="avatar "','class="avatar" style="width:20px;height:20px;font-size:9px"')}@${esc(c.h)}</span></button>`;}).join("")}</div>`; }
-function applyCreatorList(i){ const l=CREATOR_LISTS[i]; applyQ({label:`${l.t} · @${CREATORS[l.cr].h}`,ids:l.ids.slice(),ranked:true}); }
+function creatorListsHTML(){ return `<div class="hscroll">${CREATOR_LISTS.map((l,i)=>{ const ids=l.ids.filter(id=>shown(PL(id))); if(ids.length<2) return "";const c=CREATORS[l.cr];return `<button class="clist" data-clist="${i}"><span class="clist__art" style="${l.ill?`background-image:url(${IMG[l.ill]})`:`background:${TYPO_G[0]}`}"><em>${ids.length}</em></span><b>${esc(l.t)}</b><span class="row" style="gap:6px">${avatar(c.n,c.c).replace('class="avatar "','class="avatar" style="width:20px;height:20px;font-size:9px"')}@${esc(c.h)}</span></button>`;}).join("")}</div>`; }
+function applyCreatorList(i){ const l=CREATOR_LISTS[i]; applyQ({label:`${l.t} · @${CREATORS[l.cr].h}`,ids:l.ids.filter(id=>shown(PL(id))),ranked:true}); }
 
 // ---------- DÉMO INSTA : commente CARTE ----------
 function openInstaDemo(){
@@ -2700,19 +2704,19 @@ function autoContent(sig){
   }
   PLACES.forEach(p=>{ if(!p.fr||!p.fr.length) p.fr=FRIENDS.map((f,i)=>(FR_OWN[i]||[]).includes(p.id)?i:-1).filter(i=>i>=0).slice(0,3); });
   // sélection de la semaine : 3 plaqués proches, pas encore testés, selon tes envies — recalculée chaque lundi
-  const wk=weekNo(); const valid=(S.booster.ids||[]).length===3&&S.booster.ids.every(id=>PL(id));
+  const wk=weekNo(); const valid=(S.booster.ids||[]).length===3&&S.booster.ids.every(id=>PL(id)&&shown(PL(id)));
   if(!(demo&&valid&&!S.booster.week) && (S.booster.week!==wk||!valid)){
     const R=rng(wk+hash(S.name||"")); const env=new Set(S.envies||[]);
-    const ids=PLACES.filter(p=>!isOwnedPlace(p.id)).map(p=>({p,s:distM(p)*(env.has(p.c)?.45:1)*(.7+R()*.6)})).sort((a,b)=>a.s-b.s).slice(0,3).map(o=>o.p.id);
+    const ids=PLACES.filter(p=>shown(p)&&!isOwnedPlace(p.id)).map(p=>({p,s:distM(p)*(env.has(p.c)?.45:1)*(.7+R()*.6)})).sort((a,b)=>a.s-b.s).slice(0,3).map(o=>o.p.id);
     S.booster={ids,done:[],week:wk,opened:true}; save();
   }
   // plaqué du jour : chaque jour un plaqué différent, avec son « mot de la rédac » déjà écrit dans le tableur
-  const pool=PLACES.filter(p=>p.mot||MOTS[p.c]); const L=pool.length?pool:PLACES;
+  const pool=PLACES.filter(p=>shown(p)&&(p.mot||MOTS[p.c])); const L=pool.length?pool:PLACES.filter(shown);
   if(L.length){ const p=L[hash(new Date().toISOString().slice(0,10))%L.length]; PLAT={by:p.signe||"La rédac",pid:p.id,text:p.mot||motFor(p),audio:p.vocal||null}; }
   // vote : uniquement s'il y a des candidats dans le tableur (statut = candidat)
   if(!demo) CANDIDATE = DATA.cand.length ? (()=>{ const c=DATA.cand[hash(String(wk))%DATA.cand.length]; return {n:c.n,c:c.c,q:c.city==="Paris"?"Paris "+c.q:c.city,yes:52+hash(c.n)%40,text:c.mot||`Candidat pour ${title(c.c).toLowerCase()}. Il mérite la plaque ?`}; })() : null;
   // listes des créateurs : générées depuis la colonne « createurs »
-  if(!demo){ CREATOR_LISTS.length=0; CREATORS.forEach((c,i)=>{ const ids=PLACES.filter(p=>p.cr.includes(i)).map(p=>p.id); c.k=Math.max(c.k||0,ids.length); if(ids.length>=2) CREATOR_LISTS.push({cr:i,t:`Les adresses de ${c.n}`,ids,ill:ILL[PL(ids[0]).c]||null}); }); }
+  if(!demo){ CREATOR_LISTS.length=0; CREATORS.forEach((c,i)=>{ const ids=PLACES.filter(p=>shown(p)&&p.cr.includes(i)).map(p=>p.id); c.k=Math.max(c.k||0,ids.length); if(ids.length>=2) CREATOR_LISTS.push({cr:i,t:`Les adresses de ${c.n}`,ids,ill:ILL[PL(ids[0]).c]||null}); }); }
 }
 async function fetchText(u,ms=7000){ const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(),ms); try{ const r=await fetch(u,{signal:ctl.signal,cache:"no-store"}); if(!r.ok) throw new Error("HTTP "+r.status); return await r.text(); } finally{ clearTimeout(t); } }
 function toCsvUrl(u){ if(/\/d\/e\/|output=csv|tqx=out:csv/.test(u)) return u; const m=u.match(/docs\.google\.com\/spreadsheets\/d\/([^/]+)/); if(m){ const g=(u.match(/[#&?]gid=(\d+)/)||[])[1]||"0"; return `https://docs.google.com/spreadsheets/d/${m[1]}/gviz/tq?tqx=out:csv&gid=${g}`; } return u; }
