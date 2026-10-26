@@ -1151,147 +1151,6 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
   html{height:auto!important;min-height:min(100lvh,calc(100% + env(safe-area-inset-top,0px)))!important;overflow:visible!important}
   body{height:auto!important;min-height:100%;overflow:hidden}
 }
-/* ===================== V7 : UX FAÇON INSTAGRAM (charte LGU) ===================== */
-#nav{grid-template-columns:1fr 1fr 1.15fr 1fr 1fr;height:62px}
-.nav__b svg{width:27px;height:27px}
-.nav__b.is-on{color:var(--jaune)}
-.nav__b.is-on::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--jaune);margin-top:3px}
-.nav__scan{width:66px;height:66px;margin-top:-22px}
-.nav__scan svg{width:30px;height:30px}
-.nav__av{width:30px;height:30px;border-radius:50%;background:var(--jaune);color:var(--noir);display:grid;place-items:center;font:900 italic 14px var(--f-title);border:2px solid #BDB3A0}
-.nav__me.is-on .nav__av{border-color:var(--jaune);box-shadow:0 0 0 2px var(--noir),0 0 0 4px var(--jaune)}
-#t-home{padding-top:0}
-.ihead{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--top) + 4px) 14px 8px;background:var(--speck) 0 0/256px 256px repeat,#FFD200}
-.ihead__logo{height:36px;width:auto;transform:rotate(-2deg)}
-.ihead__a{display:flex;gap:16px;align-items:center}
-.ihead__a button{position:relative;display:grid;place-items:center}
-.ihead__a svg{width:27px;height:27px}
-.ihead__a .dot{position:absolute;right:-2px;top:-1px;width:9px;height:9px;border-radius:50%;background:var(--rouge);border:2px solid #FFD200}
-.ihead__a .badge{position:absolute;right:-9px;top:-7px;min-width:18px;height:18px;border-radius:9px;background:var(--rouge);color:#fff;font:800 12px/18px var(--f-cond);text-align:center;padding:0 4px;border:2px solid #FFD200;font-style:normal}
-.srow{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding:4px 14px 12px;border-bottom:1.5px solid rgba(17,17,17,.12)}
-.srow::-webkit-scrollbar{display:none}
-.sr{flex:none;display:flex;flex-direction:column;align-items:center;gap:5px;width:70px}
-.sr__r{width:68px;height:68px;border-radius:50%;padding:3px;background:conic-gradient(from 210deg,var(--jaune),var(--rouge),var(--rose),var(--jaune));display:grid;place-items:center;position:relative}
-.sr__r.is-seen{background:rgba(17,17,17,.22)}
-.sr__r--me{background:none}
-.sr__a{width:100%;height:100%;border-radius:50%;border:3px solid #FFD200;display:grid;place-items:center;font:900 italic 24px var(--f-title);color:var(--noir)}
-.sr__a--lgu{background:var(--noir)}
-.sr__a--lgu img{width:72%}
-.sr__r--me .sr__a{border:2.5px solid var(--noir)}
-.sr__r i{position:absolute;right:-1px;bottom:-1px;width:24px;height:24px;border-radius:50%;background:var(--rouge);color:#fff;border:3px solid #FFD200;font:900 18px/17px var(--f-title);text-align:center;font-style:normal}
-.sr__n{font:700 italic 12px var(--f-title);max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.feed2{display:flex;flex-direction:column}
-.post{border-bottom:1.5px solid rgba(17,17,17,.12);padding-bottom:6px}
-.post__h{display:flex;align-items:center;justify-content:space-between;padding:10px 12px}
-.post__who{display:flex;gap:10px;align-items:center;text-align:left;min-width:0}
-.post__who .avatar{width:34px;height:34px;box-shadow:0 0 0 2px #FFD200,0 0 0 4px var(--rouge)}
-.post__who b{font:900 italic 14.5px var(--f-title);display:block}
-.post__who small{font:600 italic 12px var(--f-title);color:var(--brun);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.post__more svg{width:22px;height:22px}
-.post__m{position:relative;aspect-ratio:4/5;background-size:cover;background-position:center 62%;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
-.post__m::after{content:"";position:absolute;inset:0;background-image:var(--grain);background-size:220px;mix-blend-mode:multiply;opacity:.3;pointer-events:none}
-.post__typo{position:absolute;inset:0;display:grid;place-items:center;font:900 italic 64px/.9 var(--f-title);color:#fff;-webkit-text-stroke:2.5px var(--noir);paint-order:stroke fill;text-shadow:0 5px 0 var(--noir);transform:rotate(-6deg);text-align:center;padding:20px}
-.post__v{position:absolute;left:12px;top:12px;font-size:15px;z-index:2}
-.post__vid{position:absolute;right:12px;top:12px;z-index:2;background:rgba(17,17,17,.75);color:#fff;border-radius:99px;padding:5px 11px;font:800 italic 12.5px var(--f-title);display:flex;gap:5px;align-items:center}
-.post__vid svg{width:11px;height:11px}
-.post__rk{position:absolute;left:12px;bottom:14px;z-index:2;background:var(--noir);color:var(--jaune);font:400 11.5px var(--f-px);letter-spacing:.08em;padding:5px 9px 4px;border-radius:7px;text-transform:uppercase}
-.post__card{position:absolute;right:12px;bottom:12px;width:74px;transform:rotate(5deg);z-index:2}
-.post__heart{position:absolute;left:50%;top:50%;width:110px;height:110px;margin:-55px 0 0 -55px;color:var(--rouge);opacity:0;z-index:3;pointer-events:none;filter:drop-shadow(0 4px 0 var(--noir))}
-.post__heart svg{width:100%;height:100%}
-.post__heart.is-pop{animation:hpop .9s cubic-bezier(.2,1.4,.4,1) forwards}
-@keyframes hpop{0%{opacity:0;transform:scale(.3)}25%{opacity:1;transform:scale(1.1)}60%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.1) translateY(-20px)}}
-.post__a{display:flex;align-items:center;gap:14px;padding:8px 12px 4px}
-.post__a button svg{width:27px;height:27px}
-.post__a button.is-on{color:var(--rouge)}
-.post__a [data-save].is-on{color:var(--noir)}
-.post__save{margin-left:auto}
-.post__t{padding:0 12px 8px;display:flex;flex-direction:column;gap:3px;font:600 italic 14px/1.4 var(--f-title)}
-.post__t p{margin:0}
-.post__t b{font-weight:900}
-.post__likes{font:900 italic 14.5px var(--f-title)}
-.post__cl{text-align:left;color:var(--muted);font:600 italic 13.5px var(--f-title)}
-.post__c1{color:var(--brun)}
-.post__f{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
-.post__f span{font:400 10px var(--f-px);letter-spacing:.1em;color:var(--muted)}
-.post__f button{font:900 italic 13px var(--f-title);text-decoration:underline;text-underline-offset:3px}
-.ins{padding:16px 0;border-bottom:1.5px solid rgba(17,17,17,.12);display:flex;flex-direction:column;gap:10px}
-.ins>.omo,.ins__h{margin:0 14px;width:auto}
-.ins__h{display:flex;justify-content:space-between;align-items:baseline}
-.ins__h b{font:900 italic 18px var(--f-title)}
-.ins__h button{font:800 italic 13px var(--f-title);text-decoration:underline}
-.ins .hscroll{margin:0;padding:4px 14px 6px}
-.feed2__end{display:flex;gap:8px;align-items:center;justify-content:center;font:700 italic 13px var(--f-title);color:var(--muted);padding:24px 0}
-.feed2__end svg{width:16px;height:16px}
-.cms{display:flex;flex-direction:column;gap:12px;min-height:120px}
-.cm{display:flex;gap:10px;align-items:flex-start}
-.cm .avatar{width:32px;height:32px;font-size:13px}
-.cm p{margin:4px 0 0;font:600 italic 14px/1.4 var(--f-title)}
-.cin{display:flex;gap:8px;align-items:center;border-top:1.5px solid rgba(17,17,17,.12);padding-top:12px}
-.cin input{flex:1;min-width:0;border:2px solid var(--noir);border-radius:99px;padding:10px 14px;background:#FFFBEF;font:600 italic 15px var(--f-title)}
-.cin .avatar{width:32px;height:32px;font-size:13px}
-.cin--bar{position:absolute;left:0;right:0;bottom:0;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));background:var(--speck) 0 0/256px 256px repeat,#FFD21A;border-top:2px solid var(--noir)}
-.shr{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px}
-.shr button{display:flex;flex-direction:column;align-items:center;gap:6px;font:700 italic 12.5px var(--f-title)}
-.shr .avatar{width:58px;height:58px;font-size:22px}
-.shr button.is-on .avatar{box-shadow:0 0 0 3px #FFD200,0 0 0 5px var(--cyan)}
-.shr2{display:flex;gap:10px;border-top:1.5px solid rgba(17,17,17,.12);padding-top:14px}
-.shr2 button{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;font:700 italic 12px var(--f-title)}
-.shr2 svg{width:46px;height:46px;padding:11px;border-radius:50%;background:#FFFBEF;border:2px solid var(--noir)}
-.act2{display:flex;flex-direction:column;gap:14px}
-.act2__r{display:flex;gap:12px;align-items:center}
-.act2__r .avatar{width:44px;height:44px;font-size:17px}
-.act2__r p{margin:0;flex:1;font:600 italic 14px/1.35 var(--f-title)}
-.act2__r small{color:var(--muted);font-size:12px}
-.dms{display:flex;flex-direction:column}
-.dm2{display:flex;gap:12px;align-items:center;padding:10px 0;text-align:left;width:100%}
-.dm2__av{display:flex;width:56px;flex:none}
-.dm2__av .avatar{width:44px;height:44px;font-size:17px}
-.dm2__av .avatar+.avatar{width:34px;height:34px;margin-left:-24px;margin-top:18px;font-size:13px;box-shadow:0 0 0 2px #FFD200}
-.dm2 b{font:900 italic 15.5px var(--f-title);display:block}
-.dm2 small{font:600 italic 13px var(--f-title);color:var(--muted)}
-.dm2 small.is-u{color:var(--noir);font-weight:800}
-.dm2 .dot{width:10px;height:10px;border-radius:50%;background:var(--rouge);flex:none}
-.chat{display:flex;flex-direction:column;gap:8px;padding:6px 14px 90px}
-.bub{align-self:flex-start;max-width:78%;background:#FFFBEF;border:2px solid var(--noir);border-radius:20px 20px 20px 6px;padding:9px 13px;font:600 italic 14.5px/1.35 var(--f-title)}
-.bub b{display:block;font:900 italic 11.5px var(--f-title);color:var(--rouge);margin-bottom:2px}
-.bub--me{align-self:flex-end;background:var(--noir);color:var(--jaune);border-radius:20px 20px 6px 20px}
-.bub--card{display:flex;gap:10px;align-items:center;text-align:left}
-.bub--card b{color:var(--noir);font-size:14.5px}
-.bub--card small{font:600 italic 12px var(--f-title);color:var(--brun);display:block}
-.st__reply{position:absolute;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;display:flex;gap:8px;align-items:center}
-.st__reply input{flex:1;min-width:0;background:transparent;border:2px solid rgba(255,255,255,.8);border-radius:99px;padding:11px 16px;color:#fff;font:600 italic 14.5px var(--f-title)}
-.st__reply input::placeholder{color:rgba(255,255,255,.8)}
-.st__reply button{font-size:24px}
-.pfi__head{display:flex;justify-content:space-between;align-items:center;padding:4px 16px 6px}
-.pfi__head b{font:900 italic 22px var(--f-title);letter-spacing:-.02em}
-.pfi{display:flex;flex-direction:column;gap:12px}
-.pfi__top{display:flex;align-items:center;gap:18px;padding:6px 16px 0}
-.pfi__av{width:88px;height:88px;border-radius:50%;border:3px solid var(--noir);box-shadow:0 0 0 3px #FFD200,0 0 0 6px var(--rouge);display:grid;place-items:center;font:900 italic 36px var(--f-title);flex:none}
-.pfi__st{flex:1;display:grid;grid-template-columns:repeat(3,1fr)}
-.pfi__st button{display:flex;flex-direction:column;align-items:center}
-.pfi__st b{font:800 26px/1 var(--f-cond)}
-.pfi__st span{font:600 italic 12.5px var(--f-title)}
-.pfi__bio{padding:0 16px;display:flex;flex-direction:column;gap:3px;font:600 italic 14px/1.35 var(--f-title)}
-.pfi__bio>b{font:900 italic 16px var(--f-title)}
-.lvlpill{align-self:flex-start;margin-top:6px;background:var(--noir);color:#fff;border-radius:99px;padding:7px 13px;font:600 italic 12.5px var(--f-title)}
-.lvlpill b{color:var(--jaune)}
-.pfi__btns{display:flex;gap:6px;padding:0 16px}
-.pbtn{flex:1;background:#FFFBEF;border:2px solid var(--noir);border-radius:12px;padding:9px 6px;font:900 italic 13px var(--f-title);white-space:nowrap}
-.pbtn--ic{flex:none;width:42px;display:grid;place-items:center}
-.pbtn--ic svg{width:18px;height:18px}
-.pbtn--on{background:var(--cyan)}
-.pbtn--red{background:var(--rouge);color:#fff}
-.pfi__hl{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding:4px 16px}
-.pfi__hl::-webkit-scrollbar{display:none}
-.hl{flex:none;display:flex;flex-direction:column;align-items:center;gap:5px;width:66px;font:700 italic 12px var(--f-title)}
-.hl span:last-child{max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hl__c{width:62px;height:62px;border-radius:50%;background-size:cover;background-position:center 62%;border:2.5px solid var(--noir);box-shadow:0 0 0 3px #FFD200,0 0 0 4.5px rgba(17,17,17,.3);display:block}
-.pfi__tabs{display:flex;border-top:1.5px solid rgba(17,17,17,.15);margin-top:4px}
-.pfi__tabs button{flex:1;display:grid;place-items:center;padding:10px;color:var(--muted);border-bottom:2.5px solid transparent}
-.pfi__tabs button.is-on{color:var(--noir);border-bottom-color:var(--noir)}
-.pfi__tabs svg{width:24px;height:24px}
-.pgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:8px}
-.pgrid button{display:block}
 
 </style>
 
@@ -1302,12 +1161,12 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
     <p class="pitch__p">Trouve où manger, du kebab à l'étoilé. Scanne la plaque chez les plaqués, collectionne les 93&nbsp;cartes. Prototype cliquable&nbsp;: les adresses sont des exemples.</p>
     <nav class="pitch__jump" aria-label="Aller à un écran">
       <button data-jump="onb">Accueil</button>
-      <button data-jump="map">Explorer (carte)</button>
+      <button data-jump="map">Explorer</button>
       <button data-jump="search">Recherche</button>
       <button data-jump="stories">Stories rédac</button>
       <button data-jump="group">On mange où ?</button>
       <button data-jump="scan">Scan + verdict</button>
-      <button data-jump="home">Accueil (fil)</button>
+      <button data-jump="potes">Ta bande</button>
       <button data-jump="moi">Profil</button>
       <button data-jump="insta">Insta → DM</button>
       <button data-jump="collec">Collec</button>
@@ -1319,19 +1178,18 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
   <div id="phone">
     <div id="app">
       <main id="tabs">
-        <section class="tab" id="t-home" data-tab="home"></section>
-        <section class="tab" id="t-map" data-tab="map" hidden></section>
+        <section class="tab" id="t-map" data-tab="map"></section>
         <section class="tab" id="t-collec" data-tab="collec" hidden></section>
         <section class="tab" id="t-potes" data-tab="potes" hidden></section>
         <section class="tab" id="t-moi" data-tab="moi" hidden></section>
       </main>
 
       <nav id="nav" aria-label="Navigation principale">
-        <button class="nav__b is-on" data-go="home" aria-label="Accueil"><svg><use href="#i-home"/></svg></button>
-        <button class="nav__b" data-go="map" aria-label="Explorer la carte"><svg><use href="#i-map"/></svg></button>
-        <button class="nav__scan" data-go="scan" aria-label="Scanner une plaque"><svg><use href="#i-nfc"/></svg></button>
-        <button class="nav__b" data-go="collec" aria-label="Ma collec"><svg><use href="#i-cards"/></svg></button>
-        <button class="nav__b nav__me" data-go="moi" aria-label="Mon profil"><span class="nav__av">S</span></button>
+        <button class="nav__b is-on" data-go="map"><svg><use href="#i-map"/></svg><span>Explorer</span></button>
+        <button class="nav__b" data-go="potes"><svg><use href="#i-bande"/></svg><span>Ta bande</span></button>
+        <button class="nav__scan" data-go="scan" aria-label="Scanner une plaque"><svg><use href="#i-nfc"/></svg><span>Scanner</span></button>
+        <button class="nav__b" data-go="collec"><svg><use href="#i-cards"/></svg><span>Collec</span></button>
+        <button class="nav__b" data-go="moi"><svg><use href="#i-user"/></svg><span>Moi</span></button>
       </nav>
 
       <div id="layers"></div>
@@ -1368,15 +1226,6 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
     <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
     <symbol id="i-bande" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M2.5 20c.9-3.6 3.4-5.3 6.5-5.3s5.6 1.7 6.5 5.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="16.5" cy="7.5" r="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M17.5 13.6c2.3.3 3.6 1.8 4.2 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
-    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 10.5 12 3.5l8.5 7V20a1 1 0 0 1-1 1h-5v-6h-5v6h-5a1 1 0 0 1-1-1v-9.5Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
-    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.5s-8-4.6-8-10.6A4.4 4.4 0 0 1 12 7.3a4.4 4.4 0 0 1 8 2.6c0 6-8 10.6-8 10.6Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
-    <symbol id="i-heart-f" viewBox="0 0 24 24"><path d="M12 20.5s-8-4.6-8-10.6A4.4 4.4 0 0 1 12 7.3a4.4 4.4 0 0 1 8 2.6c0 6-8 10.6-8 10.6Z" fill="currentColor" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
-    <symbol id="i-comment" viewBox="0 0 24 24"><path d="M20.5 11.6a8.4 8.4 0 0 1-12.4 7.4L3.5 20.5l1.5-4.4a8.4 8.4 0 1 1 15.5-4.5Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
-    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3.5 10.5 13.8M21 3.5l-6.6 17-3.9-6.7-6.9-3.8L21 3.5Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
-    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></symbol>
-    <symbol id="i-grid" viewBox="0 0 24 24"><path d="M3.5 3.5h17v17h-17zM9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
-    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6.5h16M4 12h16M4 17.5h16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
-    <symbol id="i-plus" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
   </defs>
 </svg>
@@ -1602,11 +1451,10 @@ const rarChip = c => `<span class="rar rar--${RAR[c]}">${RAR_NAME[RAR[c]]}</span
 let TAB = "map";
 function go(tab){
   if(tab==="scan"){ openScan(); return; }
-  if(tab==="potes") tab="home";
   TAB = tab;
   $$(".tab").forEach(t=>t.hidden = t.dataset.tab!==tab);
   $$("#nav [data-go]").forEach(b=>b.classList.toggle("is-on", b.dataset.go===tab));
-  ({home:renderHome,map:renderMap,collec:renderCollec,potes:renderPotes,moi:renderMoi})[tab]();
+  ({map:renderMap,collec:renderCollec,potes:renderPotes,moi:renderMoi})[tab]();
   const el = $("#t-"+tab); if(el) el.scrollTop = 0;
 }
 $("#nav").addEventListener("click",e=>{ const b=e.target.closest("[data-go]"); if(b){ closeAll(); go(b.dataset.go); }});
@@ -2222,7 +2070,7 @@ function openViewer(c,pid){
 function confirmReset(){
   const d=sheet(`<div class="h2">On remet tout à zéro ?</div><p class="sub">Ta collec, tes points, ton booster et ta commande reviennent à l'état de départ de la démo.</p><div style="display:flex;gap:10px"><button class="btn btn--white" style="flex:1" data-no>Non</button><button class="btn btn--red" style="flex:1" data-yes>Oui, reset</button></div>`);
   d.querySelector("[data-no]").onclick=()=>popLayer(d);
-  d.querySelector("[data-yes]").onclick=()=>{ S=freshState(); S.onb=true; save(); closeAll(); M.q=null; M.sel=null; M.rs="peek"; M.inited=false; go("home"); toast("Démo remise à zéro"); };
+  d.querySelector("[data-yes]").onclick=()=>{ S=freshState(); S.onb=true; save(); closeAll(); M.q=null; M.sel=null; M.rs="peek"; M.inited=false; go("map"); toast("Démo remise à zéro"); };
 }
 function openHow(){
   sheet(`<div class="h2">Comment gagner des points</div>
@@ -2504,11 +2352,59 @@ function topsHTML(own,rankFn,max=4){
   return cats.map(c=>{ const r=rankFn(c); return `<div class="top"><span class="top__i" style="${ILL[c]?`background-image:url(${IMG[ILL[c]]})`:`background:${TYPO_G[hash(c)%TYPO_G.length]}`}"></span><div class="grow"><b>Top ${esc(c.toLowerCase())}</b><span>${r.slice(0,3).map((p,k)=>`${k+1}. ${esc(PL(p).n)}`).join("  ·  ")}</span></div></div>`; }).join("");
 }
 function openProfile(){ closeAll(); go("moi"); }
+function renderMoi(){
+  const t=$("#t-moi");
+  const L=lvlOf(S.pts), N=nextLvl(S.pts); const pct=N?((S.pts-L.min)/(N.min-L.min)*100):100; const cards=allCards();
+  const html=`
+  <div class="pf"><div class="pf__av">${esc((S.name||"?")[0])}</div><h1 class="h1" style="font-size:32px;text-align:center">${esc(S.name)}</h1><span class="eyebrow" style="text-align:center">${esc(handle())} · ${esc(S.city)} · ${esc(L.t)}</span>
+    <div class="pf__stats"><div><b>${cards.length}</b><span>cartes</span></div><div><b>${ownedCats().length}</b><span>catégories</span></div><div><b>${FRIENDS.length}</b><span>potes</span></div></div>
+    <div style="display:flex;gap:10px;width:100%"><button class="btn btn--black" style="flex:1.2" data-sharepf>${icon("share")} Mon profil</button><button class="btn btn--white" style="flex:1" data-invite>+ Inviter</button></div></div>
+  <div class="sect"><div class="sect__h"><h2 class="h2">Mes tops</h2><span class="eyebrow">ZÉRO ÉTOILE</span></div><div class="tops">${topsHTML(S.own,myRank)}</div></div>
+  <div class="sect"><div class="sect__h"><h2 class="h2">Compatibilité</h2><button data-group>On mange où ?</button></div>
+    <div class="list">${FRIENDS.map((f,i)=>{const k=compatOf(i);return `<button class="li" data-friend="${i}">${avatar(f.n,f.c)}<span class="grow">${esc(f.n)}<small>${k.common.length} adresse${k.common.length>1?"s":""} en commun</small></span><span class="pct"><b>${k.pct}%</b><i style="width:${k.pct}%"></i></span></button>`;}).join("")}</div></div>
+  <div class="sect"><button class="lvl" data-ladder style="text-align:left;width:100%"><div class="lvl__top"><div><div class="lvl__n">NIVEAU ${L.n} · TES AVANTAGES</div><div class="lvl__t">${esc(L.t)}</div></div><div class="lvl__pts">${fmtN(S.pts)}<small>POINTS</small></div></div><div class="bar bar--y"><i style="width:${pct}%"></i></div><div class="lvl__next">${N?`Encore <b style="color:#fff">${N.min-S.pts} pts</b> pour ${esc(N.t)} · voir les avantages →`:"Ultime. Voir tes avantages →"}</div></button></div>
+  <div class="sect"><div class="list">
+    <button class="li" data-list="saved"><span class="ic" style="background:var(--jaune)">${icon("bookmark")}</span><span class="grow">À tester<small>${S.saved.length} adresses sauvées</small></span>${icon("back","chev")}</button>
+    <button class="li" data-list="print"><span class="ic" style="background:var(--rose)">${icon("box")}</span><span class="grow">Imprimer mes cartes<small>${cards.filter(x=>!isPrinted(x.p)).length} pas encore imprimées</small></span>${icon("back","chev")}</button>
+    <button class="li" data-list="creators"><span class="ic" style="background:var(--cyan)">${icon("play")}</span><span class="grow">Créateurs suivis<small>${S.follow.length} créateurs</small></span>${icon("back","chev")}</button>
+  </div></div>
+  <div class="sect"><div class="eyebrow">Démos du prototype</div><div class="list">
+    <button class="li" data-demo="insta"><span class="ic" style="background:#FF99B3">${icon("share")}</span><span class="grow">Insta : commente « CARTE »<small>Du commentaire au DM, puis à l'appli</small></span>${icon("back","chev")}</button>
+    <button class="li" data-demo="notif"><span class="ic" style="background:var(--jaune)">${icon("clock")}</span><span class="grow">Notif de 11h45<small>Le plat du jour de la rédac</small></span>${icon("back","chev")}</button>
+    <button class="li" data-onb><span class="ic" style="background:var(--beige)">${icon("star")}</span><span class="grow">Revoir l'accueil</span>${icon("back","chev")}</button>
+    <button class="li" data-reset><span class="ic" style="background:var(--beige)">${icon("x")}</span><span class="grow">Remettre la démo à zéro</span>${icon("back","chev")}</button>
+  </div><p class="note" style="text-align:center;margin:6px 0 0">Prototype · adresses, créateurs et potes d'exemple · illustrations Champ Magnétique, Clara Biel</p></div>`;
+  t.innerHTML=`<div class="tabpad">${html}</div>`;
+  t.onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
+    if(b.hasAttribute("data-sharepf")) openSharePf();
+    else if(b.hasAttribute("data-invite")) openInvite();
+    else if(b.dataset.friend) openFriend(+b.dataset.friend);
+    else if(b.hasAttribute("data-group")) openGroup();
+    else if(b.hasAttribute("data-ladder")) openLadder();
+    else if(b.dataset.list==="saved") openSaved();
+    else if(b.dataset.list==="print") openShop();
+    else if(b.dataset.list==="creators") openCreatorsList();
+    else if(b.dataset.demo==="insta") openInstaDemo();
+    else if(b.dataset.demo==="notif"){ closeAll(); notifMock.done=false; notifMock(); }
+    else if(b.hasAttribute("data-onb")) startOnb();
+    else if(b.hasAttribute("data-reset")) confirmReset(); };
+}
 function openLadder(){
   const L=lvlOf(S.pts);
   sheet(`<div class="sect__h"><h2 class="h2">Tes avantages</h2><button onclick="openHow()">Gagner des points</button></div>
     <div class="ladder">${LEVELS.map(l=>{const got=S.pts>=l.min, now=l.n===L.n;return `<div class="rung ${got?"is-got":"is-lock"} ${now?"is-now":""}"><span class="rung__l">${got?l.n:icon("lock").replace("<svg",'<svg style="width:16px;height:16px"')}</span><div class="grow"><b>${esc(l.t)}</b><small>${fmtN(l.min)} PTS</small><ul>${l.perks.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>${got&&l.n>=2&&l.n<=5?`<button class="btn btn--sm use" onclick="openPass(this.dataset.p)" data-p="${esc(l.perks[0])}">Utiliser</button>`:""}</div>`;}).join("")}</div>
     <p class="note" style="margin:0">Avantages proposés en exemple : à caler avec les restaurateurs plaqués.</p>`);
+}
+function openFriend(i){
+  const f=FRIENDS[i], k=compatOf(i); const own={}; (FR_OWN[i]||[]).forEach(p=>{ const c=PL(p).c; (own[c]=own[c]||[]).push(p); });
+  const shared=k.common.map(PL);
+  const d=full("",`<div class="pf"><div class="pf__av" style="background:${f.c}">${esc(f.n[0])}</div><h1 class="h1" style="font-size:32px;text-align:center">${esc(f.n)}</h1><span class="eyebrow">@${norm(f.n)} · ${f.k} cartes</span>
+    <div class="compat"><div class="compat__n">${k.pct}<small>%</small></div><div class="grow"><b>compatibles en bouffe</b><span>${k.pct>80?"Vous êtes faits pour manger ensemble.":k.pct>65?"Bonne entente, quelques débats sur le sucré.":"Vous allez vous disputer le choix du resto."}</span></div></div>
+    <button class="btn btn--red btn--block" data-g>On mange où ? avec ${esc(f.n)}</button></div>
+    ${shared.length?`<div class="sect"><div class="sect__h"><h2 class="h2">En commun</h2><span class="eyebrow">${shared.length} ADRESSES</span></div><div class="hscroll">${shared.map(p=>`<button data-pl="${p.id}" style="width:96px">${cardHTML(p.c,{resto:p.n})}</button>`).join("")}</div></div>`:""}
+    <div class="sect"><div class="sect__h"><h2 class="h2">Ses tops</h2></div><div class="tops">${topsHTML(own,c=>own[c])}</div></div>
+    <div class="sect"><div class="sect__h"><h2 class="h2">Pas encore testé par toi</h2></div><div class="list">${(FR_OWN[i]||[]).filter(p=>!isOwnedPlace(p)).slice(0,4).map(p=>`<button class="li" data-pl="${p}"><span class="ic" style="background:var(--jaune)">${icon("map")}</span><span class="grow">${esc(PL(p).n)}<small>${esc(title(PL(p).c))} · ${fmtD(distM(PL(p)))}</small></span>${icon("back","chev")}</button>`).join("")||`<p class="sub" style="padding:12px">Tu as déjà tout ce qu'elle a. Respect.</p>`}</div></div>`);
+  d.querySelector(".full__body").onclick=e=>{ const b=e.target.closest("button"); if(!b) return; if(b.hasAttribute("data-g")) openGroup([i]); if(b.dataset.pl) openPlace(+b.dataset.pl); };
 }
 function openSharePf(){
   const cards=allCards(); const fan=cards.filter(x=>ILL[x.c]).slice(0,3);
@@ -2627,192 +2523,12 @@ const POP=["Burger","Pizza","Sushi","Ramen","Kebab","Tacos","Poulet frit","Brunc
 function ueTile(c,on){ const ill=ILL[c]||PLAQUE_ART[c]; return `<button class="ue ${on?"is-on":""}" data-cat="${esc(c)}"><span class="ue__c" style="${ill?`background-image:url(${IMG[ill]})`:`background:${TYPO_G[hash(c)%TYPO_G.length]}`}">${ill?"":`<b>${esc(c.split(" ")[0])}</b>`}<i>${icon("check")}</i></span><span class="ue__l">${esc(c)}</span></button>`; }
 
 // =========================================================
-// UX FAÇON INSTAGRAM : accueil (stories + fil), posts, commentaires, partage, activité, messages, profils
-// =========================================================
-const CPOOL=["On y va samedi ?","Le meilleur de Paris, je valide","Trop bon le bouillon 🔥","Ajouté à ma liste","Faut que je teste ça","T'as pris quoi ?","Ça a l'air incroyable","J'y étais hier, banger"];
-const likesOf = (k) => 6 + hash(k)%48;
-const isLiked = k => (S.likes||[]).includes(k);
-function toggleLike(k,force){ S.likes=S.likes||[]; const i=S.likes.indexOf(k); if(i>=0&&force!==true) S.likes.splice(i,1); else if(i<0) S.likes.push(k); save(); return S.likes.includes(k); }
-const comKey = k => "c-"+k;
-function commentsOf(k,i){ const R=rng(hash(k)); const base=[0,1].map(n=>{ let w=Math.floor(R()*FRIENDS.length); if(w===i) w=(w+1)%FRIENDS.length; return {n:FRIENDS[w].n,c:FRIENDS[w].c,t:CPOOL[Math.floor(R()*CPOOL.length)]}; }); return base.concat((S.comments||{})[k]||[]); }
-const artStyle = c => { const ill=ILL[c]||PLAQUE_ART[c]; return ill?`background-image:url(${IMG[ill]})`:`background:${TYPO_G[hash(c)%TYPO_G.length]}`; };
-const plural = c => c.toLowerCase()+(/[sx]$/.test(c)?"":"s");
-
-function storyRingHTML(){
-  const me=`<button class="sr" data-mystory><span class="sr__r sr__r--me"><span class="sr__a" style="background:var(--jaune)">${esc((S.name||"?")[0])}</span><i>+</i></span><span class="sr__n">Ta story</span></button>`;
-  const red=`<button class="sr" data-stories><span class="sr__r ${S.storySeen?"is-seen":""}"><span class="sr__a sr__a--lgu"><img src="${IMG.badge}" alt=""></span></span><span class="sr__n">La rédac</span></button>`;
-  return `<div class="srow">${me}${red}${FRIENDS.map((f,i)=>`<button class="sr" data-fstory="${i}"><span class="sr__r ${(S.seenF||[]).includes(i)?"is-seen":""}"><span class="sr__a" style="background:${f.c}">${esc(f.n[0])}</span></span><span class="sr__n">${esc(f.n)}</span></button>`).join("")}</div>`;
-}
-function postHTML(x){
-  const f=FRIENDS[x.i], p=PL(x.pid), v=frVerdict(x.i,x.pid), r=frRank(x.i,x.pid), k=x.i+"-"+p.id, lk=isLiked(k), sv=S.saved.includes(p.id), n=likesOf(k)+(lk?1:0), cs=commentsOf(k,x.i);
-  return `<article class="post" data-k="${k}" data-pid="${p.id}" data-i="${x.i}">
-    <header class="post__h"><button class="post__who" data-friend="${x.i}">${avatar(f.n,f.c)}<span><b>${esc(f.n)}</b><small>${esc(p.n)} · ${esc(where(p))}</small></span></button><button class="post__more" data-more aria-label="Plus d'options">${icon("dots")}</button></header>
-    <div class="post__m" data-media style="${artStyle(p.c)}">${ILL[p.c]||PLAQUE_ART[p.c]?"":`<b class="post__typo">${esc(p.c)}</b>`}
-      <span class="vtag vtag--${norm(v)} post__v">${v}</span>${x.vid?`<span class="post__vid">${icon("play")} Verdict</span>`:""}
-      ${r?`<span class="post__rk">N°${r} de ses ${esc(plural(p.c))}</span>`:""}<div class="post__card">${cardHTML(p.c,{resto:p.n})}</div><span class="post__heart">${icon("heart-f")}</span></div>
-    <div class="post__a"><button class="${lk?"is-on":""}" data-like aria-label="J'aime">${icon(lk?"heart-f":"heart")}</button><button data-com aria-label="Commenter">${icon("comment")}</button><button data-share aria-label="Partager">${icon("send")}</button><button class="post__save ${sv?"is-on":""}" data-save aria-label="Enregistrer">${icon(sv?"bookmark-f":"bookmark")}</button></div>
-    <div class="post__t"><b class="post__likes">${n} J'aime</b>
-      <p><b>${esc(f.n)}</b> ${v==="Banger"?"Banger absolu.":v==="Validé"?"Validé, solide.":"Bof, pas pour moi."} ${esc(title(p.c))} ${p.city==="Paris"?"du "+esc(p.q):"à "+esc(p.city)}.</p>
-      ${cs.length?`<button class="post__cl" data-com>Voir les ${cs.length} commentaires</button>`:""}
-      <p class="post__c1"><b>${esc(cs[0].n)}</b> ${esc(cs[0].t)}</p>
-      <div class="post__f"><span>${ago(x.h).toUpperCase()}</span><button data-open="${p.id}">Voir l'adresse · ${fmtD(distM(p))}</button></div></div></article>`;
-}
-function renderHome(){
-  const t=$("#t-home"); const F=feedItems(); const unread=3;
-  let posts=""; F.forEach((x,n)=>{
-    posts+=postHTML(x);
-    if(n===1) posts+=`<section class="ins"><div class="ins__h"><b>On mange où ce soir ?</b><span class="eyebrow">AVEC TA BANDE</span></div><button class="omo" data-group><div class="omo__stack">${[5,6,3].map((id,k)=>cardHTML(PL(id).c,{resto:PL(id).n,style:`transform:rotate(${(k-1)*10}deg)`})).join("")}</div><div class="grow"><b>On mange où ?</b><span>Chacun swipe, l'appli tranche.</span><span class="omo__go">Lancer une partie →</span></div></button></section>`;
-    if(n===3) posts+=`<section class="ins"><div class="ins__h"><b>Suggestions pour toi</b><button data-add>Voir tout</button></div><div class="hscroll">${SUGG.filter(s=>!FRIENDS.some(f=>f.n===s.n)).slice(0,5).map(s=>`<div class="sugg">${avatar(s.n,s.c)}<b>${esc(s.n)}</b><span>Ami·e de ${esc(s.mut)}</span><button class="btn btn--sm" data-addname="${esc(s.n)}">Ajouter</button></div>`).join("")||`<p class="sub">T'as ajouté tout le monde.</p>`}</div></section>`;
-  });
-  t.innerHTML=`<header class="ihead"><img src="${IMG.wordmark}" alt="Le Guide Ultime" class="ihead__logo"><div class="ihead__a"><button data-activity aria-label="Activité">${icon("heart")}<i class="dot"></i></button><button data-dm aria-label="Messages">${icon("send")}<i class="badge">${unread}</i></button></div></header>
-  ${storyRingHTML()}<div class="feed2">${posts}<p class="feed2__end">${icon("check")} T'es à jour. Va scanner une plaque !</p></div>`;
-  t.onclick=homeClick; t.ondblclick=e=>{ const m=e.target.closest("[data-media]"); if(m) dblLike(m.closest(".post")); };
-  let last=0; t.ontouchend=e=>{ const m=e.target.closest("[data-media]"); if(!m) return; const now=Date.now(); if(now-last<300){ e.preventDefault(); dblLike(m.closest(".post")); } last=now; };
-}
-function dblLike(post){ const k=post.dataset.k; toggleLike(k,true); const h=post.querySelector(".post__heart"); h.classList.remove("is-pop"); void h.offsetWidth; h.classList.add("is-pop"); refreshPostActions(post); }
-function refreshPostActions(post){ const k=post.dataset.k, pid=+post.dataset.pid; const lk=isLiked(k), b=post.querySelector("[data-like]"); b.classList.toggle("is-on",lk); b.innerHTML=icon(lk?"heart-f":"heart"); post.querySelector(".post__likes").textContent=`${likesOf(k)+(lk?1:0)} J'aime`; const sv=S.saved.includes(pid), s=post.querySelector("[data-save]"); s.classList.toggle("is-on",sv); s.innerHTML=icon(sv?"bookmark-f":"bookmark"); }
-function homeClick(e){
-  const b=e.target.closest("button"); if(!b) return; const post=b.closest(".post");
-  if(b.hasAttribute("data-like")){ toggleLike(post.dataset.k); refreshPostActions(post); }
-  else if(b.hasAttribute("data-save")){ const id=+post.dataset.pid, i=S.saved.indexOf(id); if(i>=0) S.saved.splice(i,1); else S.saved.push(id); save(); refreshPostActions(post); toast(i<0?"Enregistré dans « À tester »":"Retiré de « À tester »"); }
-  else if(b.hasAttribute("data-com")) openComments(post.dataset.k,+post.dataset.pid,+post.dataset.i);
-  else if(b.hasAttribute("data-share")) openShare(+post.dataset.pid);
-  else if(b.hasAttribute("data-more")) openPostMore(+post.dataset.pid,+post.dataset.i);
-  else if(b.dataset.friend) openFriend(+b.dataset.friend);
-  else if(b.dataset.open) openPlace(+b.dataset.open);
-  else if(b.hasAttribute("data-mystory")) openMyStory();
-  else if(b.hasAttribute("data-stories")) openStories(0);
-  else if(b.dataset.fstory) openFriendStory(+b.dataset.fstory);
-  else if(b.hasAttribute("data-group")) openGroup();
-  else if(b.hasAttribute("data-add")) openAddFriends();
-  else if(b.dataset.addname) addFriend(b.dataset.addname,()=>renderHome());
-  else if(b.hasAttribute("data-activity")) openActivity();
-  else if(b.hasAttribute("data-dm")) openMessages();
-}
-function openComments(k,pid,i){
-  const draw=()=>commentsOf(k,i).map(c=>`<div class="cm">${avatar(c.n,c.c)}<p><b>${esc(c.n)}</b> ${esc(c.t)}</p></div>`).join("");
-  const d=sheet(`<div class="h3" style="text-align:center">Commentaires</div><div class="cms" id="cms">${draw()}</div><form class="cin" id="cin"><span class="avatar" style="background:var(--jaune)">${esc((S.name||"?")[0])}</span><input id="cinq" placeholder="Ajoute un commentaire…" autocomplete="off" maxlength="140"><button class="btn btn--sm" type="submit">Publier</button></form>`);
-  d.querySelector("#cin").onsubmit=e=>{ e.preventDefault(); const v=d.querySelector("#cinq").value.trim(); if(!v) return; S.comments=S.comments||{}; (S.comments[k]=S.comments[k]||[]).push({n:S.name,c:"var(--jaune)",t:v}); save(); d.querySelector("#cms").innerHTML=draw(); d.querySelector("#cinq").value=""; if(TAB==="home") renderHome(); };
-}
-function openShare(pid){
-  const p=PL(pid);
-  const d=sheet(`<div class="h3" style="text-align:center">Envoyer à</div><div class="shr">${FRIENDS.map((f,i)=>`<button data-to="${i}">${avatar(f.n,f.c)}<span>${esc(f.n)}</span></button>`).join("")}</div>
-    <div class="shr2"><button data-cp>${icon("copy")}<span>Copier le lien</span></button><button data-story>${icon("plus")}<span>Ta story</span></button><button data-grp>${icon("user")}<span>On mange où ?</span></button></div>`);
-  d.querySelector(".sheet__body").onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
-    if(b.dataset.to){ b.classList.add("is-on"); toast(`Envoyé à ${FRIENDS[+b.dataset.to].n}`); }
-    else if(b.hasAttribute("data-cp")) copyText("lgu.app/p/"+norm(p.n).replace(/[^a-z0-9]+/g,"-"),"Lien copié");
-    else if(b.hasAttribute("data-story")){ popLayer(d); openStory(p.c,p); }
-    else if(b.hasAttribute("data-grp")){ popLayer(d); openGroup(); } };
-}
-function openPostMore(pid,i){
-  const d=sheet(`<div class="list"><button class="li" data-a="place">Voir l'adresse</button><button class="li" data-a="friend">Voir le profil de ${esc(FRIENDS[i].n)}</button><button class="li" data-a="group">Proposer pour « On mange où ? »</button><button class="li" data-a="hide" style="color:var(--rouge)">Masquer ce post</button></div>`);
-  d.querySelector(".sheet__body").onclick=e=>{ const b=e.target.closest("[data-a]"); if(!b) return; popLayer(d); const a=b.dataset.a; if(a==="place") openPlace(pid); if(a==="friend") openFriend(i); if(a==="group") openGroup(); if(a==="hide") toast("Post masqué"); };
-}
-function openActivity(){
-  const it=[[0,"a aimé ta carte",PL(11).n,"3 h"],[1,"veut aller chez Forno Ribelle avec toi","","4 h"],[2,"a commenté : « Trop bon le bouillon 🔥 »","","6 h"],[3,"t'a ajouté·e à sa bande","","1 j"],[4,"a aimé ta carte",PL(23).n,"2 j"]];
-  sheet(`<div class="h3" style="text-align:center">Activité</div><div class="act2"><div class="act2__r"><span class="sr__a sr__a--lgu" style="width:44px;height:44px"><img src="${IMG.badge}" alt=""></span><p><b>La rédac</b> Le plat du jour de Clara est en ligne. <small>11:45</small></p></div>${it.map(([i,txt,extra,h])=>`<div class="act2__r">${avatar(FRIENDS[i].n,FRIENDS[i].c)}<p><b>${esc(FRIENDS[i].n)}</b> ${esc(txt)}${extra?` <b>${esc(extra)}</b>`:""}. <small>${h}</small></p>${extra?`<div style="width:38px">${cardHTML(PL(i===0?11:23).c,{resto:extra})}</div>`:""}</div>`).join("")}</div>`);
-}
-function openMessages(){
-  const convs=[{w:[0,1,2],t:"Ce soir c'est Forno ?",h:"12:10",u:true},{w:[0],t:"T'as testé Kintsugi ?",h:"11:02",u:true},{w:[3],t:"Carte décrochée 🔥",h:"Hier",u:true},{w:[4],t:"On se fait un brunch dimanche",h:"Sam."}];
-  const d=full("Messages",`<div class="sect" style="padding-top:0"><button class="omo" data-group style="padding:12px 14px"><div class="grow"><b style="font-size:20px">Nouvelle partie « On mange où ? »</b><span>Envoie 10 plaqués à swiper à tes potes.</span></div></button></div>
-    <div class="sect"><div class="dms">${convs.map((c,n)=>`<button class="dm2" data-conv="${n}"><span class="dm2__av">${c.w.slice(0,2).map(i=>avatar(FRIENDS[i].n,FRIENDS[i].c)).join("")}</span><span class="grow"><b>${esc(listFr(c.w.map(i=>FRIENDS[i].n)))}</b><small class="${c.u?"is-u":""}">${esc(c.t)} · ${c.h}</small></span>${c.u?`<i class="dot"></i>`:""}</button>`).join("")}</div></div>`);
-  d.querySelector(".full__body").onclick=e=>{ const b=e.target.closest("button"); if(!b) return; if(b.hasAttribute("data-group")) openGroup(); if(b.dataset.conv) openChat(convs[+b.dataset.conv]); };
-}
-function openChat(c){
-  const names=c.w.map(i=>FRIENDS[i].n), p=PL(6);
-  const msgs=[{w:c.w[0],t:c.t},{w:c.w[0],card:6},{me:true,t:"Grave, 20h30 ?"},{w:c.w[c.w.length-1],t:"Chaud 🔥"}];
-  const draw=()=>msgs.map(m=>m.me?`<div class="bub bub--me">${esc(m.t)}</div>`:m.card!=null?`<button class="bub bub--card" data-pl="${m.card}"><div style="width:62px">${cardHTML(PL(m.card).c,{resto:PL(m.card).n})}</div><span><b>${esc(PL(m.card).n)}</b><small>${esc(title(PL(m.card).c))} · ${fmtD(distM(PL(m.card)))}</small></span></button>`:`<div class="bub"><b>${esc(FRIENDS[m.w].n)}</b>${esc(m.t)}</div>`).join("");
-  const d=full(esc(listFr(names)),`<div class="chat" id="chat">${draw()}</div>`,{after:`<form class="cin cin--bar" id="chf"><input id="chq" placeholder="Message…" autocomplete="off"><button class="btn btn--sm" type="submit">Envoyer</button></form>`,right:`<button class="iconbtn" data-g aria-label="On mange où ?">${icon("user")}</button>`});
-  d.querySelector("#chf").onsubmit=e=>{ e.preventDefault(); const v=d.querySelector("#chq").value.trim(); if(!v) return; msgs.push({me:true,t:v}); d.querySelector("#chat").innerHTML=draw(); d.querySelector("#chq").value=""; const fb=d.querySelector(".full__body"); fb.scrollTop=fb.scrollHeight; };
-  d.onclick=e=>{ const b=e.target.closest("button"); if(!b) return; if(b.dataset.pl) openPlace(+b.dataset.pl); if(b.hasAttribute("data-g")) openGroup(c.w); };
-}
-function openFriendStory(i){
-  const f=FRIENDS[i]; const L=(FR_OWN[i]||[]).slice(0,4); let k=0, timer=null;
-  S.seenF=S.seenF||[]; if(!S.seenF.includes(i)){ S.seenF.push(i); save(); }
-  const d=pushLayer(`<div class="st"><div class="st__bars">${L.map(()=>`<i><b></b></i>`).join("")}</div><div class="st__head"><span class="st__av" style="background:${f.c}">${esc(f.n[0])}</span><div class="grow"><b>${esc(f.n)}</b><span id="sth"></span></div><button class="iconbtn" data-x aria-label="Fermer" style="background:rgba(0,0,0,.35);color:#fff;border-color:rgba(255,255,255,.35);box-shadow:none">${icon("x")}</button></div><div class="st__slide" id="sts"></div><button class="st__nav st__nav--l" data-prev aria-label="Précédente"></button><button class="st__nav st__nav--r" data-nextst aria-label="Suivante"></button>
-    <form class="st__reply" id="str"><input placeholder="Envoyer un message à ${esc(f.n)}…" autocomplete="off"><button type="button" data-re="🔥">🔥</button><button type="button" data-re="😍">😍</button></form></div>`,"ov",{hideNav:true});
-  const bars=$$(".st__bars b",d);
-  const show=()=>{ clearTimeout(timer); bars.forEach((b,n)=>{ b.style.transition="none"; b.style.width=n<k?"100%":"0%"; }); requestAnimationFrame(()=>{ bars[k].style.transition="width 6s linear"; bars[k].style.width="100%"; });
-    const p=PL(L[k]), v=frVerdict(i,p.id), r=frRank(i,p.id); d.querySelector("#sth").textContent=`${ago(k*7+i+2)} · ${p.n}`;
-    const s=d.querySelector("#sts"); s.setAttribute("style",artStyle(p.c)+";background-size:cover;background-position:center 60%");
-    s.innerHTML=`<div class="st__shade"></div><div class="st__body"><span class="vtag vtag--${norm(v)}" style="align-self:flex-start;font-size:16px">${v}</span><h2 class="st__t">${esc(p.n)}</h2><p class="st__s">${r?`N°${r} de ses ${esc(plural(p.c))} · `:""}${esc(where(p))}</p><button class="btn btn--block" data-pl="${p.id}" style="margin-bottom:58px">Voir l'adresse</button></div>`;
-    timer=setTimeout(()=>{ if(k<L.length-1){ k++; show(); } else close(); },6000); };
-  const close=()=>{ clearTimeout(timer); popLayer(d); if(TAB==="home") renderHome(); };
-  d.querySelector("#str").onsubmit=e=>{ e.preventDefault(); const inp=e.target.querySelector("input"); if(inp.value.trim()){ toast(`Envoyé à ${f.n}`); inp.value=""; } };
-  d.onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
-    if(b.hasAttribute("data-x")) close();
-    else if(b.hasAttribute("data-prev")){ k=Math.max(0,k-1); show(); }
-    else if(b.hasAttribute("data-nextst")){ if(k<L.length-1){ k++; show(); } else close(); }
-    else if(b.dataset.pl){ close(); openPlace(+b.dataset.pl); }
-    else if(b.dataset.re){ toast(`${b.dataset.re} envoyé à ${f.n}`); } };
-  d.querySelector("#str input").onfocus=()=>clearTimeout(timer);
-  show();
-}
-function openMyStory(){ const c=allCards()[0]; if(c) openStory(c.c,PL(c.p)); }
-
-// ---------- profils façon Instagram ----------
-function pfLayout(o){
-  return `<div class="pfi"><div class="pfi__top"><span class="pfi__av" style="background:${o.c}">${esc(o.n[0])}</span><div class="pfi__st">${o.stats.map(([n,l,a])=>`<button ${a||""}><b>${n}</b><span>${l}</span></button>`).join("")}</div></div>
-    <div class="pfi__bio"><b>${esc(o.n)}</b><span>${o.bio}</span>${o.extra||""}</div><div class="pfi__btns">${o.btns}</div>
-    ${o.hl.length?`<div class="pfi__hl">${o.hl.map(h=>`<button class="hl" data-top="${esc(h)}"><span class="hl__c" style="${artStyle(h)}"></span><span>${esc(h)}</span></button>`).join("")}</div>`:""}
-    <div class="pfi__tabs">${o.tabs.map(([k,ic,on])=>`<button class="${on?"is-on":""}" data-ptab="${k}" aria-label="${k}">${icon(ic)}</button>`).join("")}</div><div id="pgrid">${o.grid}</div></div>`;
-}
-function gridHTML(items){ return items.length?`<div class="pgrid">${items.map(x=>`<button data-card="${esc(PL(x.p).c)}|${x.p}">${cardHTML(PL(x.p).c,{resto:PL(x.p).n})}</button>`).join("")}</div>`:`<p class="sub" style="text-align:center;padding:30px 16px">Rien ici pour l'instant.</p>`; }
-let PTAB="grid";
-function renderMoi(){
-  const t=$("#t-moi"); const L=lvlOf(S.pts); const cards=allCards();
-  const tops=Object.keys(S.own).filter(c=>S.own[c].length).sort((a,b)=>S.own[b].length-S.own[a].length).slice(0,8);
-  const grid = PTAB==="grid"?gridHTML(cards):PTAB==="tops"?`<div class="tops" style="padding:12px 16px">${topsHTML(S.own,myRank,12)}</div>`:gridHTML(S.saved.map(p=>({p})));
-  t.innerHTML=`<div class="tabpad"><header class="pfi__head"><b>${esc(handle())}</b><div class="ihead__a"><button data-add aria-label="Ajouter des potes">${icon("plus")}</button><button data-menu aria-label="Menu">${icon("menu")}</button></div></header>
-  ${pfLayout({n:S.name,c:"var(--jaune)",stats:[[cards.length,"cartes"],[ownedCats().length,"catégories"],[FRIENDS.length,"potes","data-friends"]],
-    bio:`${esc((S.cities||[S.city]).join(" · "))}`,extra:`<button class="lvlpill" data-ladder><b>Niv. ${L.n} · ${esc(L.t)}</b> ${fmtN(S.pts)} pts · Avantages ›</button>`,
-    btns:`<button class="pbtn" data-print>Imprimer mes cartes</button><button class="pbtn" data-sharepf>Partager le profil</button><button class="pbtn pbtn--ic" data-add aria-label="Ajouter des potes">${icon("user")}</button>`,
-    hl:tops,tabs:[["grid","grid",PTAB==="grid"],["tops","star",PTAB==="tops"],["saved","bookmark",PTAB==="saved"]],grid})}</div>`;
-  t.onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
-    if(b.dataset.ptab){ PTAB=b.dataset.ptab; renderMoi(); }
-    else if(b.dataset.card){ const [c,p]=b.dataset.card.split("|"); openViewer(c,+p); }
-    else if(b.dataset.top) openTop(b.dataset.top,S.own,myRank);
-    else if(b.hasAttribute("data-friends")) openFriendsList();
-    else if(b.hasAttribute("data-ladder")) openLadder();
-    else if(b.hasAttribute("data-print")) openShop();
-    else if(b.hasAttribute("data-sharepf")) openSharePf();
-    else if(b.hasAttribute("data-add")) openAddFriends();
-    else if(b.hasAttribute("data-menu")) openMenu(); };
-}
-function openTop(c,own,rankFn){ const r=rankFn(c); const d=sheet(`<div class="row" style="gap:12px"><span class="hl__c" style="${artStyle(c)};width:56px;height:56px"></span><div><span class="eyebrow">À LA UNE</span><div class="h2">Top ${esc(c.toLowerCase())}</div></div></div><div class="list">${r.map((p,k)=>`<button class="li" data-pl="${p}"><span class="rr__rk" style="width:24px">${k+1}</span><span class="grow">${esc(PL(p).n)}<small>${esc(where(PL(p)))}</small></span>${icon("back","chev")}</button>`).join("")}</div>`); d.querySelector(".sheet__body").onclick=e=>{ const b=e.target.closest("[data-pl]"); if(b){ popLayer(d); openPlace(+b.dataset.pl); } }; }
-function openFriendsList(){ const d=sheet(`<div class="h3" style="text-align:center">Ta bande · ${FRIENDS.length}</div><div class="list">${FRIENDS.map((f,i)=>`<button class="li" data-friend="${i}">${avatar(f.n,f.c)}<span class="grow">${esc(f.n)}<small>@${norm(f.n)} · ${compatOf(i).common.length} adresses en commun</small></span><span class="pct"><b>${FR_COMPAT[i]}%</b><i style="width:${FR_COMPAT[i]}%"></i></span></button>`).join("")}</div><button class="btn btn--black btn--block" data-add>Ajouter des potes</button>`); d.querySelector(".sheet__body").onclick=e=>{ const b=e.target.closest("button"); if(!b) return; popLayer(d); if(b.dataset.friend) openFriend(+b.dataset.friend); if(b.hasAttribute("data-add")) openAddFriends(); }; }
-function openMenu(){
-  const d=sheet(`<div class="list">
-    <button class="li" data-m="print"><span class="ic" style="background:var(--rose)">${icon("box")}</span><span class="grow">Imprimer mes cartes<small>${allCards().filter(x=>!isPrinted(x.p)).length} pas encore imprimées</small></span></button>
-    <button class="li" data-m="ladder"><span class="ic" style="background:var(--jaune)">${icon("gift")}</span><span class="grow">Mes avantages</span></button>
-    <button class="li" data-m="saved"><span class="ic" style="background:var(--jaune)">${icon("bookmark")}</span><span class="grow">À tester<small>${S.saved.length} adresses</small></span></button>
-    <button class="li" data-m="creators"><span class="ic" style="background:var(--cyan)">${icon("play")}</span><span class="grow">Créateurs suivis</span></button></div>
-    <span class="eyebrow">Démos du prototype</span><div class="list">
-    <button class="li" data-m="insta"><span class="grow">Insta : commente « CARTE »</span></button><button class="li" data-m="notif"><span class="grow">Notif de 11h45</span></button><button class="li" data-m="onb"><span class="grow">Revoir l'accueil</span></button><button class="li" data-m="reset" style="color:var(--rouge)"><span class="grow">Remettre la démo à zéro</span></button></div>`);
-  d.querySelector(".sheet__body").onclick=e=>{ const b=e.target.closest("[data-m]"); if(!b) return; popLayer(d); const m=b.dataset.m;
-    ({print:openShop,ladder:openLadder,saved:openSaved,creators:openCreatorsList,insta:openInstaDemo,onb:startOnb,reset:confirmReset,notif:()=>{ notifMock.done=false; notifMock(); }})[m](); };
-}
-function openFriend(i){
-  const f=FRIENDS[i], k=compatOf(i); const own={}; (FR_OWN[i]||[]).forEach(p=>{ const c=PL(p).c; (own[c]=own[c]||[]).push(p); });
-  const items=(FR_OWN[i]||[]).map(p=>({p}));
-  const d=full(`@${norm(f.n)}`,pfLayout({n:f.n,c:f.c,stats:[[f.k,"cartes"],[Object.keys(own).length,"catégories"],[k.common.length,"en commun"]],
-    bio:"Dans ta bande",extra:`<div class="compat" style="margin-top:8px"><div class="compat__n">${k.pct}<small>%</small></div><div class="grow"><b>compatibles en bouffe</b><span>${k.pct>80?"Vous êtes faits pour manger ensemble.":k.pct>65?"Bonne entente, quelques débats sur le sucré.":"Vous allez vous disputer le choix du resto."}</span></div></div>`,
-    btns:`<button class="pbtn pbtn--on">Dans ta bande ✓</button><button class="pbtn" data-msg>Message</button><button class="pbtn pbtn--red" data-g>On mange où ?</button>`,
-    hl:Object.keys(own).slice(0,6),tabs:[["grid","grid",true]],grid:gridHTML(items)}));
-  d.querySelector(".full__body").onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
-    if(b.hasAttribute("data-g")) openGroup([i]);
-    else if(b.hasAttribute("data-msg")) openChat({w:[i],t:"Yo ! On se fait un resto ?"});
-    else if(b.dataset.top) openTop(b.dataset.top,own,c=>own[c]);
-    else if(b.dataset.card){ const p=+b.dataset.card.split("|")[1]; openPlace(p); } };
-}
-
-// =========================================================
 // ACCUEIL (3 écrans)
 // =========================================================
 const ONB=["splash","name","envies","bande"];
 let O=0, OD=null, ONB_ALL=false;
 function startOnb(){ closeAll(); O=0; ONB_ALL=false; if(OD) OD.remove(); OD=document.createElement("div"); OD.className="onb"; $("#app").appendChild(OD); $("#nav").classList.add("is-hidden"); drawOnb(); }
-function endOnb(){ S.onb=true; save(); if(OD){ OD.remove(); OD=null; } $("#nav").classList.remove("is-hidden"); go("home"); setTimeout(notifMock,2500); }
+function endOnb(){ S.onb=true; save(); if(OD){ OD.remove(); OD=null; } $("#nav").classList.remove("is-hidden"); go("map"); setTimeout(notifMock,2500); }
 function drawOnb(){
   const step=ONB[O]; let body="", foot="";
   S.cities=S.cities||["Paris"];
@@ -2856,12 +2572,12 @@ function drawOnb(){
 // =========================================================
 // BOOT
 // =========================================================
-function rerender(){ ({home:renderHome,map:refreshMap,collec:renderCollec,potes:renderPotes,moi:renderMoi})[TAB](); }
+function rerender(){ ({map:refreshMap,collec:renderCollec,potes:renderPotes,moi:renderMoi})[TAB](); }
 function boot(){
   document.documentElement.style.setProperty("--grain",`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E")`); document.documentElement.style.setProperty("--speck",`url(${IMG.speck})`);
   $("#pitchLogo").src=IMG.wordmark;
   $$("[data-jump]").forEach(b=>b.onclick=()=>jump(b.dataset.jump));
-  go("home"); const av=$(".nav__av"); if(av) av.textContent=(S.name||"?")[0];
+  go("map");
   const h=(location.hash||"").slice(1);
   if(h) jump(h); else if(!S.onb) startOnb(); else setTimeout(notifMock,2500);
 }
@@ -2877,12 +2593,12 @@ function jump(k){
     case "collec": go("collec"); break;
     case "album": go("collec"); openShop(); break;
     case "moi": go("moi"); break;
-    case "potes": case "home": go("home"); break;
+    case "potes": go("potes"); break;
     case "stories": notifMock.done=true; go("map"); openStories(0); break;
     case "group": notifMock.done=true; go("map"); openGroup(); break;
     case "insta": notifMock.done=true; go("map"); openInstaDemo(); break;
     case "notif": go("map"); notifMock.done=false; notifMock(); break;
-    default: go("home");
+    default: go("map");
   }
 }
 let rz; window.addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(TAB==="map"){ renderMap(); } },200); });
