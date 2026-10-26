@@ -1302,12 +1302,12 @@ const NEWCAT = 25, BOOSTER_BONUS = 150, REVISIT = 5;
 const TYPO_G = ["linear-gradient(180deg,#FF99B3 0%,#FFB37A 55%,#FFCE18 100%)","linear-gradient(180deg,#6EA5FF 0%,#C9C7E6 50%,#FFCE18 100%)","linear-gradient(180deg,#EE0001 0%,#FF6A6A 45%,#FF99B3 100%)","linear-gradient(180deg,#FFD24A 0%,#FF8A1F 60%,#EE0001 100%)","linear-gradient(180deg,#00DEB5 0%,#9BE7D5 45%,#FFCE18 100%)","linear-gradient(180deg,#FFE27A 0%,#FF99B3 100%)"];
 
 const LEVELS = [
-  {n:1,t:"Petit creux",min:0,perks:["La map de tous les plaqués","Ta collec et ton booster chaque lundi"]},
-  {n:2,t:"Affamé",min:250,perks:["Le café offert chez les plaqués Coffeeshop"]},
-  {n:3,t:"Gourmand",min:700,perks:["−10 % sur l'addition chez les plaqués partenaires"]},
-  {n:4,t:"Fine gueule",min:1200,perks:["Le dessert offert chez les plaqués partenaires","Les nouvelles plaques 48 h avant tout le monde"]},
-  {n:5,t:"Épicurien",min:2000,perks:["Une table gardée pour toi le vendredi soir","Invitations aux soirées LGU"]},
-  {n:6,t:"Ultime",min:3500,perks:["Tu votes pour la cuvée 2027/2028","Un dîner avec la rédac"]}
+  {n:1,t:"Petit creux",min:0,perks:["La map de tous les plaqués","Ta collec et ta sélection chaque lundi"]},
+  {n:2,t:"Affamé",min:250,perks:["Tes premières récompenses LGU"]},
+  {n:3,t:"Gourmand",min:700,perks:["Des avantages chez les plaqués"]},
+  {n:4,t:"Fine gueule",min:1200,perks:["Des surprises réservées aux fines gueules","Les nouvelles plaques en avant-première"]},
+  {n:5,t:"Épicurien",min:2000,perks:["Des expériences signées LGU"]},
+  {n:6,t:"Ultime",min:3500,perks:["Les plus belles récompenses du Guide"]}
 ];
 
 const CREATORS = [
@@ -1418,11 +1418,11 @@ const MOTS = {
 const motFor = p => p.mot || MOTS[p.c] || `On est passés, on a goûté, on a tranché : ${title(p.c).toLowerCase()} ${p.city==="Paris"?"du "+p.q:"de "+p.city}. La rédac a validé, la plaque est sur la devanture.`;
 
 const SETS = [
-  {id:"kebab-etoile",t:"Du kebab à l'étoilé",c:["Kebab","Boui boui","Bistrot","Brasserie","Mérite une étoile","Étoilé"],r:"Badge signature + un dîner étoilé tiré au sort"},
-  {id:"asie",t:"Tour d'Asie",c:["Ramen","Pho","Bobun","Banh mi","Pad thaï","Gyoza","Xiao long bao","Bibimbap","Sushi","Onigiri","Hot pot"],r:"Sticker holo « Tour d'Asie » + 100 pts"},
-  {id:"street",t:"Street-food",c:["Kebab","Burger","Frites","Tacos","French Tacos","Poulet frit","Crousty","Sandwich"],r:"Sticker holo « Street » + 100 pts"},
-  {id:"sucre",t:"Bec sucré",c:["Flan","Cookie","Croissant","Pain au chocolat","Éclairs","Paris Brest","Cannelés","Kouign Amann"],r:"Le goûter offert chez un plaqué sucré"},
-  {id:"france",t:"Tour de France",c:["Aligot","Cannelés","Kouign Amann","Cuisine locale","Produits locaux","Marchés"],r:"Badge globe-trotteur + 200 pts"}
+  {id:"kebab-etoile",t:"Du kebab à l'étoilé",c:["Kebab","Boui boui","Bistrot","Brasserie","Mérite une étoile","Étoilé"],r:"Badge signature + une récompense surprise"},
+  {id:"asie",t:"Tour d'Asie",c:["Ramen","Pho","Bobun","Banh mi","Pad thaï","Gyoza","Xiao long bao","Bibimbap","Sushi","Onigiri","Hot pot"],r:"Sticker holo « Tour d'Asie » + une récompense surprise"},
+  {id:"street",t:"Street-food",c:["Kebab","Burger","Frites","Tacos","French Tacos","Poulet frit","Crousty","Sandwich"],r:"Sticker holo « Street » + une récompense surprise"},
+  {id:"sucre",t:"Bec sucré",c:["Flan","Cookie","Croissant","Pain au chocolat","Éclairs","Paris Brest","Cannelés","Kouign Amann"],r:"Sticker holo « Bec sucré » + une récompense surprise"},
+  {id:"france",t:"Tour de France",c:["Aligot","Cannelés","Kouign Amann","Cuisine locale","Produits locaux","Marchés"],r:"Badge globe-trotteur + une récompense surprise"}
 ];
 
 // ---------- ÉTAT ----------
@@ -1926,7 +1926,7 @@ function openPlace(id){
     ${own?`<div class="perk" style="background:var(--cyan);color:var(--noir)">${icon("check")}<div><b style="color:var(--noir)">Carte décrochée le ${fmtDate(S.own[p.c].find(x=>x.p===id).d)}</b><br><span style="font:600 italic 13px var(--f-title)">Reviens quand tu veux : +${REVISIT} pts à chaque visite.</span></div></div>`
           :`<div class="perk">${icon("nfc")}<div><b>Carte à décrocher ici</b><br><span style="font:600 italic 13px var(--f-title)">Scanne la plaque au moment de payer : +${RAR_PTS[RAR[p.c]]} pts${isOwnedCat(p.c)?"":` et +${NEWCAT} nouvelle catégorie`}.</span></div></div>`}
     <div class="quote"><span class="sig">la rédac</span><span class="eyebrow">Pourquoi on l'a plaqué</span><p>${esc(motFor(p))}</p></div>
-    <div class="perk ${perkOk?"":"is-locked"}">${icon("gift")}<div><b>${perkOk?"Ton avantage ici":"Avantage niveau 3"}</b><br><span style="font:600 italic 13px var(--f-title)">−10 % sur l'addition${perkOk?" : montre ton pass en payant.":" dès le niveau Gourmand."}</span></div>${perkOk?`<button class="btn btn--sm" data-pass style="margin-left:auto">Pass</button>`:""}</div>
+    <div class="perk">${icon("gift")}<div><b>Récompenses LGU</b><br><span style="font:600 italic 13px var(--f-title)">Bientôt des récompenses chez les plaqués. Plus tu collectionnes, plus tu débloques.</span></div></div>
     ${bandNotesHTML(id)}
     ${p.cr.length?`<div style="display:flex;flex-direction:column;gap:8px"><div class="sect__h"><span class="h3">Vu chez</span><span class="eyebrow muted">bonus créateurs</span></div><div class="creators">${p.cr.map(i=>{const c=CREATORS[i];return `<button class="cr" data-creator="${i}">${avatar(c.n,c.c)}@${esc(c.h)}<span class="pl">${icon("play")}</span></button>`;}).join("")}</div></div>`:""}
     <div class="actions"><button class="act" data-route>${icon("route")}Y aller</button><button class="act" data-save>${icon(saved?"bookmark-f":"bookmark")}${saved?"Sauvé":"À tester"}</button><button class="act" data-share>${icon("share")}Partager</button></div>
@@ -2030,7 +2030,7 @@ function doScan(id){
   setTimeout(rerender,100);
 }
 function levelUp(L){
-  const d=pushLayer(`<div class="lu"><div class="reveal__burst" style="top:30%"></div><span class="reveal__kicker">Niveau débloqué</span><div class="lu__n">${L.n}</div><h2 class="lu__t">${esc(L.t)}</h2><p class="scan__p" style="position:relative">Nouveaux avantages chez les plaqués partenaires :</p><ul>${L.perks.map(x=>`<li>${icon("gift")}${esc(x)}</li>`).join("")}</ul><button class="btn btn--block" data-ok style="position:relative">Let's gooooo</button></div>`,"ov",{hideNav:true});
+  const d=pushLayer(`<div class="lu"><div class="reveal__burst" style="top:30%"></div><span class="reveal__kicker">Niveau débloqué</span><div class="lu__n">${L.n}</div><h2 class="lu__t">${esc(L.t)}</h2><p class="scan__p" style="position:relative">Ce que ça débloque :</p><ul>${L.perks.map(x=>`<li>${icon("gift")}${esc(x)}</li>`).join("")}</ul><button class="btn btn--block" data-ok style="position:relative">Let's gooooo</button></div>`,"ov",{hideNav:true});
   confetti(220);
   d.querySelector("[data-ok]").onclick=()=>{ popLayer(d); go(TAB); };
 }
@@ -2155,7 +2155,7 @@ function openCreatorsList(){
   d.onclick=e=>{ const b=e.target.closest(".crow"); if(!b) return; const i=+b.dataset.i; const k=S.follow.indexOf(i); if(k>=0) S.follow.splice(k,1); else S.follow.push(i); save(); b.classList.toggle("is-on"); b.querySelector(".fol").textContent=k>=0?"Suivre":"Suivi"; };
 }
 function openInvite(){
-  const d=sheet(`<div class="h2">Ramène ta bande</div><p class="sub">+50 pts pour toi à chaque pote qui s'inscrit avec ton code. Et un booster offert pour lui.</p>
+  const d=sheet(`<div class="h2">Ramène ta bande</div><p class="sub">+50 pts pour toi à chaque pote qui s'inscrit avec ton code. Et un bonus de bienvenue pour lui.</p>
   <div class="friends">${FRIENDS.slice(0,3).map(f=>`<div class="crow">${avatar(f.n,f.c)}<span class="grow"><b>${esc(f.n)}</b><span>${f.k} cartes · déjà sur LGU</span></span><span class="fol" style="background:var(--noir);color:var(--jaune)">Ami</span></div>`).join("")}
   ${["Léa","Nassim","Chloé"].map((n,i)=>`<div class="crow">${avatar(n,["#FFE27A","#BDEFD9","#FFC9D6"][i])}<span class="grow"><b>${n}</b><span>Dans tes contacts</span></span><button class="fol" data-inv="${n}">Inviter</button></div>`).join("")}</div>
   <p class="note">Contacts d'exemple. Dans l'appli, le matching se fait sur des empreintes chiffrées sur ton tel, jamais en clair.</p>`);
@@ -2418,7 +2418,7 @@ function renderMoi(){
   <div class="sect"><div class="sect__h"><h2 class="h2">Mes tops</h2><span class="eyebrow">ZÉRO ÉTOILE</span></div><div class="tops">${topsHTML(S.own,myRank)}</div></div>
   <div class="sect"><div class="sect__h"><h2 class="h2">Compatibilité</h2><button data-group>On mange où ?</button></div>
     <div class="list">${FRIENDS.map((f,i)=>{const k=compatOf(i);return `<button class="li" data-friend="${i}">${avatar(f.n,f.c)}<span class="grow">${esc(f.n)}<small>${k.common.length} adresse${k.common.length>1?"s":""} en commun</small></span><span class="pct"><b>${k.pct}%</b><i style="width:${k.pct}%"></i></span></button>`;}).join("")}</div></div>
-  <div class="sect"><button class="lvl" data-ladder style="text-align:left;width:100%"><div class="lvl__top"><div><div class="lvl__n">NIVEAU ${L.n} · TES AVANTAGES</div><div class="lvl__t">${esc(L.t)}</div></div><div class="lvl__pts">${fmtN(S.pts)}<small>POINTS</small></div></div><div class="bar bar--y"><i style="width:${pct}%"></i></div><div class="lvl__next">${N?`Encore <b style="color:#fff">${N.min-S.pts} pts</b> pour ${esc(N.t)} · voir les avantages →`:"Ultime. Voir tes avantages →"}</div></button></div>
+  <div class="sect"><button class="lvl" data-ladder style="text-align:left;width:100%"><div class="lvl__top"><div><div class="lvl__n">NIVEAU ${L.n} · TES RÉCOMPENSES</div><div class="lvl__t">${esc(L.t)}</div></div><div class="lvl__pts">${fmtN(S.pts)}<small>POINTS</small></div></div><div class="bar bar--y"><i style="width:${pct}%"></i></div><div class="lvl__next">${N?`Encore <b style="color:#fff">${N.min-S.pts} pts</b> pour ${esc(N.t)} · voir les récompenses →`:"Ultime. Voir tes récompenses →"}</div></button></div>
   <div class="sect"><div class="list">
     <button class="li" data-list="saved"><span class="ic" style="background:var(--jaune)">${icon("bookmark")}</span><span class="grow">À tester<small>${S.saved.length} adresses sauvées</small></span>${icon("back","chev")}</button>
     <button class="li" data-list="print"><span class="ic" style="background:var(--rose)">${icon("box")}</span><span class="grow">Imprimer mes cartes<small>${cards.filter(x=>!isPrinted(x.p)).length} pas encore imprimées</small></span>${icon("back","chev")}</button>
@@ -2449,9 +2449,9 @@ function renderMoi(){
 }
 function openLadder(){
   const L=lvlOf(S.pts);
-  sheet(`<div class="sect__h"><h2 class="h2">Tes avantages</h2><button onclick="openHow()">Gagner des points</button></div>
-    <div class="ladder">${LEVELS.map(l=>{const got=S.pts>=l.min, now=l.n===L.n;return `<div class="rung ${got?"is-got":"is-lock"} ${now?"is-now":""}"><span class="rung__l">${got?l.n:icon("lock").replace("<svg",'<svg style="width:16px;height:16px"')}</span><div class="grow"><b>${esc(l.t)}</b><small>${fmtN(l.min)} PTS</small><ul>${l.perks.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>${got&&l.n>=2&&l.n<=5?`<button class="btn btn--sm use" onclick="openPass(this.dataset.p)" data-p="${esc(l.perks[0])}">Utiliser</button>`:""}</div>`;}).join("")}</div>
-    <p class="note" style="margin:0">Avantages proposés en exemple : à caler avec les restaurateurs plaqués.</p>`);
+  sheet(`<div class="sect__h" style="padding-right:58px;flex-wrap:wrap;gap:4px 12px"><h2 class="h2">Tes récompenses</h2><button onclick="openHow()">Gagner des points</button></div>
+    <div class="ladder">${LEVELS.map(l=>{const got=S.pts>=l.min, now=l.n===L.n;return `<div class="rung ${got?"is-got":"is-lock"} ${now?"is-now":""}"><span class="rung__l">${got?l.n:icon("lock").replace("<svg",'<svg style="width:16px;height:16px"')}</span><div class="grow"><b>${esc(l.t)}</b><small>${fmtN(l.min)} PTS</small><ul>${l.perks.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div></div>`;}).join("")}</div>
+    <p class="note" style="margin:0">Les récompenses arrivent bientôt. Tes points comptent déjà : garde-les au chaud.</p>`);
 }
 function openFriend(i){
   const f=FRIENDS[i], k=compatOf(i); const own={}; (FR_OWN[i]||[]).forEach(p=>{ const c=PL(p).c; (own[c]=own[c]||[]).push(p); });
