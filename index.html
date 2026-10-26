@@ -1382,7 +1382,7 @@ const MOTS = {
   "Étoilé":"Une étoile, et pourtant le menu déj tient sous les 60 €. Du kebab à l'étoilé, on a dit.",
   "Flan":"Pâte feuilletée caramélisée, cœur tremblotant, vanille de Madagascar. On a fait la queue. On la refera."
 };
-const motFor = p => MOTS[p.c] || `On est passés, on a goûté, on a tranché : ${title(p.c).toLowerCase()} ${p.city==="Paris"?"du "+p.q:"de "+p.city}. La rédac a validé, la plaque est sur la devanture.`;
+const motFor = p => p.mot || MOTS[p.c] || `On est passés, on a goûté, on a tranché : ${title(p.c).toLowerCase()} ${p.city==="Paris"?"du "+p.q:"de "+p.city}. La rédac a validé, la plaque est sur la devanture.`;
 
 const SETS = [
   {id:"kebab-etoile",t:"Du kebab à l'étoilé",c:["Kebab","Boui boui","Bistrot","Brasserie","Mérite une étoile","Étoilé"],r:"Badge signature + un dîner étoilé tiré au sort"},
@@ -1517,6 +1517,7 @@ const QUICK=["Burger","Ramen","Pizza","Kebab","Brunch","Sushi","Flan","Pho","Tac
 // --- géographie : chaque plaqué a des coordonnées réelles (approchées pour la démo) ---
 const ISLE_LL = {"La Réunion":[55.53,-21.12],"Martinique":[-61.02,14.64],"Guadeloupe":[-61.55,16.25]};
 PLACES.forEach(p=>{
+  if(p.lon!=null) return;
   if(p.city==="Paris"){ p.lon=2.25+p.x*.2; p.lat=48.905-p.y*.095; }
   else { const c=CITIES[p.city]||ISLE_LL[p.city]; p.lon=c[0]+(p.x-.5)*.05; p.lat=c[1]-(p.y-.5)*.035; }
 });
@@ -2169,8 +2170,8 @@ function openOrder(){
 // SOCIAL : rédac, On mange où, avis + verdict, profil, compat, créateurs, Insta
 // =========================================================
 const TEAM = {Clara:{c:"#FF99B3",r:"rédac Paris"},Yanis:{c:"#6EA5FF",r:"rédac Lyon"},Nora:{c:"#FFCE18",r:"co-fondatrice"}};
-const PLAT = {by:"Clara", pid:6, text:"La margherita de Forno Ribelle, 9 balles, pâte qui lève 72 heures. On y était hier midi, on y retourne demain. Fonce.", dur:"0:24"};
-const CANDIDATE = {n:"Boulangerie Brûlée", c:"Flan", q:"Paris 3e", yes:68, text:"Un flan vanille-caramel brûlé à la commande. Elle mérite la plaque ? À vous de jouer."};
+let PLAT = {by:"Clara", pid:6, text:"La margherita de Forno Ribelle, 9 balles, pâte qui lève 72 heures. On y était hier midi, on y retourne demain. Fonce.", dur:"0:24"};
+let CANDIDATE = {n:"Boulangerie Brûlée", c:"Flan", q:"Paris 3e", yes:68, text:"Un flan vanille-caramel brûlé à la commande. Elle mérite la plaque ? À vous de jouer."};
 const FR_OWN = {0:[0,5,3,2,15,22,17,24,25,21,7,33],1:[0,7,12,37,10,13,1],2:[1,9,14,21,24,25,32,20],3:[10,20,29,35,0],4:[25,26,27,32,24]};
 const FR_COMPAT = [87,64,78,52,71];
 const CREATOR_LISTS = [
@@ -2189,9 +2190,9 @@ const rankLabel = (c,i) => `N°${i+1} de mes ${c.toLowerCase()}${/[sx]$/.test(c)
 
 // ---------- STORIES DE LA RÉDAC ----------
 function openStories(start=0){
-  let i=start, timer=null; const N=3;
-  const d=pushLayer(`<div class="st"><div class="st__bars">${[0,1,2].map(k=>`<i><b></b></i>`).join("")}</div>
-    <div class="st__head"><span class="st__av" style="background:${TEAM[PLAT.by].c}">C</span><div class="grow"><b>La rédac</b><span id="stwho"></span></div><button class="iconbtn" data-x aria-label="Fermer" style="background:rgba(0,0,0,.35);color:#fff;border-color:rgba(255,255,255,.35);box-shadow:none">${icon("x")}</button></div>
+  const SL=["plat",...(CANDIDATE?["vote"]:[]),...(S.booster.ids.length?["week"]:[])]; let i=Math.min(start,SL.length-1), timer=null; const N=SL.length; const TM=TEAM[PLAT.by]||{c:"#FFCE18"};
+  const d=pushLayer(`<div class="st"><div class="st__bars">${SL.map(k=>`<i><b></b></i>`).join("")}</div>
+    <div class="st__head"><span class="st__av" style="background:${TM.c}">${esc((PLAT.by||"R")[0])}</span><div class="grow"><b>La rédac</b><span id="stwho"></span></div><button class="iconbtn" data-x aria-label="Fermer" style="background:rgba(0,0,0,.35);color:#fff;border-color:rgba(255,255,255,.35);box-shadow:none">${icon("x")}</button></div>
     <div class="st__slide" id="sts"></div><button class="st__nav st__nav--l" data-prev aria-label="Story précédente"></button><button class="st__nav st__nav--r" data-nextst aria-label="Story suivante"></button></div>`,"ov",{hideNav:true});
   $$(".notif").forEach(n=>n.remove()); S.storySeen=true; save(); const ring=$(".ring"); if(ring) ring.classList.add("is-seen");
   const bars=$$(".st__bars i b",d);
@@ -2199,16 +2200,16 @@ function openStories(start=0){
     clearTimeout(timer); bars.forEach((b,k)=>{ b.style.transition="none"; b.style.width=k<i?"100%":"0%"; });
     requestAnimationFrame(()=>{ const b=bars[i]; b.style.transition="width 9s linear"; b.style.width="100%"; });
     const s=d.querySelector("#sts"), who=d.querySelector("#stwho");
-    if(i===0){ const p=PL(PLAT.pid); who.textContent=`${PLAT.by} · 11:45`;
+    if(SL[i]==="plat"){ const p=PL(PLAT.pid); who.textContent=`${PLAT.by==='La rédac'?'Le plat du jour':PLAT.by} · 11:45`;
       s.style.background=`url(${IMG[ILL[p.c]]}) center 60%/cover`;
       s.innerHTML=`<div class="st__shade"></div><div class="st__body"><span class="ed">Le plat du jour</span><h2 class="st__t">${esc(p.n)}</h2><p class="st__s">${esc(title(p.c))} · ${esc(where(p))}</p>
-        <button class="voice" data-play><span class="voice__p">${icon("play")}</span><span class="voice__w">${Array.from({length:28},(_,k)=>`<i style="height:${6+Math.abs(Math.sin(k*1.7))*18}px"></i>`).join("")}</span><span class="voice__d">${PLAT.dur}</span></button>
+        ${PLAT.audio||PLAT.dur?`<button class="voice" data-play><span class="voice__p">${icon("play")}</span><span class="voice__w">${Array.from({length:28},(_,k)=>`<i style="height:${6+Math.abs(Math.sin(k*1.7))*18}px"></i>`).join("")}</span><span class="voice__d">${PLAT.dur||"vocal"}</span></button>${PLAT.audio?`<audio id="staud" src="${esc(PLAT.audio)}" preload="none"></audio>`:""}`:""}
         <p class="st__tr" id="sttr"><span>${esc(PLAT.text)}</span></p>
         <button class="btn btn--block" data-placest="${p.id}">Voir l'adresse</button></div>`; }
-    if(i===1){ who.textContent="Yanis · vote ouvert"; s.style.background=TYPO_G[0];
-      const voted=S.vote; s.innerHTML=`<div class="st__body st__body--c"><span class="ed">On plaque ou pas ?</span><div style="width:150px;margin:6px auto">${cardHTML(CANDIDATE.c,{resto:CANDIDATE.n,locked:true,lockText:"Candidate<small>cuvée 2026/27</small>"})}</div><h2 class="st__t" style="text-align:center">${esc(CANDIDATE.n)}</h2><p class="st__s" style="text-align:center">Meilleur flan · ${esc(CANDIDATE.q)}</p><p class="st__tr" style="text-align:center"><span>${esc(CANDIDATE.text)}</span></p>
+    if(SL[i]==="vote"){ who.textContent="La rédac · vote ouvert"; s.style.background=TYPO_G[0];
+      const voted=S.vote; s.innerHTML=`<div class="st__body st__body--c"><span class="ed">On plaque ou pas ?</span><div style="width:150px;margin:6px auto">${cardHTML(CANDIDATE.c,{resto:CANDIDATE.n,locked:true,lockText:"Candidate<small>cuvée 2026/27</small>"})}</div><h2 class="st__t" style="text-align:center">${esc(CANDIDATE.n)}</h2><p class="st__s" style="text-align:center">${esc(title(CANDIDATE.c))} · ${esc(CANDIDATE.q)}</p><p class="st__tr" style="text-align:center"><span>${esc(CANDIDATE.text)}</span></p>
         <div id="vote">${voted?voteRes():`<div class="vote"><button class="btn" data-vote="yes">On plaque !</button><button class="btn btn--white" data-vote="no">Pas encore</button></div>`}</div></div>`; }
-    if(i===2){ who.textContent="Pour toi · semaine 44"; s.style.background=TYPO_G[3]; const ids=S.booster.ids;
+    if(SL[i]==="week"){ who.textContent=`Pour toi · semaine ${weekNo()%100}`; s.style.background=TYPO_G[3]; const ids=S.booster.ids;
       s.innerHTML=`<div class="st__body st__body--c"><span class="ed">Ta sélection de la semaine</span><div class="st__fan">${ids.map((id,k)=>cardHTML(PL(id).c,{resto:PL(id).n,style:`transform:rotate(${(k-1)*10}deg) translateY(${k===1?-10:0}px)`})).join("")}</div><h2 class="st__t" style="text-align:center">3 adresses<br>choisies pour toi</h2><p class="st__s" style="text-align:center">Les 3 avant dimanche : +${BOOSTER_BONUS} pts.</p><button class="btn btn--block" data-weekst>Voir sur la carte</button></div>`; }
     timer=setTimeout(()=>{ if(i<N-1){ i++; show(); } else close(); },9000);
   };
@@ -2218,7 +2219,7 @@ function openStories(start=0){
     if(b.hasAttribute("data-x")) close();
     else if(b.hasAttribute("data-prev")){ i=Math.max(0,i-1); show(); }
     else if(b.hasAttribute("data-nextst")){ if(i<N-1){ i++; show(); } else close(); }
-    else if(b.hasAttribute("data-play")){ clearTimeout(timer); b.classList.add("is-on"); bars[i].style.transition="none"; bars[i].style.width=bars[i].getBoundingClientRect().width+"px"; const tr=d.querySelector("#sttr"); tr.classList.add("is-play"); setTimeout(()=>{ b.classList.remove("is-on"); },6500); }
+    else if(b.hasAttribute("data-play")){ clearTimeout(timer); b.classList.add("is-on"); bars[i].style.transition="none"; bars[i].style.width=bars[i].getBoundingClientRect().width+"px"; const tr=d.querySelector("#sttr"); tr.classList.add("is-play"); const au=d.querySelector("#staud"); if(au) au.play().catch(()=>{}); setTimeout(()=>{ b.classList.remove("is-on"); },6500); }
     else if(b.dataset.vote){ S.vote=b.dataset.vote; save(); d.querySelector("#vote").innerHTML=voteRes(); clearTimeout(timer); }
     else if(b.dataset.placest){ close(); openPlace(+b.dataset.placest); }
     else if(b.hasAttribute("data-weekst")){ close(); applyQ({label:"Ta sélection de la semaine",ids:S.booster.ids.slice()}); } };
@@ -2226,8 +2227,8 @@ function openStories(start=0){
 }
 function notifMock(){
   if(notifMock.done || !S.onb) return; notifMock.done=true;
-  const n=document.createElement("button"); n.className="notif"; n.setAttribute("aria-label","Notification : le plat du jour de Clara");
-  n.innerHTML=`<img src="${IMG.badge}" alt=""><span class="grow"><span class="notif__h"><b>LE GUIDE ULTIME</b><span>11:45</span></span><b>Le plat du jour de Clara</b><span>La margherita à 9 € qui met tout le monde d'accord. Écoute son vocal.</span></span>`;
+  const n=document.createElement("button"); n.className="notif"; n.setAttribute("aria-label","Notification : le plat du jour"); const np=PL(PLAT.pid);
+  n.innerHTML=`<img src="${IMG.badge}" alt=""><span class="grow"><span class="notif__h"><b>LE GUIDE ULTIME</b><span>11:45</span></span><b>Le plat du jour${PLAT.by&&PLAT.by!=="La rédac"?" de "+esc(PLAT.by):""}</b><span>${esc(np.n)} · ${esc(where(np))}. ${esc(PLAT.text.split(/(?<=[.!?])\s/)[0])}</span></span>`;
   $("#app").appendChild(n); requestAnimationFrame(()=>n.classList.add("is-on"));
   const hide=()=>{ n.classList.remove("is-on"); setTimeout(()=>n.remove(),400); };
   n.onclick=()=>{ hide(); openStories(0); }; setTimeout(hide,6500);
@@ -2370,6 +2371,7 @@ function renderMoi(){
   </div></div>
   <div class="sect"><div class="eyebrow">Démos du prototype</div><div class="list">
     <button class="li" data-demo="insta"><span class="ic" style="background:#FF99B3">${icon("share")}</span><span class="grow">Insta : commente « CARTE »<small>Du commentaire au DM, puis à l'appli</small></span>${icon("back","chev")}</button>
+    <button class="li" data-demo="verif"><span class="ic" style="background:var(--cyan)">${icon("check")}</span><span class="grow">Vérifier le tableur<small>${DATA.ok} plaqués · source : ${esc(DATA.source)}</small></span>${icon("back","chev")}</button>
     <button class="li" data-demo="notif"><span class="ic" style="background:var(--jaune)">${icon("clock")}</span><span class="grow">Notif de 11h45<small>Le plat du jour de la rédac</small></span>${icon("back","chev")}</button>
     <button class="li" data-onb><span class="ic" style="background:var(--beige)">${icon("star")}</span><span class="grow">Revoir l'accueil</span>${icon("back","chev")}</button>
     <button class="li" data-reset><span class="ic" style="background:var(--beige)">${icon("x")}</span><span class="grow">Remettre la démo à zéro</span>${icon("back","chev")}</button>
@@ -2385,6 +2387,7 @@ function renderMoi(){
     else if(b.dataset.list==="print") openShop();
     else if(b.dataset.list==="creators") openCreatorsList();
     else if(b.dataset.demo==="insta") openInstaDemo();
+    else if(b.dataset.demo==="verif") openVerif();
     else if(b.dataset.demo==="notif"){ closeAll(); notifMock.done=false; notifMock(); }
     else if(b.hasAttribute("data-onb")) startOnb();
     else if(b.hasAttribute("data-reset")) confirmReset(); };
@@ -2425,12 +2428,12 @@ function applyCreatorList(i){ const l=CREATOR_LISTS[i]; applyQ({label:`${l.t} ·
 
 // ---------- DÉMO INSTA : commente CARTE ----------
 function openInstaDemo(){
-  const p=PL(5);
+  const p=PLACES.find(x=>x.c==="Ramen")||PL(S.booster.ids[0]??0);
   const d=pushLayer(`<div class="ig"><div class="ig__bar"><button class="iconbtn" data-x aria-label="Fermer" style="box-shadow:none">${icon("back")}</button><b>Instagram</b><span class="ed" style="margin-left:auto">DÉMO</span></div><div class="ig__body" id="igb"></div></div>`,"ov",{hideNav:true});
   const igb=d.querySelector("#igb");
   const post=()=>{ igb.innerHTML=`<div class="ig__head"><img src="${IMG.badge}" alt=""><b>leguideultime</b><span>Paris 11e</span></div>
-    <div class="ig__media" style="background-image:url(${IMG[ILL[p.c]]})"><span class="ig__play">${icon("play")}</span><span class="ig__cap">LE MEILLEUR RAMEN DE PARIS ?</span></div>
-    <div class="ig__txt"><b>leguideultime</b> Bouillon 18 h, œuf mariné parfait 🍜 On a fini le bol. Puis on a bu le fond. <b>Commente CARTE</b> et on t'envoie l'adresse en DM 👇</div>
+    <div class="ig__media" style="background-image:url(${IMG[ILL[p.c]]||IMG.c03})"><span class="ig__play">${icon("play")}</span><span class="ig__cap">${esc(title(p.c).toUpperCase())} ${p.city==="Paris"?"DE PARIS":"À "+esc(p.city.toUpperCase())} ?</span></div>
+    <div class="ig__txt"><b>leguideultime</b> ${esc(motFor(p))} <b>Commente CARTE</b> et on t'envoie l'adresse en DM 👇</div>
     <div class="ig__com" id="igc"><div><b>ines.mange</b> CARTE</div><div><b>malik_75</b> CARTE 🔥</div><div><b>jadeeee</b> on y va samedi @theo</div></div>
     <div class="ig__in"><span>${esc(handle().slice(1))}</span><button class="btn btn--sm" data-com>Commenter « CARTE »</button></div>`; };
   const dm=()=>{ igb.innerHTML=`<div class="ig__dmh"><img src="${IMG.badge}" alt=""><b>leguideultime</b></div><div class="dm"><div class="dm__b">Yo ${esc(S.name)} ! Voilà l'adresse du ramen 🍜</div><div class="dm__b dm__card"><div style="width:64px">${cardHTML(p.c,{resto:p.n})}</div><div class="grow"><b>${esc(p.n)}</b><span>${esc(title(p.c))} · ${esc(where(p))}</span><span class="dm__link">lgu.app/p/kintsugi</span></div></div><div class="dm__b">On te l'a mis direct dans « À tester ». Et si tu y vas, scanne la plaque : la carte est à toi.</div></div><button class="btn btn--red btn--block" data-open style="margin-top:auto">Ouvrir dans l'appli</button>`; };
@@ -2468,7 +2471,7 @@ function renderPotes(){
   const t=$("#t-potes"); const F=feedItems();
   t.innerHTML=`<div class="tabpad">
   <div class="bh"><div><span class="ed">Ta bande · ${FRIENDS.length} potes</span><h1 class="h1 outline" style="margin-top:8px;font-size:44px">Ta bande</h1></div><button class="addf" data-add aria-label="Ajouter des potes">${icon("user")}<b>+</b></button></div>
-  <div class="sect"><button class="omo" data-group><div class="omo__stack">${[5,6,3].map((id,k)=>cardHTML(PL(id).c,{resto:PL(id).n,style:`transform:rotate(${(k-1)*10}deg)`})).join("")}</div><div class="grow"><b>On mange où ?</b><span>Chacun swipe, l'appli tranche. Fini les 40 messages.</span><span class="omo__go">Lancer une partie →</span></div></button></div>
+  <div class="sect"><button class="omo" data-group><div class="omo__stack">${(S.booster.ids.length?S.booster.ids:[0,1,2].filter(PL)).slice(0,3).map((id,k)=>cardHTML(PL(id).c,{resto:PL(id).n,style:`transform:rotate(${(k-1)*10}deg)`})).join("")}</div><div class="grow"><b>On mange où ?</b><span>Chacun swipe, l'appli tranche. Fini les 40 messages.</span><span class="omo__go">Lancer une partie →</span></div></button></div>
   <div class="sect"><div class="sect__h"><h2 class="h2">Compatibilité</h2><span class="eyebrow">TOUCHE UN POTE</span></div>
     <div class="cring-row"><button class="cring cring--add" data-add><span>+</span><b>Ajouter</b></button>${FRIENDS.map((f,i)=>`<button class="cring" data-friend="${i}" style="--p:${FR_COMPAT[i]}"><span style="background:${f.c}">${esc(f.n[0])}</span><b>${esc(f.n)}</b><em>${FR_COMPAT[i]} %</em></button>`).join("")}</div></div>
   <div class="sect"><div class="sect__h"><h2 class="h2">Tu les connais peut-être</h2></div><div class="hscroll">${SUGG.filter(s=>!FRIENDS.some(f=>f.n===s.n)).slice(0,4).map(s=>`<div class="sugg">${avatar(s.n,s.c)}<b>${esc(s.n)}</b><span>Ami·e de ${esc(s.mut)}</span><button class="btn btn--sm" data-addname="${esc(s.n)}">Ajouter</button></div>`).join("")||`<p class="sub">T'as ajouté tout le monde. Respect.</p>`}</div></div>
@@ -2570,6 +2573,123 @@ function drawOnb(){
 }
 
 // =========================================================
+// DONNÉES : une seule source à alimenter, la liste des plaqués (Google Sheets, Airtable ou CSV)
+// Tout le reste (plaqué du jour, sélection de la semaine, listes des créateurs…) se calcule tout seul.
+// =========================================================
+const DATA={source:"Démo intégrée",url:null,rows:0,ok:0,errors:[],cand:[],hidden:0,loadedAt:null};
+const sigOf = L => String(hash(L.map(p=>p.n+"|"+p.c).join(";")));
+const DEMO_SIG = sigOf(PLACES);
+const COLS={nom:["nom","name","restaurant","resto","etablissement"],categorie:["categorie","category","plaque"],ville:["ville","city"],quartier:["quartier","arrondissement","zone"],adresse:["adresse","address"],coord:["coordonnees","coords","gps","latlng","lat,lng","position"],lat:["lat","latitude"],lng:["lng","lon","long","longitude"],prix:["prix","budget","price"],ferme:["ferme_a","ferme a","fermeture","ferme","horaires"],mot:["mot_de_la_redac","mot de la redac","mot","description","pourquoi"],createurs:["createurs","creators","vu chez","vu_chez"],illustration:["illustration","image","visuel"],date:["date_ajout","date","ajoute le","ajout"],statut:["statut","status","etat"],vocal:["vocal","audio"],signe:["signe_par","signe par","auteur","redac"]};
+function parseCSV(txt){
+  txt=txt.replace(/^﻿/,""); const first=txt.split(/\r?\n/)[0]||""; const sep=(first.match(/;/g)||[]).length>(first.match(/,/g)||[]).length?";":(first.includes("\t")?"\t":",");
+  const rows=[]; let row=[],cell="",q=false;
+  for(let i=0;i<txt.length;i++){ const ch=txt[i];
+    if(q){ if(ch==='"'){ if(txt[i+1]==='"'){ cell+='"'; i++; } else q=false; } else cell+=ch; }
+    else if(ch==='"') q=true; else if(ch===sep){ row.push(cell); cell=""; } else if(ch==="\n"){ row.push(cell); rows.push(row); row=[]; cell=""; } else if(ch!=="\r") cell+=ch; }
+  if(cell||row.length){ row.push(cell); rows.push(row); }
+  const head=(rows.shift()||[]).map(h=>norm(h).trim().replace(/\s+/g," "));
+  const key=h=>{ for(const [k,al] of Object.entries(COLS)) if(al.includes(h)||al.includes(h.replace(/_/g," "))) return k; return null; };
+  const keys=head.map(key);
+  return rows.filter(r=>r.some(c=>c.trim())).map(r=>{ const o={}; keys.forEach((k,j)=>{ if(k) o[k]=(r[j]||"").trim(); }); return o; });
+}
+function lev(a,b){ const m=a.length,n=b.length; const d=[...Array(m+1)].map((_,i)=>[i]); for(let j=1;j<=n;j++) d[0][j]=j; for(let i=1;i<=m;i++) for(let j=1;j<=n;j++) d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[m][n]; }
+function matchCat(v){
+  const x=norm(v).trim(); if(!x) return {c:null};
+  const strip=s=>s.replace(/^(le |la |les |l')?(meilleur(e)?s? )?/,"").replace(/s$/,"");
+  for(const c of ALL){ const y=norm(c); if(y===x||strip(y)===strip(x)||norm(title(c))===x) return {c}; }
+  let best=null,bd=99; ALL.forEach(c=>{ const dd=lev(strip(norm(c)),strip(x)); if(dd<bd){bd=dd;best=c;} });
+  return bd<=2?{c:best,fixed:true}:{c:null,sug:bd<=4?best:null};
+}
+function parseCoord(o){
+  let lat=parseFloat((o.lat||"").replace(",",".")), lng=parseFloat((o.lng||"").replace(",","."));
+  if(isNaN(lat)||isNaN(lng)){ const src=(o.coord||"")+" "+(o.adresse||""); const m=src.match(/@?(-?\d{1,2}[.]\d+)\s*[,;\s]\s*(-?\d{1,3}[.]\d+)/)||src.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/); if(m){ lat=+m[1]; lng=+m[2]; } }
+  return isNaN(lat)||isNaN(lng)?null:[lat,lng];
+}
+const normPrice = v => { const s=(v||"").trim(); if(/^€+$/.test(s)) return s.slice(0,4); const n=parseInt(s)||(s.match(/[$€]/g)||[]).length||2; return "€".repeat(Math.min(4,Math.max(1,n))); };
+const COLORS=["#FF99B3","#00DEB5","#6EA5FF","#FFCE18","#FF7A1A","#FF6A6A"];
+function creatorIdx(h){ h=h.replace(/^@/,"").trim(); if(!h) return -1; let i=CREATORS.findIndex(c=>c.h.toLowerCase()===h.toLowerCase()); if(i<0){ CREATORS.push({h,n:h.replace(/[._].*/,"").replace(/^./,m=>m.toUpperCase()),c:COLORS[hash(h)%COLORS.length],k:0}); i=CREATORS.length-1; } return i; }
+function rowsToPlaces(objs){
+  const out=[]; DATA.errors=[]; DATA.cand=[]; DATA.hidden=0;
+  objs.forEach((o,r)=>{ const line=r+2, err=m=>DATA.errors.push({line,nom:o.nom||"(sans nom)",m});
+    const st=norm(o.statut||"");
+    if(/masque|cache|off|ferme definitivement/.test(st)){ DATA.hidden++; return; }
+    if(!o.nom){ err("Nom manquant"); return; }
+    const mc=matchCat(o.categorie||""); if(!mc.c){ err(o.categorie?`Catégorie « ${o.categorie} » inconnue${mc.sug?` (tu voulais dire « ${mc.sug} » ?)`:""}`:"Catégorie manquante"); return; }
+    if(mc.fixed) err(`Catégorie « ${o.categorie} » lue comme « ${mc.c} » (à corriger dans le tableur)`);
+    const ll=parseCoord(o); if(!ll){ err("Coordonnées manquantes : sur Google Maps, clic droit sur le resto puis copie les chiffres dans « coordonnees »"); return; }
+    const d=o.date?new Date(o.date.split("/").reverse().join("-")):null;
+    const p={n:o.nom,c:mc.c,city:o.ville||"France",q:o.quartier||o.ville||"",p:normPrice(o.prix),h:o.ferme||"23h",cr:(o.createurs||"").split(/[,\s]+/).filter(Boolean).map(creatorIdx).filter(i=>i>=0),fr:[],lat:ll[0],lon:ll[1],mot:o.mot||"",addr:o.adresse||"",vocal:o.vocal||"",signe:o.signe||"",isNew:d&&!isNaN(d)&&(Date.now()-d)<30*864e5,img:o.illustration||""};
+    if(/candidat/.test(st)){ DATA.cand.push(p); return; }
+    out.push(p);
+  });
+  return out;
+}
+function applyPlaces(list){
+  PLACES.length=0; list.forEach((p,i)=>{ p.id=i; PLACES.push(p); });
+  // illustrations fournies dans le tableur : remplacent celles de la catégorie
+  PLACES.forEach(p=>{ if(p.img){ const k="x_"+hash(p.c); IMG[k]=p.img; ILL[p.c]=k; } });
+  // villes : centre = moyenne des plaqués
+  const by={}; PLACES.forEach(p=>(by[p.city]=by[p.city]||[]).push(p));
+  Object.entries(by).forEach(([c,a])=>{ if(!CITIES[c]&&!ISLE_LL[c]) CITIES[c]=[a.reduce((s,p)=>s+p.lon,0)/a.length,a.reduce((s,p)=>s+p.lat,0)/a.length]; });
+  CITY_W.length=0; Object.entries({...CITIES,...ISLE_LL}).filter(([n])=>by[n]).forEach(([n,[lo,la]])=>CITY_W.push({n,x:wx(lo),y:wy(la)}));
+}
+function prepGeo(){ PLACES.forEach(p=>{ p.wx=wx(p.lon); p.wy=wy(p.lat); }); }
+const weekNo = () => { const d=new Date(); const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())); const day=t.getUTCDay()||7; t.setUTCDate(t.getUTCDate()+4-day); return t.getUTCFullYear()*100+Math.ceil(((t-Date.UTC(t.getUTCFullYear(),0,1))/864e5+1)/7); };
+function autoContent(sig){
+  const demo = sig===DEMO_SIG;
+  // état de l'utilisateur : on repart à zéro si la liste des plaqués a changé
+  if(!demo && S.dataSig!==sig){
+    const near=PLACES.slice().sort((a,b)=>distM(a)-distM(b)).slice(0,Math.min(8,Math.max(0,PLACES.length-6)));
+    const own={}; near.forEach((p,k)=>{ (own[p.c]=own[p.c]||[]).push({p:p.id,d:new Date(Date.now()-(k+1)*9*864e5).toISOString().slice(0,10)}); });
+    Object.assign(S,{own,rank:{},saved:[],printed:[],react:{},likes:[],booster:{ids:[],done:[],week:0},vote:null,dataSig:sig}); save();
+  } else if(!S.dataSig){ S.dataSig=sig; save(); }
+  // potes de la démo : leurs visites piochées dans la vraie liste
+  if(!demo){ Object.keys(FR_OWN).forEach(k=>delete FR_OWN[k]); const pool=PLACES.slice().sort((a,b)=>distM(a)-distM(b)).slice(0,40);
+    FRIENDS.forEach((f,i)=>{ const R=rng(hash(f.n+sig)); FR_OWN[i]=[...Array(8)].map(()=>pool[Math.floor(R()*pool.length)]).filter(Boolean).map(p=>p.id).filter((v,k,s)=>s.indexOf(v)===k); });
+  }
+  PLACES.forEach(p=>{ if(!p.fr||!p.fr.length) p.fr=FRIENDS.map((f,i)=>(FR_OWN[i]||[]).includes(p.id)?i:-1).filter(i=>i>=0).slice(0,3); });
+  // sélection de la semaine : 3 plaqués proches, pas encore testés, selon tes envies — recalculée chaque lundi
+  const wk=weekNo(); const valid=(S.booster.ids||[]).length===3&&S.booster.ids.every(id=>PL(id));
+  if(!(demo&&valid&&!S.booster.week) && (S.booster.week!==wk||!valid)){
+    const R=rng(wk+hash(S.name||"")); const env=new Set(S.envies||[]);
+    const ids=PLACES.filter(p=>!isOwnedPlace(p.id)).map(p=>({p,s:distM(p)*(env.has(p.c)?.45:1)*(.7+R()*.6)})).sort((a,b)=>a.s-b.s).slice(0,3).map(o=>o.p.id);
+    S.booster={ids,done:[],week:wk,opened:true}; save();
+  }
+  // plaqué du jour : chaque jour un plaqué différent, avec son « mot de la rédac » déjà écrit dans le tableur
+  const pool=PLACES.filter(p=>p.mot||MOTS[p.c]); const L=pool.length?pool:PLACES;
+  if(L.length){ const p=L[hash(new Date().toISOString().slice(0,10))%L.length]; PLAT={by:p.signe||"La rédac",pid:p.id,text:p.mot||motFor(p),audio:p.vocal||null}; }
+  // vote : uniquement s'il y a des candidats dans le tableur (statut = candidat)
+  if(!demo) CANDIDATE = DATA.cand.length ? (()=>{ const c=DATA.cand[hash(String(wk))%DATA.cand.length]; return {n:c.n,c:c.c,q:c.city==="Paris"?"Paris "+c.q:c.city,yes:52+hash(c.n)%40,text:c.mot||`Candidat pour ${title(c.c).toLowerCase()}. Il mérite la plaque ?`}; })() : null;
+  // listes des créateurs : générées depuis la colonne « createurs »
+  if(!demo){ CREATOR_LISTS.length=0; CREATORS.forEach((c,i)=>{ const ids=PLACES.filter(p=>p.cr.includes(i)).map(p=>p.id); c.k=Math.max(c.k||0,ids.length); if(ids.length>=2) CREATOR_LISTS.push({cr:i,t:`Les adresses de ${c.n}`,ids,ill:ILL[PL(ids[0]).c]||null}); }); }
+}
+async function fetchText(u,ms=7000){ const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(),ms); try{ const r=await fetch(u,{signal:ctl.signal,cache:"no-store"}); if(!r.ok) throw new Error("HTTP "+r.status); return await r.text(); } finally{ clearTimeout(t); } }
+function toCsvUrl(u){ if(/\/d\/e\/|output=csv|tqx=out:csv/.test(u)) return u; const m=u.match(/docs\.google\.com\/spreadsheets\/d\/([^/]+)/); if(m){ const g=(u.match(/[#&?]gid=(\d+)/)||[])[1]||"0"; return `https://docs.google.com/spreadsheets/d/${m[1]}/gviz/tq?tqx=out:csv&gid=${g}`; } return u; }
+async function loadData(){
+  let src=null;
+  try{ const cfg=JSON.parse(await fetchText("config.json",4000)); src=cfg.source||null; }catch(e){}
+  const tries=[src,"plaques.csv"].filter((v,i,a)=>v&&a.indexOf(v)===i);
+  for(const s of tries){
+    try{ if(/airtable\.com/.test(s)) throw new Error("Airtable doit passer par une synchro vers Google Sheets ou plaques.csv");
+      const objs=parseCSV(await fetchText(toCsvUrl(s))); const list=rowsToPlaces(objs);
+      if(!list.length) throw new Error("Aucun plaqué valide");
+      applyPlaces(list); DATA.source=/docs\.google/.test(s)?"Google Sheets":s; DATA.url=s; DATA.rows=objs.length; DATA.ok=list.length; DATA.loadedAt=new Date(); break;
+    }catch(e){ DATA.errors.push({line:0,nom:s,m:"Source illisible : "+e.message}); }
+  }
+  if(!DATA.loadedAt){ DATA.rows=PLACES.length; DATA.ok=PLACES.length; }
+  prepGeo(); autoContent(sigOf(PLACES));
+}
+function openVerif(){
+  const errs=DATA.errors.filter(e=>e.line>0), src=DATA.errors.filter(e=>e.line===0);
+  sheet(`<div class="h2">Vérifier le tableur</div>
+  <div class="pstat"><div class="pstat__c"><b>${DATA.ok}</b><span>plaqués en ligne</span></div><div class="pstat__c"><b>${DATA.cand.length}</b><span>candidats (vote)</span></div><div class="pstat__c ${errs.length?"is-todo":""}"><b>${errs.length}</b><span>ligne${errs.length>1?"s":""} à corriger</span></div></div>
+  <p class="sub" style="margin:0">Source : <b>${esc(DATA.source)}</b>${DATA.loadedAt?` · lue à ${DATA.loadedAt.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}`:""}${DATA.hidden?` · ${DATA.hidden} masqué${DATA.hidden>1?"s":""}`:""}</p>
+  ${src.length&&!DATA.loadedAt?`<div class="quote"><span class="eyebrow">Tableur non branché</span><p>L'app affiche les adresses de démo. ${esc(src.map(e=>e.m).join(" · "))}</p></div>`:""}
+  ${errs.length?`<div class="list">${errs.map(e=>`<div class="li"><span class="ic" style="background:var(--rouge);color:#fff;font:800 14px var(--f-cond)">${e.line}</span><span class="grow">${esc(e.nom)}<small>${esc(e.m)}</small></span></div>`).join("")}</div>`:`<div class="perk" style="background:var(--cyan);color:var(--noir)">${icon("check")}<b style="color:var(--noir)">Tout est bon. Chaque ligne est en ligne.</b></div>`}
+  <div class="quote"><span class="eyebrow">Ajouter un plaqué</span><p>Une ligne dans le tableur : nom, catégorie (une des 93), ville, coordonnées (clic droit sur Google Maps). Le reste est facultatif. L'appli se met à jour à la prochaine ouverture.</p></div>`);
+}
+
+// =========================================================
 // BOOT
 // =========================================================
 function rerender(){ ({map:refreshMap,collec:renderCollec,potes:renderPotes,moi:renderMoi})[TAB](); }
@@ -2597,12 +2717,13 @@ function jump(k){
     case "stories": notifMock.done=true; go("map"); openStories(0); break;
     case "group": notifMock.done=true; go("map"); openGroup(); break;
     case "insta": notifMock.done=true; go("map"); openInstaDemo(); break;
+    case "verif": go("map"); openVerif(); break;
     case "notif": go("map"); notifMock.done=false; notifMock(); break;
     default: go("map");
   }
 }
 let rz; window.addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(TAB==="map"){ renderMap(); } },200); });
-boot();
+loadData().catch(e=>console.warn(e)).finally(boot);
 
 </script>
 
