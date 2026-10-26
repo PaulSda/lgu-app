@@ -89,7 +89,7 @@ input,select{font:inherit;color:inherit}
 #t-map{overflow:hidden;padding:0}
 
 /* ---------- NAV ---------- */
-#nav{position:absolute;left:12px;right:12px;bottom:14px;height:66px;background:var(--noir);border-radius:26px;display:grid;grid-template-columns:1fr 1.1fr 1fr;align-items:center;z-index:40;box-shadow:0 8px 20px -6px rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.3,1.4,.5,1)}
+#nav{position:absolute;left:12px;right:12px;bottom:14px;height:66px;background:var(--noir);border-radius:26px;display:grid;grid-template-columns:1fr 1fr 1.2fr 1fr 1fr;align-items:center;z-index:40;box-shadow:0 8px 20px -6px rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.3,1.4,.5,1)}
 #nav.is-hidden{transform:translateY(130%)}
 .nav__b{display:flex;flex-direction:column;align-items:center;gap:3px;color:#BDB3A0;font:800 italic 11.5px var(--f-title);text-transform:uppercase;letter-spacing:.02em;height:100%;justify-content:center}
 .nav__b svg{width:23px;height:23px}
@@ -1025,6 +1025,75 @@ input,select{font:inherit;color:inherit}
 .ig__body>.btn{margin:12px;width:auto}
 #confetti{z-index:200}
 
+/* ===================== V5 : TA BANDE ===================== */
+.nav__b{font-size:10.5px}
+.tabpad{padding-top:calc(var(--top) + 6px)}
+.bh{display:flex;justify-content:space-between;align-items:flex-end;padding:0 16px}
+.addf{position:relative;width:52px;height:52px;border-radius:50%;background:var(--jaune);border:var(--bw) solid var(--noir);box-shadow:0 3px 0 var(--noir);display:grid;place-items:center}
+.addf svg{width:24px;height:24px}
+.addf b{position:absolute;right:-4px;top:-4px;width:22px;height:22px;border-radius:50%;background:var(--rouge);color:#fff;border:2px solid var(--noir);font:900 16px/18px var(--f-title);text-align:center}
+.omo{display:flex;gap:14px;align-items:center;background:var(--rouge);color:var(--blanc);border:var(--bw) solid var(--noir);border-radius:24px;padding:16px;box-shadow:0 5px 0 var(--noir);text-align:left;width:100%;overflow:hidden}
+.omo__stack{width:96px;height:96px;position:relative;flex:none}
+.omo__stack .card{position:absolute;width:50px;left:22px;top:6px}
+.omo__stack .card:first-child{left:0}.omo__stack .card:last-child{left:44px}
+.omo b{font:900 italic 26px/1 var(--f-title);letter-spacing:-.03em;display:block;color:var(--jaune);-webkit-text-stroke:1.2px var(--noir);paint-order:stroke fill}
+.omo span{font:600 italic 13.5px/1.3 var(--f-title);display:block;margin-top:4px}
+.omo__go{font-weight:900!important;margin-top:8px!important;text-decoration:underline;text-underline-offset:3px}
+.cring-row{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:4px 16px 6px}
+.cring-row::-webkit-scrollbar{display:none}
+.cring{flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;width:66px}
+.cring span{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font:900 italic 24px var(--f-title);border:3px solid var(--beige);box-shadow:0 0 0 3px var(--noir);position:relative;background-clip:padding-box}
+.cring:not(.cring--add) span{box-shadow:0 0 0 3px var(--beige),0 0 0 6px transparent;background-image:none}
+.cring:not(.cring--add){--p:50}
+.cring:not(.cring--add) span::after{content:"";position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(var(--rouge) calc(var(--p)*1%),rgba(17,17,17,.12) 0);-webkit-mask:radial-gradient(circle,transparent 62%,#000 63%);mask:radial-gradient(circle,transparent 62%,#000 63%)}
+.cring b{font:900 italic 13px var(--f-title)}
+.cring em{font:800 15px/1 var(--f-cond);font-style:normal;color:var(--rouge)}
+.cring--add span{background:var(--blanc);font:800 32px var(--f-cond);border:2.5px dashed var(--noir);box-shadow:none}
+.sugg{flex:none;width:130px;background:var(--blanc);border:2px solid var(--noir);border-radius:18px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.sugg .avatar{width:52px;height:52px;font-size:20px}
+.sugg b{font:900 italic 15px var(--f-title)}
+.sugg span{font:600 italic 11.5px var(--f-title);color:var(--brun);margin-bottom:4px}
+.feed{display:flex;flex-direction:column;gap:12px}
+.fi{background:var(--blanc);border:2px solid var(--noir);border-radius:20px;overflow:hidden}
+.fi__h{display:flex;gap:10px;align-items:center;padding:12px 14px 8px;font:600 italic 14px/1.3 var(--f-title)}
+.fi__h b{font-weight:900}
+.fi__h small{display:block;font:400 10px var(--f-px);letter-spacing:.08em;color:var(--muted);margin-top:2px}
+.fi__body{display:flex;gap:14px;align-items:center;padding:4px 14px 12px;width:100%;text-align:left}
+.fi__card{width:92px;flex:none;position:relative;transform:rotate(-3deg)}
+.fi__vid{position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);background:var(--noir);color:var(--blanc);font:800 italic 11px var(--f-title);border-radius:99px;padding:3px 9px;display:flex;gap:4px;align-items:center;white-space:nowrap;border:2px solid var(--jaune)}
+.fi__vid svg{width:10px;height:10px}
+.fi__rk{font:900 italic 18px/1.1 var(--f-title);margin-top:8px;letter-spacing:-.02em}
+.fi__body p{margin:4px 0 0;font:600 italic 13px var(--f-title);color:var(--brun)}
+.fi__a{display:flex;border-top:2px solid rgba(17,17,17,.08)}
+.fi__a button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;font:800 italic 13px var(--f-title)}
+.fi__a button+button{border-left:2px solid rgba(17,17,17,.08)}
+.fi__a svg{width:16px;height:16px}
+.fi__a button.is-on{color:var(--rouge)}
+.vtag{display:inline-block;font:900 italic 13px var(--f-title);padding:3px 10px;border-radius:99px;border:2px solid var(--noir)}
+.vtag--banger{background:var(--jaune)}
+.vtag--valide{background:var(--cyan)}
+.vtag--bof{background:var(--beige);color:var(--muted)}
+.bn{display:flex;flex-direction:column;gap:8px}
+.bn__r{display:flex;gap:10px;align-items:center;background:var(--blanc);border:2px solid var(--noir);border-radius:16px;padding:8px 12px;text-align:left;width:100%}
+.bn__r b{font:900 italic 15px var(--f-title);display:block}
+.bn__r span span,.bn__r .grow>span{font:600 italic 12.5px var(--f-title);color:var(--brun)}
+.cbig{display:flex;align-items:center;gap:14px;position:relative}
+.cbig .avatar{width:64px;height:64px;font-size:26px}
+.cbig__n{font:800 72px/1 var(--f-cond);color:var(--jaune);min-width:150px;text-align:center}
+.mycode{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:var(--jaune);border:var(--bw) solid var(--noir);border-radius:22px;padding:18px}
+.mycode b{font:900 italic 22px var(--f-title)}
+.mycode span{font:600 italic 13px var(--f-title);color:var(--brun)}
+.uegrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 8px}
+.ue{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.ue__c{width:100%;max-width:72px;aspect-ratio:1;border-radius:50%;background-size:cover;background-position:center 65%;border:2.5px solid var(--noir);position:relative;display:grid;place-items:center;transition:transform .15s;box-shadow:0 3px 0 var(--noir)}
+.ue__c b{font:900 italic 12px/1 var(--f-title);color:var(--blanc);-webkit-text-stroke:1px var(--noir);paint-order:stroke fill;transform:rotate(-8deg)}
+.ue__c i{position:absolute;right:-4px;top:-4px;width:24px;height:24px;border-radius:50%;background:var(--rouge);color:#fff;border:2px solid var(--noir);display:none;place-items:center}
+.ue__c i svg{width:13px;height:13px}
+.ue__l{font:800 italic 12px/1.15 var(--f-title);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.ue.is-on .ue__c{transform:scale(.92);box-shadow:0 0 0 4px var(--rouge)}
+.ue.is-on .ue__c i{display:grid}
+.ue.is-on .ue__l{color:var(--rouge)}
+
 </style>
 
 <div id="stage">
@@ -1039,7 +1108,8 @@ input,select{font:inherit;color:inherit}
       <button data-jump="stories">Stories rédac</button>
       <button data-jump="group">On mange où ?</button>
       <button data-jump="scan">Scan + verdict</button>
-      <button data-jump="moi">Profil + compat</button>
+      <button data-jump="potes">Ta bande</button>
+      <button data-jump="moi">Profil</button>
       <button data-jump="insta">Insta → DM</button>
       <button data-jump="collec">Collec</button>
       <button data-jump="album">Impression</button>
@@ -1052,12 +1122,16 @@ input,select{font:inherit;color:inherit}
       <main id="tabs">
         <section class="tab" id="t-map" data-tab="map"></section>
         <section class="tab" id="t-collec" data-tab="collec" hidden></section>
+        <section class="tab" id="t-potes" data-tab="potes" hidden></section>
+        <section class="tab" id="t-moi" data-tab="moi" hidden></section>
       </main>
 
       <nav id="nav" aria-label="Navigation principale">
         <button class="nav__b is-on" data-go="map"><svg><use href="#i-map"/></svg><span>Explorer</span></button>
+        <button class="nav__b" data-go="potes"><svg><use href="#i-bande"/></svg><span>Ta bande</span></button>
         <button class="nav__scan" data-go="scan" aria-label="Scanner une plaque"><svg><use href="#i-nfc"/></svg><span>Scanner</span></button>
-        <button class="nav__b" data-go="collec"><svg><use href="#i-cards"/></svg><span>Ma collec</span></button>
+        <button class="nav__b" data-go="collec"><svg><use href="#i-cards"/></svg><span>Collec</span></button>
+        <button class="nav__b" data-go="moi"><svg><use href="#i-user"/></svg><span>Moi</span></button>
       </nav>
 
       <div id="layers"></div>
@@ -1093,6 +1167,7 @@ input,select{font:inherit;color:inherit}
     <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
     <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-bande" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M2.5 20c.9-3.6 3.4-5.3 6.5-5.3s5.6 1.7 6.5 5.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="16.5" cy="7.5" r="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M17.5 13.6c2.3.3 3.6 1.8 4.2 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
   </defs>
 </svg>
@@ -1260,18 +1335,18 @@ const SETS = [
 ];
 
 // ---------- ÉTAT ----------
-const KEY = "lgu-app-v6";
+const KEY = "lgu-app-v7";
 function freshState(){
   const own = {};
   const seed = [[0,"2026-03-14"],[1,"2026-03-21"],[7,"2026-04-02"],[8,"2026-04-11"],[9,"2026-04-19"],[10,"2026-05-03"],[11,"2026-05-10"],[12,"2026-05-24"],[13,"2026-06-07"],[14,"2026-06-14"],[15,"2026-06-28"],[16,"2026-07-05"],[17,"2026-07-19"],[18,"2026-08-02"],[19,"2026-08-16"],[20,"2026-08-30"],[21,"2026-09-06"],[22,"2026-09-13"],[23,"2026-09-27"],[24,"2026-10-04"],[25,"2026-10-11"],[38,"2026-05-17"],[45,"2026-07-26"]];
   seed.forEach(([pid,d])=>{const c=PL(pid).c;(own[c]=own[c]||[]).push({p:pid,d});});
-  return {v:6,rank:{Kebab:[0,45]},vote:null,storySeen:false,printed:seed.slice(0,15).map(x=>x[0]),album:true,onb:false,name:"Sam",city:"Paris",envies:[],recent:["ramen","pas cher"],follow:[0,2,4],pts:1960,own,saved:[2,4,31],
+  return {v:7,cities:["Paris"],added:[],likes:[],rank:{Kebab:[0,45]},vote:null,storySeen:false,printed:seed.slice(0,15).map(x=>x[0]),album:true,onb:false,name:"Sam",city:"Paris",envies:[],recent:["ramen","pas cher"],follow:[0,2,4],pts:1960,own,saved:[2,4,31],
     booster:{opened:false,ids:BOOSTER_IDS.slice(),done:[]},react:{},order:null,sub:false,shipped:[],friendsFound:false,
     week:{sale:1,sucre:0,other:0,revisit:0,friends:0},streak:5};
 }
 let S;
 try{ S = JSON.parse(localStorage.getItem(KEY)) || null; }catch(e){ S = null; }
-if(!S || S.v!==6) S = freshState();
+if(!S || S.v!==7) S = freshState();
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
 const ownedCats = () => Object.keys(S.own).filter(c=>S.own[c].length);
@@ -1318,11 +1393,10 @@ const rarChip = c => `<span class="rar rar--${RAR[c]}">${RAR_NAME[RAR[c]]}</span
 let TAB = "map";
 function go(tab){
   if(tab==="scan"){ openScan(); return; }
-  if(tab==="moi"){ openProfile(); return; }
   TAB = tab;
   $$(".tab").forEach(t=>t.hidden = t.dataset.tab!==tab);
   $$("#nav [data-go]").forEach(b=>b.classList.toggle("is-on", b.dataset.go===tab));
-  ({map:renderMap,collec:renderCollec})[tab]();
+  ({map:renderMap,collec:renderCollec,potes:renderPotes,moi:renderMoi})[tab]();
   const el = $("#t-"+tab); if(el) el.scrollTop = 0;
 }
 $("#nav").addEventListener("click",e=>{ const b=e.target.closest("[data-go]"); if(b){ closeAll(); go(b.dataset.go); }});
@@ -1397,7 +1471,7 @@ distM = p => { const dx=(p.lon-ME_LL.lon)*73000, dy=(p.lat-ME_LL.lat)*111000; re
 
 const isOpen = p => !["14h","16h","18h"].includes(p.h);
 function matchesQ(p){ const q=M.q; if(!q) return true; if(q.ids && !q.ids.includes(p.id)) return false; if(q.cats && !q.cats.includes(p.c)) return false; if(q.price && p.p!==q.price) return false; return true; }
-function passFilter(p){ return matchesQ(p) && (!M.open||isOpen(p)) && (!M.todo||!isOwnedPlace(p.id)) && (!M.price.length||M.price.includes(p.p)); }
+function passFilter(p){ return (!M.band||bandLiked(p.id)) && matchesQ(p) && (!M.open||isOpen(p)) && (!M.todo||!isOwnedPlace(p.id)) && (!M.price.length||M.price.includes(p.p)); }
 const filtered = () => PLACES.filter(passFilter);
 const placesIn = city => PLACES.filter(p=>p.city===city);
 
@@ -1558,7 +1632,7 @@ function renderMap(){
   const t=$("#t-map");
   t.innerHTML=`<div class="map" id="map"><svg id="msvg" class="msvg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${BASE}</svg><div class="mov" id="mov"></div></div>
   <div class="topbar">
-    <div class="sbar">${icon("search")}<button class="sbar__q ${M.q?"is-set":""}" data-search>${M.q?esc(M.q.label):"Un plat, un resto, une ville…"}</button>${M.q?`<button class="sbar__x" data-clear aria-label="Effacer la recherche">${icon("x")}</button>`:""}<button class="me-btn" data-me aria-label="Mon profil">${esc((S.name||"?")[0])}</button></div>
+    <div class="sbar">${icon("search")}<button class="sbar__q ${M.q?"is-set":""}" data-search>${M.q?esc(M.q.label):"Un plat, un resto, une ville…"}</button>${M.q?`<button class="sbar__x" data-clear aria-label="Effacer la recherche">${icon("x")}</button>`:""}</div>
     <div class="qrow" id="qrow"></div>
   </div>
   <div class="mctrl"><div class="zoom"><button data-zin aria-label="Zoomer">+</button><button data-zout aria-label="Dézoomer">−</button></div><button class="fab" data-loc aria-label="Me recentrer">${icon("locate")}</button><button class="fab" data-fr aria-label="Voir toute la France">${icon("france")}</button></div>
@@ -1571,7 +1645,7 @@ function refreshMap(){ if(!$("#msvg")) return renderMap(); drawQrow(); const b=$
 function drawQrow(){
   const nf=(M.open?1:0)+(M.todo?1:0)+(M.price.length?1:0)+(M.creators?1:0);
   const sm = id => icon(id).replace("<svg",'<svg style="width:14px;height:14px"');
-  $("#qrow").innerHTML=`<button class="qc ring ${S.storySeen?"is-seen":""}" data-stories><i><img src="${IMG.badge}" alt=""></i>La rédac</button><button class="qc plain qc--red" data-group>${sm("user")} On mange où ?</button><button class="qc plain ${nf?"is-on":""}" data-filters>${sm("filter")} Filtres${nf?` <span class="n">${nf}</span>`:""}</button><button class="qc plain ${M.open?"is-on":""}" data-topen>Ouvert</button>${QUICK.map(c=>{const on=M.q&&M.q.cats&&M.q.cats.length===1&&M.q.cats[0]===c; return `<button class="qc ${on?"is-on":""}" data-qc="${esc(c)}"><i style="${ILL[c]?`background-image:url(${IMG[ILL[c]]})`:`background:${TYPO_G[hash(c)%TYPO_G.length]}`}"></i>${esc(c)}</button>`;}).join("")}`;
+  $("#qrow").innerHTML=`<button class="qc ring ${S.storySeen?"is-seen":""}" data-stories><i><img src="${IMG.badge}" alt=""></i>La rédac</button><button class="qc plain qc--red" data-group>${sm("user")} On mange où ?</button><button class="qc plain ${M.band?"is-on":""}" data-band>Validé par ta bande</button><button class="qc plain ${nf?"is-on":""}" data-filters>${sm("filter")} Filtres${nf?` <span class="n">${nf}</span>`:""}</button><button class="qc plain ${M.open?"is-on":""}" data-topen>Ouvert</button>${QUICK.map(c=>{const on=M.q&&M.q.cats&&M.q.cats.length===1&&M.q.cats[0]===c; return `<button class="qc ${on?"is-on":""}" data-qc="${esc(c)}"><i style="${ILL[c]?`background-image:url(${IMG[ILL[c]]})`:`background:${TYPO_G[hash(c)%TYPO_G.length]}`}"></i>${esc(c)}</button>`;}).join("")}`;
 }
 function selectPlace(id){
   const p=PL(id); M.sel=id; if(TAB!=="map") go("map");
@@ -1588,6 +1662,7 @@ function mapClick(e){
   if(b.hasAttribute("data-search")){ openSearch(); return; }
   if(b.hasAttribute("data-stories")){ openStories(0); return; }
   if(b.hasAttribute("data-group")){ openGroup(); return; }
+  if(b.hasAttribute("data-band")){ M.band=!M.band; M.sel=null; refreshMap(); if(M.band) toast("Les adresses que ta bande a aimées"); return; }
   if(b.hasAttribute("data-clear")||b.hasAttribute("data-reset")){ M.q=null; M.sel=null; M.open=M.todo=false; M.price=[]; M.rs="peek"; refreshMap(); return; }
   if(b.hasAttribute("data-fitall")){ fitTo(filtered()); return; }
   if(b.hasAttribute("data-me")){ openProfile(); return; }
@@ -1673,7 +1748,7 @@ function openPlace(id){
           :`<div class="perk">${icon("nfc")}<div><b>Carte à décrocher ici</b><br><span style="font:600 italic 13px var(--f-title)">Scanne la plaque au moment de payer : +${RAR_PTS[RAR[p.c]]} pts${isOwnedCat(p.c)?"":` et +${NEWCAT} nouvelle catégorie`}.</span></div></div>`}
     <div class="quote"><span class="sig">la rédac</span><span class="eyebrow">Pourquoi on l'a plaqué</span><p>${esc(motFor(p))}</p></div>
     <div class="perk ${perkOk?"":"is-locked"}">${icon("gift")}<div><b>${perkOk?"Ton avantage ici":"Avantage niveau 3"}</b><br><span style="font:600 italic 13px var(--f-title)">−10 % sur l'addition${perkOk?" : montre ton pass en payant.":" dès le niveau Gourmand."}</span></div>${perkOk?`<button class="btn btn--sm" data-pass style="margin-left:auto">Pass</button>`:""}</div>
-    ${friends.length?`<div class="row"><div class="avs">${friends.map(f=>avatar(f.n,f.c)).join("")}</div><div class="sub" style="font-size:14px"><b>${friends.map(f=>f.n).join(", ")}</b> ${friends.length>1?"l'ont":"l'a"} déjà dans ${friends.length>1?"leur":"sa"} collec.</div></div>`:""}
+    ${bandNotesHTML(id)}
     ${p.cr.length?`<div style="display:flex;flex-direction:column;gap:8px"><div class="sect__h"><span class="h3">Vu chez</span><span class="eyebrow muted">bonus créateurs</span></div><div class="creators">${p.cr.map(i=>{const c=CREATORS[i];return `<button class="cr" data-creator="${i}">${avatar(c.n,c.c)}@${esc(c.h)}<span class="pl">${icon("play")}</span></button>`;}).join("")}</div></div>`:""}
     <div class="actions"><button class="act" data-route>${icon("route")}Y aller</button><button class="act" data-save>${icon(saved?"bookmark-f":"bookmark")}${saved?"Sauvé":"À tester"}</button><button class="act" data-share>${icon("share")}Partager</button></div>
     ${!own?`<button class="btn btn--red btn--block" data-scanhere>${icon("nfc")} J'y suis, je scanne</button>`:`<button class="btn btn--white btn--block" data-viewcard>Voir ma carte</button>`}
@@ -1688,6 +1763,7 @@ function openPlace(id){
     if(b.hasAttribute("data-viewcard")){ popLayer(d); openViewer(p.c, id); }
     if(b.hasAttribute("data-pass")) openPass(LEVELS[2].perks[0]);
     if(b.dataset.creator) openCreator(+b.dataset.creator);
+    if(b.dataset.friend){ popLayer(d); openFriend(+b.dataset.friend); }
   };
 }
 function openCreator(i){
@@ -1797,7 +1873,7 @@ function renderCollec(){
   const fan=cards.filter(x=>ILL[x.c]).slice(0,3).map(x=>cardHTML(x.c,{resto:PL(x.p).n})).join("");
   t.innerHTML=`
   <header class="hero hero--feu grain"><div class="fan">${fan}</div>
-    <div class="row" style="justify-content:space-between;position:relative;z-index:3"><span class="ed">Ma collec · 2026/2027</span><button class="me-btn" data-me aria-label="Mon profil">${esc((S.name||"?")[0])}</button></div>
+    <div class="row" style="justify-content:space-between;position:relative;z-index:3"><span class="ed">Ma collec · 2026/2027</span></div>
     <div class="count"><span class="count__n">${cards.length}</span><span class="count__d">cartes</span></div>
     <div class="count__s" style="margin-top:8px;max-width:20ch">${PLACES.length-cards.length} autres à décrocher en France.</div>
     <div class="segbar" style="margin-top:16px">${secs.map(s=>`<div style="--w:${s.a.length}"><div class="bar bar--y"><i style="width:${s.got/s.a.length*100}%"></i></div><span>${SECT_NAME[s.k]} ${s.got}/${s.a.length}</span></div>`).join("")}</div>
@@ -2150,7 +2226,9 @@ function topsHTML(own,rankFn,max=4){
   const cats=Object.keys(own).sort((a,b)=>own[b].length-own[a].length||a.localeCompare(b)).slice(0,max);
   return cats.map(c=>{ const r=rankFn(c); return `<div class="top"><span class="top__i" style="${ILL[c]?`background-image:url(${IMG[ILL[c]]})`:`background:${TYPO_G[hash(c)%TYPO_G.length]}`}"></span><div class="grow"><b>Top ${esc(c.toLowerCase())}</b><span>${r.slice(0,3).map((p,k)=>`${k+1}. ${esc(PL(p).n)}`).join("  ·  ")}</span></div></div>`; }).join("");
 }
-function openProfile(){
+function openProfile(){ closeAll(); go("moi"); }
+function renderMoi(){
+  const t=$("#t-moi");
   const L=lvlOf(S.pts), N=nextLvl(S.pts); const pct=N?((S.pts-L.min)/(N.min-L.min)*100):100; const cards=allCards();
   const html=`
   <div class="pf"><div class="pf__av">${esc((S.name||"?")[0])}</div><h1 class="h1" style="font-size:32px;text-align:center">${esc(S.name)}</h1><span class="eyebrow" style="text-align:center">${esc(handle())} · ${esc(S.city)} · ${esc(L.t)}</span>
@@ -2171,8 +2249,8 @@ function openProfile(){
     <button class="li" data-onb><span class="ic" style="background:var(--beige)">${icon("star")}</span><span class="grow">Revoir l'accueil</span>${icon("back","chev")}</button>
     <button class="li" data-reset><span class="ic" style="background:var(--beige)">${icon("x")}</span><span class="grow">Remettre la démo à zéro</span>${icon("back","chev")}</button>
   </div><p class="note" style="text-align:center;margin:6px 0 0">Prototype · adresses, créateurs et potes d'exemple · illustrations Champ Magnétique, Clara Biel</p></div>`;
-  const d=full("",html);
-  d.querySelector(".full__body").onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
+  t.innerHTML=`<div class="tabpad">${html}</div>`;
+  t.onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
     if(b.hasAttribute("data-sharepf")) openSharePf();
     else if(b.hasAttribute("data-invite")) openInvite();
     else if(b.dataset.friend) openFriend(+b.dataset.friend);
@@ -2240,25 +2318,116 @@ function openInstaDemo(){
 
 
 // =========================================================
+// TA BANDE : fil des potes, avis, compat, ajout de potes
+// =========================================================
+const VERDICTS=["Banger","Banger","Validé","Validé","Bof"];
+const SUGG=[{n:"Léa",c:"#FFE27A",mut:"Inès"},{n:"Nassim",c:"#BDEFD9",mut:"Malik"},{n:"Chloé",c:"#FFC9D6",mut:"Jade"},{n:"Hugo",c:"#C9DBFF",mut:"Théo"},{n:"Manon",c:"#FFD8B0",mut:"Inès"},{n:"Rayan",c:"#D7F5A8",mut:"Sacha"},{n:"Lina",c:"#F3C4FF",mut:"Malik"}];
+// potes ajoutés pendant la démo : on les recrée au chargement
+(S.added||[]).forEach(a=>{ if(!FRIENDS.some(f=>f.n===a.n)) addFriendData(a); });
+function addFriendData(a){ const i=FRIENDS.length; FRIENDS.push({n:a.n,c:a.c,k:6+hash(a.n)%20,w:0}); const R=rng(hash(a.n)); const pool=PLACES.filter(p=>p.city==="Paris"); FR_OWN[i]=[...Array(6)].map(()=>pool[Math.floor(R()*pool.length)].id).filter((v,k,s)=>s.indexOf(v)===k); FR_COMPAT[i]=58+hash(a.n+"c")%35; return i; }
+const frVerdict = (i,pid) => VERDICTS[hash(FRIENDS[i].n+pid)%VERDICTS.length];
+function frRank(i,pid){ const c=PL(pid).c; const l=(FR_OWN[i]||[]).filter(p=>PL(p).c===c); return l.indexOf(pid)+1; }
+const bandOn = pid => FRIENDS.some((f,i)=>(FR_OWN[i]||[]).includes(pid));
+const bandLiked = pid => FRIENDS.some((f,i)=>(FR_OWN[i]||[]).includes(pid)&&frVerdict(i,pid)!=="Bof");
+function bandNotesHTML(pid){
+  const L=FRIENDS.map((f,i)=>({f,i})).filter(o=>(FR_OWN[o.i]||[]).includes(pid)); if(!L.length) return "";
+  return `<div class="bn"><div class="sect__h"><span class="h3">Ce qu'en pense ta bande</span><span class="eyebrow">${L.length} AVIS</span></div>${L.map(({f,i})=>{const v=frVerdict(i,pid), r=frRank(i,pid); return `<button class="bn__r" data-friend="${i}">${avatar(f.n,f.c)}<span class="grow"><b>${esc(f.n)}</b><span>${r?`N°${r} de ses ${esc(PL(pid).c.toLowerCase())}${/[sx]$/.test(PL(pid).c)?"":"s"}`:""}</span></span><span class="vtag vtag--${norm(v)}">${v}</span></button>`;}).join("")}</div>`;
+}
+function feedItems(){
+  const it=[]; FRIENDS.forEach((f,i)=>(FR_OWN[i]||[]).slice(0,4).forEach((pid,k)=>it.push({i,pid,h:k*9+i*2+1,vid:(hash(f.n+pid)%3===0)})));
+  const seen=new Set(); return it.sort((a,b)=>a.h-b.h).filter(x=>!seen.has(x.pid)&&seen.add(x.pid)).slice(0,14);
+}
+const ago = h => h<24?`il y a ${h} h`:`il y a ${Math.floor(h/24)} j`;
+
+function renderPotes(){
+  const t=$("#t-potes"); const F=feedItems();
+  t.innerHTML=`<div class="tabpad">
+  <div class="bh"><div><span class="ed">Ta bande · ${FRIENDS.length} potes</span><h1 class="h1 outline" style="margin-top:8px;font-size:44px">Ta bande</h1></div><button class="addf" data-add aria-label="Ajouter des potes">${icon("user")}<b>+</b></button></div>
+  <div class="sect"><button class="omo" data-group><div class="omo__stack">${[5,6,3].map((id,k)=>cardHTML(PL(id).c,{resto:PL(id).n,style:`transform:rotate(${(k-1)*10}deg)`})).join("")}</div><div class="grow"><b>On mange où ?</b><span>Chacun swipe, l'appli tranche. Fini les 40 messages.</span><span class="omo__go">Lancer une partie →</span></div></button></div>
+  <div class="sect"><div class="sect__h"><h2 class="h2">Compatibilité</h2><span class="eyebrow">TOUCHE UN POTE</span></div>
+    <div class="cring-row"><button class="cring cring--add" data-add><span>+</span><b>Ajouter</b></button>${FRIENDS.map((f,i)=>`<button class="cring" data-friend="${i}" style="--p:${FR_COMPAT[i]}"><span style="background:${f.c}">${esc(f.n[0])}</span><b>${esc(f.n)}</b><em>${FR_COMPAT[i]} %</em></button>`).join("")}</div></div>
+  <div class="sect"><div class="sect__h"><h2 class="h2">Tu les connais peut-être</h2></div><div class="hscroll">${SUGG.filter(s=>!FRIENDS.some(f=>f.n===s.n)).slice(0,4).map(s=>`<div class="sugg">${avatar(s.n,s.c)}<b>${esc(s.n)}</b><span>Ami·e de ${esc(s.mut)}</span><button class="btn btn--sm" data-addname="${esc(s.n)}">Ajouter</button></div>`).join("")||`<p class="sub">T'as ajouté tout le monde. Respect.</p>`}</div></div>
+  <div class="sect"><div class="sect__h"><h2 class="h2">Ce que teste ta bande</h2></div>
+    <div class="feed">${F.map(x=>{const f=FRIENDS[x.i], p=PL(x.pid), v=frVerdict(x.i,x.pid), r=frRank(x.i,x.pid), saved=S.saved.includes(p.id), lk=(S.likes||[]).includes(x.i+"-"+p.id);
+      return `<article class="fi"><div class="fi__h">${avatar(f.n,f.c)}<span class="grow"><b>${esc(f.n)}</b> a décroché <b>${esc(p.n)}</b><small>${ago(x.h)} · ${esc(where(p))}</small></span></div>
+      <button class="fi__body" data-place="${p.id}"><div class="fi__card">${cardHTML(p.c,{resto:p.n})}${x.vid?`<span class="fi__vid">${icon("play")} verdict</span>`:""}</div><div class="grow"><span class="vtag vtag--${norm(v)}">${v}</span><div class="fi__rk">${r?`N°${r} de ses ${esc(p.c.toLowerCase())}${/[sx]$/.test(p.c)?"":"s"}`:""}</div><p>${esc(title(p.c))}${isOwnedPlace(p.id)?" · t'y es allé aussi":""}</p></div></button>
+      <div class="fi__a"><button class="${lk?"is-on":""}" data-like="${x.i}-${p.id}">${icon("flame")} ${lk?"Chaud":"Ça donne envie"}</button><button class="${saved?"is-on":""}" data-save="${p.id}">${icon(saved?"bookmark-f":"bookmark")} ${saved?"Sauvé":"À tester"}</button></div></article>`;}).join("")}</div></div></div>`;
+  t.onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
+    if(b.hasAttribute("data-add")) openAddFriends();
+    else if(b.hasAttribute("data-group")) openGroup();
+    else if(b.dataset.friend) openFriend(+b.dataset.friend);
+    else if(b.dataset.addname) addFriend(b.dataset.addname);
+    else if(b.dataset.place) openPlace(+b.dataset.place);
+    else if(b.dataset.like){ S.likes=S.likes||[]; const k=b.dataset.like, i=S.likes.indexOf(k); if(i>=0) S.likes.splice(i,1); else S.likes.push(k); save(); b.classList.toggle("is-on"); b.innerHTML=icon("flame")+(i>=0?" Ça donne envie":" Chaud"); }
+    else if(b.dataset.save){ const id=+b.dataset.save, i=S.saved.indexOf(id); if(i>=0) S.saved.splice(i,1); else S.saved.push(id); save(); $$(`[data-save="${id}"]`,t).forEach(x=>{ x.classList.toggle("is-on",i<0); x.innerHTML=icon(i<0?"bookmark-f":"bookmark")+(i<0?" Sauvé":" À tester"); }); toast(i<0?"Ajouté à « À tester »":"Retiré de « À tester »"); } };
+}
+function addFriend(n,after){
+  const s=SUGG.find(x=>x.n===n)||{n,c:"#FFE27A"}; if(FRIENDS.some(f=>f.n===n)) return;
+  S.added=S.added||[]; S.added.push({n:s.n,c:s.c}); save(); const i=addFriendData(s);
+  const d=pushLayer(`<div class="lu" style="background:var(--noir)"><span class="reveal__kicker">Calcul de votre compatibilité…</span><div class="cbig">${avatar(S.name,"var(--jaune)")}<span class="cbig__n" id="cn">0</span>${avatar(s.n,s.c)}</div><h2 class="lu__t" id="ct" style="opacity:0">${esc(s.n)} et toi</h2><p class="scan__p" id="cp" style="opacity:0;position:relative"></p><button class="btn btn--block" data-ok style="position:relative">Voir sa collec</button><button class="btn btn--ghost" data-close style="color:#B9AC94;position:relative">Fermer</button></div>`,"ov",{hideNav:true});
+  d.style.zIndex=95;
+  const target=FR_COMPAT[i]; let v=0; const iv=setInterval(()=>{ v=Math.min(target,v+3); const el=d.querySelector("#cn"); if(el) el.textContent=v+"%"; if(v>=target){ clearInterval(iv); d.querySelector("#ct").style.opacity=1; const p=d.querySelector("#cp"); p.style.opacity=1; p.textContent=target>80?"Vous êtes faits pour manger ensemble.":target>65?"Bonne entente, quelques débats sur le sucré.":"Vous allez vous disputer le choix du resto."; confetti(120); } },30);
+  d.onclick=e=>{ const b=e.target.closest("button"); if(!b) return; clearInterval(iv); popLayer(d); if(b.hasAttribute("data-ok")) openFriend(i); if(after) after(); else if(TAB==="potes") renderPotes(); };
+  toast(`${esc(s.n)} ajouté·e à ta bande`);
+}
+function qrSVG(seed){ const R=rng(hash(seed)); let cells=""; for(let y=0;y<21;y++)for(let x=0;x<21;x++){ const fin=(a,b)=>x>=a&&x<a+7&&y>=b&&y<b+7; let on; if(fin(0,0)||fin(14,0)||fin(0,14)){ const lx=x%14===x?x:x-14, ly=y%14===y?y:y-14, ax=Math.min(lx,6-lx), ay=Math.min(ly,6-ly); on=Math.min(ax,ay)!==1; } else on=R()<.48; if(on) cells+=`<rect x="${x}" y="${y}" width="1" height="1"/>`; } return `<svg viewBox="0 0 21 21" shape-rendering="crispEdges" fill="#111">${cells}</svg>`; }
+function openAddFriends(tab="search"){
+  const link="lgu.app/"+handle().slice(1);
+  const d=sheet(`<div class="h2">Ajoute tes potes</div><div class="seg" id="aft"><button data-t="search">Chercher</button><button data-t="code">Mon code</button><button data-t="contacts">Contacts</button></div><div id="afb" style="display:flex;flex-direction:column;gap:12px"></div>`);
+  const afb=d.querySelector("#afb");
+  const draw=()=>{ $$("#aft button",d).forEach(b=>b.classList.toggle("is-on",b.dataset.t===tab));
+    if(tab==="search"){ afb.innerHTML=`<input id="afq" class="bigin" style="font-size:18px;padding:13px 14px" placeholder="Un prénom ou un @" autocomplete="off"><div class="list" id="afr"></div><button class="link" data-cp>${icon("copy")} <span>Ou envoie ton lien : <b>${esc(link)}</b></span></button>`;
+      const q=afb.querySelector("#afq"), r=afb.querySelector("#afr");
+      const res=()=>{ const v=norm(q.value); const L=SUGG.filter(s=>!v||norm(s.n).includes(v)); r.innerHTML=L.map(s=>{const has=FRIENDS.some(f=>f.n===s.n);return `<div class="li">${avatar(s.n,s.c)}<span class="grow">${esc(s.n)}<small>@${norm(s.n)} · ami·e de ${esc(s.mut)}</small></span>${has?`<span class="tag tag--own">✓ Dans ta bande</span>`:`<button class="btn btn--sm" data-addname="${esc(s.n)}">Ajouter</button>`}</div>`;}).join("")||`<div class="li">Personne à ce nom. Envoie-lui ton lien !</div>`; };
+      q.oninput=res; res(); }
+    if(tab==="code"){ afb.innerHTML=`<div class="mycode"><div class="qr" style="width:180px;height:180px">${qrSVG(link)}</div><b>${esc(handle())}</b><span>Fais scanner ce code à ton pote : il t'ajoute en une seconde.</span></div><div style="display:flex;gap:10px"><button class="btn btn--white" style="flex:1" data-cp>${icon("copy")} Copier le lien</button><button class="btn" style="flex:1" data-scanq>Scanner un code</button></div>`; }
+    if(tab==="contacts"){ afb.innerHTML=S.friendsFound?`<div class="list">${SUGG.slice(0,4).map(s=>{const has=FRIENDS.some(f=>f.n===s.n);return `<div class="li">${avatar(s.n,s.c)}<span class="grow">${esc(s.n)}<small>Dans tes contacts · déjà sur LGU</small></span>${has?`<span class="tag tag--own">✓</span>`:`<button class="btn btn--sm" data-addname="${esc(s.n)}">Ajouter</button>`}</div>`;}).join("")}</div>`
+      :`<div class="rgpd"><span class="eyebrow">Pourquoi on te demande tes contacts</span><p>Pour te montrer <b>qui de tes potes est déjà là</b>. Les numéros sont transformés en empreintes chiffrées <b>sur ton tel</b>, jamais envoyés en clair. Celles des non-inscrits sont <b>effacées tout de suite</b>.</p></div><button class="btn btn--black btn--block" data-contacts>Trouver mes potes</button>`; }
+  };
+  draw();
+  d.querySelector(".sheet__body").onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
+    if(b.dataset.t){ tab=b.dataset.t; draw(); }
+    else if(b.dataset.addname){ addFriend(b.dataset.addname,()=>{ draw(); if(TAB==="potes") renderPotes(); }); }
+    else if(b.hasAttribute("data-cp")) copyText(link,"Lien copié : envoie-le à tes potes");
+    else if(b.hasAttribute("data-scanq")) toast("Dans l'appli, ça ouvre l'appareil photo pour scanner son code");
+    else if(b.hasAttribute("data-contacts")){ S.friendsFound=true; save(); draw(); toast("4 de tes contacts sont déjà sur LGU"); } };
+}
+
+// ---------- envies façon Uber Eats ----------
+const POP=["Burger","Pizza","Sushi","Ramen","Kebab","Tacos","Poulet frit","Brunch","Pho","Bobun","Banh mi","Xiao long bao","Pad thaï","Frites","Falafels","Naan","Couscous","Crêpes","Glace","Flan","Cookie","Coffeeshop","Bar à cocktails","Étoilé"];
+function ueTile(c,on){ const ill=ILL[c]||PLAQUE_ART[c]; return `<button class="ue ${on?"is-on":""}" data-cat="${esc(c)}"><span class="ue__c" style="${ill?`background-image:url(${IMG[ill]})`:`background:${TYPO_G[hash(c)%TYPO_G.length]}`}">${ill?"":`<b>${esc(c.split(" ")[0])}</b>`}<i>${icon("check")}</i></span><span class="ue__l">${esc(c)}</span></button>`; }
+
+// =========================================================
 // ACCUEIL (3 écrans)
 // =========================================================
-const ONB=["splash","name","envies"];
-let O=0, OD=null;
-function startOnb(){ closeAll(); O=0; if(OD) OD.remove(); OD=document.createElement("div"); OD.className="onb"; $("#app").appendChild(OD); $("#nav").classList.add("is-hidden"); drawOnb(); }
+const ONB=["splash","name","envies","bande"];
+let O=0, OD=null, ONB_ALL=false;
+function startOnb(){ closeAll(); O=0; ONB_ALL=false; if(OD) OD.remove(); OD=document.createElement("div"); OD.className="onb"; $("#app").appendChild(OD); $("#nav").classList.add("is-hidden"); drawOnb(); }
 function endOnb(){ S.onb=true; save(); if(OD){ OD.remove(); OD=null; } $("#nav").classList.remove("is-hidden"); go("map"); setTimeout(notifMock,2500); }
 function drawOnb(){
   const step=ONB[O]; let body="", foot="";
-  const top = O===0 ? "" : `<div class="onb__top"><button class="iconbtn" data-prev aria-label="Retour">${icon("back")}</button><div class="dots">${[1,2].map(i=>`<i class="${i<=O?"on":""}"></i>`).join("")}</div><button class="skip" data-end>Passer</button></div>`;
+  S.cities=S.cities||["Paris"];
+  const top = O===0 ? "" : `<div class="onb__top"><button class="iconbtn" data-prev aria-label="Retour">${icon("back")}</button><div class="dots">${[1,2,3].map(i=>`<i class="${i<=O?"on":""}"></i>`).join("")}</div><button class="skip" data-end>Passer</button></div>`;
   if(step==="splash"){
-    body=`<div class="splash"><div class="splash__fan">${cardHTML("Kebab",{resto:"La Broche 96"})}${cardHTML("Xiao long bao",{resto:"Les raviolis de Mimi",cls:"is-live"})}${cardHTML("Frites",{resto:"Chez Maé"})}</div><img class="splash__logo" src="${IMG.badge}" alt="LGU"><h1 class="splash__t">Du kebab<br>à l'étoilé</h1><p class="sub" style="color:var(--noir);max-width:30ch">Les meilleures adresses de France, testées par la rédac. Chez les plaqués, scanne la plaque et collectionne leur carte.</p></div>`;
+    body=`<div class="splash"><div class="splash__fan">${cardHTML("Kebab",{resto:"La Broche 96"})}${cardHTML("Xiao long bao",{resto:"Les raviolis de Mimi",cls:"is-live"})}${cardHTML("Frites",{resto:"Chez Maé"})}</div><img class="splash__logo" src="${IMG.badge}" alt="LGU"><h1 class="splash__t">Du kebab<br>à l'étoilé</h1><p class="sub" style="color:var(--noir);max-width:30ch">Les meilleures adresses de France, testées par la rédac. Avec ta bande, chez les plaqués, et une carte à collectionner à chaque visite.</p></div>`;
     foot=`<button class="btn btn--black btn--block" data-next>C'est parti</button><button class="btn btn--ghost" data-end>J'ai déjà un compte</button>`;
   }
   if(step==="name"){
-    body=`<h1 class="h1 outline">On t'appelle<br>comment ?</h1><input id="onbName" class="bigin" placeholder="Ton prénom" value="${S.name==="Sam"?"":esc(S.name)}" maxlength="18" autocomplete="given-name"><h2 class="h2" style="margin-top:8px">Tu manges où, d'habitude ?</h2><div class="cities">${["Paris","Lyon","Marseille","Bordeaux","Lille","Toulouse","Nantes","Ailleurs"].map(c=>`<button class="chip ${S.city===c?"is-on":""}" data-city="${c}">${c}</button>`).join("")}</div><p class="note">Dans le proto, la carte s'ouvre sur Paris 11e.</p>`;
-    foot=`<button class="btn btn--black btn--block" data-next>Suivant</button>`;
+    const CS=["Paris","Lyon","Marseille","Bordeaux","Lille","Toulouse","Nantes","Strasbourg","Rennes","Nice","Montpellier","Les Îles"];
+    body=`<h1 class="h1 outline">On t'appelle<br>comment ?</h1><input id="onbName" class="bigin" placeholder="Ton prénom" value="${S.name==="Sam"?"":esc(S.name)}" maxlength="18" autocomplete="given-name"><div class="sect__h" style="margin-top:8px"><h2 class="h2">Tu manges où ?</h2><span class="eyebrow">${S.cities.length} CHOISIE${S.cities.length>1?"S":""}</span></div><p class="sub" style="margin-top:-8px">Choisis-en autant que tu veux : ta ville, celle de tes parents, tes week-ends.</p><div class="cities">${CS.map(c=>`<button class="chip ${S.cities.includes(c)?"is-on":""}" data-city="${c}">${S.cities.includes(c)?icon("check").replace("<svg",'<svg style="width:13px;height:13px"'):""}${c}</button>`).join("")}</div>`;
+    foot=`<button class="btn btn--black btn--block" data-next ${S.cities.length?"":"disabled"}>Suivant</button>`;
   }
   if(step==="envies"){
-    body=`<h1 class="h1 outline">T'as envie<br>de quoi ?</h1><p class="sub">Choisis ce qui te parle, on s'en sert pour ta sélection de la semaine. Tu pourras changer après.</p><div class="env6">${ENVIES.map(e=>`<button class="env ${S.envies.includes(e.k)?"is-on":""}" data-env="${e.k}" style="background:${e.g};${S.envies.includes(e.k)?"box-shadow:0 0 0 4px var(--rouge)":""}">${e.img?`<i style="background-image:url(${IMG[e.img]})"></i>`:""}<b>${esc(e.t)}</b></button>`).join("")}</div>`;
+    const list = ONB_ALL ? null : POP;
+    body=`<h1 class="h1 outline">T'as envie<br>de quoi ?</h1><p class="sub">Touche tout ce qui te fait saliver. On s'en sert pour ta sélection de la semaine.</p>
+      ${list?`<div class="uegrid">${list.map(c=>ueTile(c,S.envies.includes(c))).join("")}</div><button class="btn btn--white btn--block" data-all>Voir les 93 catégories</button>`
+      :Object.entries(SECT).map(([k,a])=>`<div class="group__h"><b>${SECT_NAME[k]}</b><span>${a.filter(c=>S.envies.includes(c)).length}/${a.length}</span></div><div class="uegrid">${a.map(c=>ueTile(c,S.envies.includes(c))).join("")}</div>`).join("")}`;
+    foot=`<button class="btn btn--black btn--block" data-next>${S.envies.length?`Suivant · ${S.envies.length} envie${S.envies.length>1?"s":""}`:"Suivant"}</button>`;
+  }
+  if(step==="bande"){
+    body=`<h1 class="h1 outline">Ramène<br>ta bande</h1><p class="sub">Vois ce que testent tes potes, votre compatibilité en bouffe, et choisissez le resto ensemble.</p>
+      <div class="list">${SUGG.slice(0,4).map(s=>{const has=FRIENDS.some(f=>f.n===s.n);return `<div class="li">${avatar(s.n,s.c)}<span class="grow">${esc(s.n)}<small>Déjà sur LGU · ami·e de ${esc(s.mut)}</small></span>${has?`<span class="tag tag--own">✓ Ajouté·e</span>`:`<button class="btn btn--sm" data-addname="${esc(s.n)}">Ajouter</button>`}</div>`;}).join("")}</div>
+      <div style="display:flex;gap:10px"><button class="btn btn--white" style="flex:1" data-cp>${icon("copy")} Mon lien</button><button class="btn btn--white" style="flex:1" data-code>Mon QR code</button></div>`;
     foot=`<button class="btn btn--red btn--block" data-end>Voir la carte</button>`;
   }
   OD.innerHTML=`${top}<div class="onb__body" style="${O===0?"padding-top:calc(var(--top) + 10px)":""}">${body}</div><div class="onb__foot">${foot}</div>`;
@@ -2267,14 +2436,18 @@ function drawOnb(){
     if(b.hasAttribute("data-next")){ save(); O++; drawOnb(); }
     else if(b.hasAttribute("data-prev")){ O=Math.max(0,O-1); drawOnb(); }
     else if(b.hasAttribute("data-end")) endOnb();
-    else if(b.dataset.city){ S.city=b.dataset.city==="Ailleurs"?"Paris":b.dataset.city; $$("[data-city]",OD).forEach(x=>x.classList.toggle("is-on",x===b)); }
-    else if(b.dataset.env){ const k=b.dataset.env, i=S.envies.indexOf(k); if(i>=0) S.envies.splice(i,1); else S.envies.push(k); b.style.boxShadow=i>=0?"":"0 0 0 4px var(--rouge)"; save(); } };
+    else if(b.dataset.city){ const c=b.dataset.city, i=S.cities.indexOf(c); if(i>=0) S.cities.splice(i,1); else S.cities.push(c); S.city=S.cities[0]||"Paris"; save(); const sc=OD.querySelector(".onb__body").scrollTop; drawOnb(); OD.querySelector(".onb__body").scrollTop=sc; }
+    else if(b.dataset.cat){ const c=b.dataset.cat, i=S.envies.indexOf(c); if(i>=0) S.envies.splice(i,1); else S.envies.push(c); save(); b.classList.toggle("is-on",i<0); const nb=OD.querySelector("[data-next]"); nb.textContent=S.envies.length?`Suivant · ${S.envies.length} envie${S.envies.length>1?"s":""}`:"Suivant"; }
+    else if(b.hasAttribute("data-all")){ ONB_ALL=true; drawOnb(); }
+    else if(b.dataset.addname){ addFriend(b.dataset.addname,()=>drawOnb()); }
+    else if(b.hasAttribute("data-cp")) copyText("lgu.app/"+handle().slice(1),"Lien copié : envoie-le à ta bande");
+    else if(b.hasAttribute("data-code")){ const d=sheet(`<div class="mycode"><div class="qr" style="width:180px;height:180px">${qrSVG("lgu.app/"+handle().slice(1))}</div><b>${esc(handle())}</b><span>Fais scanner ce code à ton pote.</span></div>`); d.style.zIndex=95; } };
 }
 
 // =========================================================
 // BOOT
 // =========================================================
-function rerender(){ ({map:refreshMap,collec:renderCollec})[TAB](); }
+function rerender(){ ({map:refreshMap,collec:renderCollec,potes:renderPotes,moi:renderMoi})[TAB](); }
 function boot(){
   document.documentElement.style.setProperty("--grain",`url(${IMG.grain})`);
   $("#pitchLogo").src=IMG.wordmark;
@@ -2294,7 +2467,8 @@ function jump(k){
     case "scan": go("map"); openScan(); break;
     case "collec": go("collec"); break;
     case "album": go("collec"); openShop(); break;
-    case "moi": go("map"); openProfile(); break;
+    case "moi": go("moi"); break;
+    case "potes": go("potes"); break;
     case "stories": notifMock.done=true; go("map"); openStories(0); break;
     case "group": notifMock.done=true; go("map"); openGroup(); break;
     case "insta": notifMock.done=true; go("map"); openInstaDemo(); break;
