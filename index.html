@@ -2955,7 +2955,7 @@ function drawOnb(){
   OD.innerHTML=`${top}<div class="onb__body" style="${O===0?"padding-top:calc(var(--top) + 10px)":""}">${body}</div><div class="onb__foot">${foot}</div>`;
   OD.onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
     const nm=OD.querySelector("#onbName"); if(nm&&nm.value.trim()) S.name=nm.value.trim();
-    if(b.hasAttribute("data-next")){ save(); O++; drawOnb(); }
+    if(b.hasAttribute("data-next")){ save(); if(nm&&window.LGU_HOOK_NAME){ LGU_HOOK_NAME(S.name,()=>{ O++; drawOnb(); }); return; } O++; drawOnb(); }
     else if(b.hasAttribute("data-prev")){ O=Math.max(0,O-1); drawOnb(); }
     else if(b.hasAttribute("data-end")) endOnb();
     else if(b.dataset.city){ const c=b.dataset.city, i=S.cities.indexOf(c); if(i>=0) S.cities.splice(i,1); else S.cities.push(c); S.city=S.cities[0]||"Paris"; save(); const sc=OD.querySelector(".onb__body").scrollTop; drawOnb(); OD.querySelector(".onb__body").scrollTop=sc; }
