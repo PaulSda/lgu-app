@@ -1396,6 +1396,9 @@ html,body{background:var(--speck) 0 0/420px 420px repeat,#E6E3DC!important}
   .rw__pts b{font-size:52px}
   .onb{overflow-y:auto!important}
 }
+/* écran « carte décrochée » : le récap des points garde son fond sombre (texte blanc lisible) */
+.reveal .tally,.scan .tally,.lu .tally{background:#1F1A14!important;border-color:#3b3228!important;color:#fff!important}
+.reveal .tally__r span{color:#fff}
 
 </style>
 
@@ -2257,7 +2260,7 @@ function doScan(id){
     <span class="reveal__kicker">Plaque détectée · ${esc(p.n)}</span>
     <h2 class="reveal__t">${already?"Te revoilà !":newCat?"Carte<br>décrochée !":"Encore une !"}</h2>
     <div class="flip is-back" id="rflip"><div class="flip__in">${cardHTML(p.c,{resto:p.n,cls:"is-live"})}${backHTML()}</div></div>
-    <div class="row" style="position:relative;gap:8px">${rarChip(p.c)}<span class="eyebrow" style="color:#D9CDB6">${newCat?`Catégorie ${n}/93`:already?"Déjà dans ta collec":`Carte x${S.own[p.c].length}`}</span></div>
+    <div class="row" style="position:relative;gap:8px">${rarChip(p.c)}<span class="eyebrow" style="color:#D9CDB6">${newCat?`Catégorie ${n}/${Object.keys(CAT_VIS).length}`:already?"Déjà dans ta collec":`Carte x${S.own[p.c].length}`}</span></div>
     <div class="tally">${rows.map((x,i)=>`<div class="tally__r" style="animation-delay:${1.1+i*.28}s"><span>${esc(x[0])}</span><b>${x[1]?"+"+x[1]:"✓"}</b></div>`).join("")}<div class="tally__r tally__tot" style="animation-delay:${1.2+rows.length*.28}s"><span>Total</span><b>+${gain} pts</b></div></div>
     ${!already?`<p class="note" style="color:#B9AC94;text-align:center;margin:0;position:relative">Imprime-la en sticker pour ton album quand tu veux.</p>`:""}
     <div style="display:flex;width:100%;position:relative"><button class="btn btn--block" data-next>${already?"Continuer":"Continuer · ton avis"}</button></div>
