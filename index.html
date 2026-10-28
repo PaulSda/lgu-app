@@ -1379,6 +1379,24 @@ html,body{background:var(--speck) 0 0/420px 420px repeat,#E6E3DC!important}
 .nav__scan svg{width:28px!important;height:28px!important}
 #phone #nav{border-radius:0 0 42px 42px!important}
 
+/* ---------- PETITS ÉCRANS / ÉCRANS CARRÉS (ex. Unihertz Titan 2) : tout reste accessible en défilant ----------
+   Ne s'applique qu'aux écrans de moins de 640 px de haut : aucun changement sur les téléphones classiques. */
+@media (max-height:640px){
+  .scan{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
+  .scan__body{flex:1 0 auto;gap:10px;padding-top:4px;padding-bottom:12px}
+  .nfc{width:150px;height:150px}
+  .nfc__plaque{width:70px}
+  .nfc__phone{width:56px;height:106px;top:-14px;border-radius:14px}
+  .scan__t{font-size:24px}
+  .scan__p{font-size:13px}
+  .scan__foot{flex:0 0 auto;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  .lu,.rw{overflow-y:auto!important;justify-content:flex-start!important}
+  .lu>*,.rw>*{flex-shrink:0}
+  .rw__stage{width:150px}
+  .rw__pts b{font-size:52px}
+  .onb{overflow-y:auto!important}
+}
+
 </style>
 
 <div id="stage">
