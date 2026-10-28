@@ -91,7 +91,7 @@ input,select{font:inherit;color:inherit}
 /* ---------- NAV ---------- */
 #nav{position:absolute;left:12px;right:12px;bottom:14px;height:66px;background:var(--noir);border-radius:26px;display:grid;grid-template-columns:1fr 1fr 1.2fr 1fr 1fr;align-items:center;z-index:40;box-shadow:0 8px 20px -6px rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.3,1.4,.5,1)}
 #nav.is-hidden{transform:translateY(130%)}
-.nav__b{display:flex;flex-direction:column;align-items:center;gap:3px;color:#BDB3A0;font:800 italic 11.5px var(--f-title);text-transform:uppercase;letter-spacing:.02em;height:100%;justify-content:center}
+.nav__b{white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:3px;color:#BDB3A0;font:800 italic 11.5px var(--f-title);text-transform:uppercase;letter-spacing:.02em;height:100%;justify-content:center}
 .nav__b svg{width:23px;height:23px}
 .nav__b.is-on{color:var(--jaune)}
 .nav__b.is-on svg{transform:scale(1.08)}
@@ -1204,7 +1204,7 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
 .rw__steam i:nth-child(2){animation-delay:.8s;height:54px}.rw__steam i:nth-child(3){animation-delay:1.6s}
 @keyframes rwsteam{0%{transform:translateY(30px) scaleY(.4);opacity:0}30%{opacity:1}100%{transform:translateY(-30px) translateX(8px) scaleY(1.1);opacity:0}}
 .rw__bar{width:min(300px,80vw);height:16px;border-radius:99px;border:2.5px solid var(--jaune);padding:2px;overflow:hidden}
-.rw__bar i{display:block;height:100%;border-radius:99px;background:repeating-linear-gradient(-45deg,var(--rouge) 0 8px,#FF5A3C 8px 16px);width:99%;animation:rwfill 2.2s cubic-bezier(.2,.8,.3,1) both,rwjit 1.2s 2.2s ease-in-out infinite}
+.rw__bar i{display:block;height:100%;border-radius:99px;background:repeating-linear-gradient(-45deg,var(--rouge) 0 8px,#FF5A3C 8px 16px);width:1%}
 @keyframes rwfill{from{width:0}}
 @keyframes rwjit{50%{width:97.5%}}
 .rw__pct{font:400 11px var(--f-px);letter-spacing:.12em;color:var(--cyan);text-transform:uppercase}
@@ -1228,10 +1228,9 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
       <button data-jump="stories">Stories rédac</button>
       <button data-jump="group">On mange où ?</button>
       <button data-jump="scan">Scan + verdict</button>
-      <button data-jump="potes">Ta bande</button>
+      <button data-jump="potes">Ma bande</button>
       <button data-jump="moi">Profil</button>
-      <button data-jump="insta">Insta → DM</button>
-      <button data-jump="collec">Collec</button>
+      <button data-jump="collec">Ma collec'</button>
       <button data-jump="album">Impression</button>
     </nav>
     <p class="pitch__hand">ouvre-la sur ton tel,<br>c'est encore mieux ↗</p>
@@ -1247,10 +1246,10 @@ html,body{background:var(--speck) 0 0/256px 256px repeat,#FFD200!important}
       </main>
 
       <nav id="nav" aria-label="Navigation principale">
-        <button class="nav__b is-on" data-go="map"><svg><use href="#i-map"/></svg><span>Explorer</span></button>
-        <button class="nav__b" data-go="potes"><svg><use href="#i-bande"/></svg><span>Ta bande</span></button>
+        <button class="nav__b is-on" data-go="map"><svg><use href="#i-map"/></svg><span>J'explore</span></button>
+        <button class="nav__b" data-go="potes"><svg><use href="#i-bande"/></svg><span>Ma bande</span></button>
         <button class="nav__scan" data-go="scan" aria-label="Scanner une plaque"><svg><use href="#i-nfc"/></svg><span>Scanner</span></button>
-        <button class="nav__b" data-go="collec"><svg><use href="#i-cards"/></svg><span>Collec</span></button>
+        <button class="nav__b" data-go="collec"><svg><use href="#i-cards"/></svg><span>Ma collec'</span></button>
         <button class="nav__b" data-go="moi"><svg><use href="#i-user"/></svg><span>Moi</span></button>
       </nav>
 
@@ -2056,7 +2055,7 @@ function doScan(id){
   d.onclick=e=>{ const b=e.target.closest("button"); if(!b) return;
     if(b.dataset.react){ $$("[data-react]",d).forEach(x=>x.classList.toggle("is-on",x===b)); S.react[id]=b.dataset.react; save(); toast(b.dataset.react==="Bof"?"Noté. La rédac lit tout, promis.":"Noté, ça compte pour ta compatibilité avec tes potes"); }
     if(b.hasAttribute("data-story")) openStory(p.c,p);
-    if(b.hasAttribute("data-next")){ popLayer(d); const fin=()=>{ if(lvAfter.n>lvBefore.n) levelUp(lvAfter); else go(TAB); }; if(already) fin(); else afterScan(id,fin); } };
+    if(b.hasAttribute("data-next")){ popLayer(d); const fin=()=>{ go(TAB); }; if(already) fin(); else afterScan(id,fin); } };
   setTimeout(rerender,100);
 }
 function levelUp(L){
@@ -2083,7 +2082,7 @@ function renderCollec(){
   const fan=cards.filter(x=>ILL[x.c]).slice(0,3).map(x=>cardHTML(x.c,{resto:PL(x.p).n})).join("");
   t.innerHTML=`
   <header class="hero hero--feu grain"><div class="fan">${fan}</div>
-    <div class="row" style="justify-content:space-between;position:relative;z-index:3"><span class="ed">Ma collec · 2026/2027</span></div>
+    <div class="row" style="justify-content:space-between;position:relative;z-index:3"><span class="ed">Ma collec' · 2026/2027</span></div>
     <div class="count"><span class="count__n">${cards.length}</span><span class="count__d">cartes</span></div>
     <div class="count__s" style="margin-top:8px;max-width:20ch">${PLACES.length-cards.length} autres à décrocher en France.</div>
     <div class="segbar" style="margin-top:16px">${secs.map(s=>`<div style="--w:${s.a.length}"><div class="bar bar--y"><i style="width:${s.got/s.a.length*100}%"></i></div><span>${SECT_NAME[s.k]} ${s.got}/${s.a.length}</span></div>`).join("")}</div>
@@ -2443,21 +2442,19 @@ function renderMoi(){
   const t=$("#t-moi");
   const L=lvlOf(S.pts), N=nextLvl(S.pts); const pct=N?((S.pts-L.min)/(N.min-L.min)*100):100; const cards=allCards();
   const html=`
-  <div class="pf"><div class="pf__av">${esc((S.name||"?")[0])}</div><h1 class="h1" style="font-size:32px;text-align:center">${esc(S.name)}</h1><span class="eyebrow" style="text-align:center">${esc(handle())} · ${esc(S.city)} · ${esc(L.t)}</span>
+  <div class="pf"><div class="pf__av">${esc((S.name||"?")[0])}</div><h1 class="h1" style="font-size:32px;text-align:center">${esc(S.name)}</h1><span class="eyebrow" style="text-align:center">${esc(handle())} · ${esc(S.city)}</span>
     <div class="pf__stats"><div><b>${cards.length}</b><span>cartes</span></div><div><b>${ownedCats().length}</b><span>catégories</span></div><div><b>${FRIENDS.length}</b><span>potes</span></div></div>
     <div style="display:flex;gap:10px;width:100%"><button class="btn btn--black" style="flex:1.2" data-sharepf>${icon("share")} Mon profil</button><button class="btn btn--white" style="flex:1" data-invite>+ Inviter</button></div></div>
-  <div class="sect"><div class="sect__h"><h2 class="h2">Mes tops</h2><span class="eyebrow">ZÉRO ÉTOILE</span></div><div class="tops">${topsHTML(S.own,myRank)}</div></div>
   <div class="sect"><div class="sect__h"><h2 class="h2">Compatibilité</h2><button data-group>On mange où ?</button></div>
     <div class="list">${FRIENDS.map((f,i)=>{const k=compatOf(i);return `<button class="li" data-friend="${i}">${avatar(f.n,f.c)}<span class="grow">${esc(f.n)}<small>${k.common.length} adresse${k.common.length>1?"s":""} en commun</small></span><span class="pct"><b>${k.pct}%</b><i style="width:${k.pct}%"></i></span></button>`;}).join("")}</div></div>
-  <div class="sect"><button class="lvl" data-ladder style="text-align:left;width:100%"><div class="lvl__top"><div><div class="lvl__n">NIVEAU ${L.n} · TES RÉCOMPENSES</div><div class="lvl__t">${esc(L.t)}</div></div><div class="lvl__pts">${fmtN(S.pts)}<small>POINTS</small></div></div><div class="bar bar--y"><i style="width:${pct}%"></i></div><div class="lvl__next">${N?`Encore <b style="color:#fff">${N.min-S.pts} pts</b> pour ${esc(N.t)} · voir mes récompenses →`:"Ultime. Voir mes récompenses →"}</div></button></div>
+  <div class="sect"><button class="lvl" data-ladder style="text-align:left;width:100%"><div class="lvl__top"><div><div class="lvl__n">MES RÉCOMPENSES</div><div class="lvl__t">Ça arrive…</div></div><div class="lvl__pts">${fmtN(S.pts)}<small>POINTS</small></div></div><div class="lvl__next">Voir mes récompenses →</div></button></div>
+  <div class="sect"><div class="sect__h"><h2 class="h2">Mes tops</h2><span class="eyebrow">ZÉRO ÉTOILE</span></div><div class="tops">${topsHTML(S.own,myRank)}</div></div>
   <div class="sect"><div class="list">
     <button class="li" data-list="saved"><span class="ic" style="background:var(--jaune)">${icon("bookmark")}</span><span class="grow">À tester<small>${S.saved.length} adresses sauvées</small></span>${icon("back","chev")}</button>
     <button class="li" data-list="print"><span class="ic" style="background:var(--rose)">${icon("box")}</span><span class="grow">Imprimer mes cartes<small>${cards.filter(x=>!isPrinted(x.p)).length} pas encore imprimées</small></span>${icon("back","chev")}</button>
     <button class="li" data-list="creators"><span class="ic" style="background:var(--cyan)">${icon("play")}</span><span class="grow">Créateurs suivis<small>${S.follow.length} créateurs</small></span>${icon("back","chev")}</button>
   </div></div>
   <div class="sect"><div class="eyebrow">Démos du prototype</div><div class="list">
-    <button class="li" data-demo="insta"><span class="ic" style="background:#FF99B3">${icon("share")}</span><span class="grow">Insta : commente « CARTE »<small>Du commentaire au DM, puis à l'appli</small></span>${icon("back","chev")}</button>
-    <button class="li" data-demo="verif"><span class="ic" style="background:var(--cyan)">${icon("check")}</span><span class="grow">Vérifier le tableur<small>${DATA.ok} plaqués · source : ${esc(DATA.source)}</small></span>${icon("back","chev")}</button>
     <button class="li" data-demo="notif"><span class="ic" style="background:var(--jaune)">${icon("clock")}</span><span class="grow">Notif de 11h45<small>Le plat du jour de la rédac</small></span>${icon("back","chev")}</button>
     <button class="li" data-onb><span class="ic" style="background:var(--beige)">${icon("star")}</span><span class="grow">Revoir l'accueil</span>${icon("back","chev")}</button>
     <button class="li" data-reset><span class="ic" style="background:var(--beige)">${icon("x")}</span><span class="grow">Remettre la démo à zéro</span>${icon("back","chev")}</button>
@@ -2480,21 +2477,21 @@ function renderMoi(){
 }
 // ---------- MES RÉCOMPENSES : pas encore dévoilées → grosse animation + blague ----------
 const RW_JOKES=[
+  "On a demandé au chef quand c'est prêt. Il a répondu « oui chef ». On n'a pas compris non plus.",
   "Le chef a dit 18 h de mijotage minimum. Comme le bouillon. Ça vaut le coup, promis.",
   "Tes récompenses sont au four. Ouvre pas la porte, ça fait retomber le soufflé.",
   "La rédac goûte chaque récompense avant de la valider. Elle a un peu trop goûté. On recommence.",
-  "On a demandé au chef quand c'est prêt. Il a répondu « oui chef ». On n'a pas compris non plus.",
   "C'est comme le resto du moment : liste d'attente. Mais toi t'es devant, t'inquiète.",
   "Spoiler : y aura à manger. On n'en dira pas plus.",
   "La pâte lève. 72 h, comme la pizza. On touche pas.",
   "Le serveur arrive. Il a dit « j'arrive » il y a 20 minutes, mais il arrive."
 ];
 function openRewards(){
-  const L=lvlOf(S.pts), N=nextLvl(S.pts); let j=hash(S.name+new Date().toDateString())%RW_JOKES.length;
+  const L=lvlOf(S.pts), N=nextLvl(S.pts); let j=0;
   const d=pushLayer(`<div class="rw"><div class="reveal__burst" style="top:44%"></div>
     <button class="iconbtn rw__x" data-x aria-label="Fermer">${icon("x")}</button>
     <span class="reveal__kicker">Mes récompenses</span>
-    <div class="rw__pts"><b id="rwn">0</b><small>POINTS AU CHAUD · NIV. ${L.n} ${esc(L.t.toUpperCase())}</small></div>
+    <div class="rw__pts"><b id="rwn">0</b><small>POINTS AU CHAUD</small></div>
     <div class="rw__stage" id="rwst">
       <div class="rw__steam"><i></i><i></i><i></i></div>
       <svg class="rw__svg" viewBox="0 0 260 200" aria-hidden="true">
@@ -2512,22 +2509,23 @@ function openRewards(){
     <div class="rw__bar"><i></i></div><div class="rw__pct" id="rwp">Cuisson des récompenses · 0 %</div>
     <p class="rw__joke" id="rwj">${esc(RW_JOKES[j])}</p>
     <div class="rw__btns"><button class="btn btn--block" data-again>Une autre excuse du chef</button><button class="btn btn--white btn--block" data-how>Gagner encore des points</button></div>
-    <p class="rw__note">Tout ce que tu gagnes maintenant compte déjà${N?` · encore ${fmtN(N.min-S.pts)} pts avant ${esc(N.t)}`:""}.</p>
+    <p class="rw__note">Tout ce que tu gagnes maintenant compte déjà.</p>
   </div>`,"ov",{hideNav:true});
   // points qui défilent
   const n=d.querySelector("#rwn"), t0=performance.now(), D=1300;
   (function step(t){ const k=Math.min(1,(t-t0)/D), e=1-Math.pow(1-k,3); n.textContent=fmtN(Math.round(S.pts*e)); if(k<1&&n.isConnected) requestAnimationFrame(step); })(t0);
   // la cuisson bloque à 99 %
-  const p=d.querySelector("#rwp"); const steps=[[0,"0 %"],[400,"37 %"],[900,"72 %"],[1500,"94 %"],[2100,"99 %"],[3600,"99,9 %"],[5400,"99,99 %"],[7600,"99,999 %"]];
-  const tm=steps.map(([ms,v])=>setTimeout(()=>{ if(p.isConnected) p.textContent="Cuisson des récompenses · "+v; },ms));
+  const p=d.querySelector("#rwp"), pb=d.querySelector(".rw__bar i"); const tm=[]; const T0=performance.now();
+  const setP=v=>{ p.textContent="Cuisson des récompenses · "+v+" %"; };
+  (function climb(t){ if(!p.isConnected) return; const k=Math.min(1,(t-T0)/1800), v=1+Math.round(98*(1-Math.pow(1-k,2))); setP(v); pb.style.width=v+"%"; if(k<1) requestAnimationFrame(climb); else { let n=0; tm.push(setInterval(()=>{ if(!p.isConnected) return; n++; setP("99,"+String(n).padStart(4,"0")); },700)); } })(T0);
   setTimeout(()=>confetti(60),2300);
   const jk=d.querySelector("#rwj"), st=d.querySelector("#rwst");
   d.onclick=e=>{ const b=e.target.closest("button");
     if(e.target.closest("#rwst")){ st.classList.remove("is-tap"); void st.offsetWidth; st.classList.add("is-tap"); return; }
     if(!b) return;
-    if(b.hasAttribute("data-x")){ tm.forEach(clearTimeout); popLayer(d); }
+    if(b.hasAttribute("data-x")){ tm.forEach(clearInterval); popLayer(d); }
     else if(b.hasAttribute("data-again")){ j=(j+1)%RW_JOKES.length; jk.classList.remove("is-new"); void jk.offsetWidth; jk.textContent=RW_JOKES[j]; jk.classList.add("is-new"); st.classList.remove("is-tap"); void st.offsetWidth; st.classList.add("is-tap"); }
-    else if(b.hasAttribute("data-how")){ tm.forEach(clearTimeout); popLayer(d); openHow(); } };
+    else if(b.hasAttribute("data-how")){ tm.forEach(clearInterval); popLayer(d); openHow(); } };
 }
 const openLadder = openRewards;
 function openFriend(i){
@@ -2602,7 +2600,7 @@ const ago = h => h<24?`il y a ${h} h`:`il y a ${Math.floor(h/24)} j`;
 function renderPotes(){
   const t=$("#t-potes"); const F=feedItems();
   t.innerHTML=`<div class="tabpad">
-  <div class="bh"><div><span class="ed">Ta bande · ${FRIENDS.length} potes</span><h1 class="h1 outline" style="margin-top:8px;font-size:44px">Ta bande</h1></div><button class="addf" data-add aria-label="Ajouter des potes">${icon("user")}<b>+</b></button></div>
+  <div class="bh"><div><span class="ed">Ma bande · ${FRIENDS.length} potes</span><h1 class="h1 outline" style="margin-top:8px;font-size:44px">Ma bande</h1></div><button class="addf" data-add aria-label="Ajouter des potes">${icon("user")}<b>+</b></button></div>
   <div class="sect"><button class="omo" data-group><div class="omo__stack">${(S.booster.ids.length?S.booster.ids:[0,1,2].filter(PL)).slice(0,3).map((id,k)=>cardHTML(PL(id).c,{resto:PL(id).n,style:`transform:rotate(${(k-1)*10}deg)`})).join("")}</div><div class="grow"><b>On mange où ?</b><span>Chacun swipe, l'appli tranche. Fini les 40 messages.</span><span class="omo__go">Lancer une partie →</span></div></button></div>
   <div class="sect"><div class="sect__h"><h2 class="h2">Compatibilité</h2><span class="eyebrow">TOUCHE UN POTE</span></div>
     <div class="cring-row"><button class="cring cring--add" data-add><span>+</span><b>Ajouter</b></button>${FRIENDS.map((f,i)=>`<button class="cring" data-friend="${i}" style="--p:${FR_COMPAT[i]}"><span style="background:${f.c}">${esc(f.n[0])}</span><b>${esc(f.n)}</b><em>${FR_COMPAT[i]} %</em></button>`).join("")}</div></div>
