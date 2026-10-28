@@ -1735,7 +1735,7 @@ function confetti(n=140){
 // =========================================================
 const M = {q:null, open:false, todo:false, price:[], creators:false, sel:null, cx:0, cy:0, s:40, rs:"peek", inited:false};
 const PAN={moved:false};
-const norm = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const norm = s => String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const ASIA=["Ramen","Pho","Bobun","Banh mi","Pad thaï","Gyoza","Xiao long bao","Bibimbap","Sushi","Onigiri","Hot pot","Dumpling","Raviolis","Nouilles","Loc lac","Curry","Naan"];
 const ENVIES=[
   {k:"asie",t:"Envie d'Asie",cats:ASIA,img:"c03",g:TYPO_G[2]},
@@ -1746,6 +1746,26 @@ const ENVIES=[
   {k:"occasion",t:"Grande occasion",cats:["Étoilé","Mérite une étoile","Avec vue","Bar à cocktails"],g:TYPO_G[1]}
 ];
 const SYN={japonais:["Ramen","Sushi","Gyoza","Onigiri"],asiatique:ASIA,asie:ASIA,chinois:["Xiao long bao","Hot pot","Dumpling","Raviolis","Nouilles"],vietnamien:["Pho","Bobun","Banh mi"],coreen:["Bibimbap"],thai:["Pad thaï"],indien:["Naan","Curry"],italien:["Pizza","Vraie carbo","Pâtes fraîches","Tiramisu"],africain:["Mafé","Thiep"],libanais:["Shawarma","Falafels"],street:ENVIES[1].cats,sucre:ENVIES[2].cats,dessert:ENVIES[2].cats,patisserie:["Flan","Éclairs","Paris Brest","Millefeuilles","Cannelés","Tartes sucrées","Kouign Amann"],boulangerie:["Croissant","Pain au chocolat","Flan","Brioche","Chouquettes","Kouign Amann"],cafe:["Coffeeshop","Café pas cher","Brunch"],"petit dej":["Brunch","Croissant","Coffeeshop","Pain au chocolat"],vege:["Falafels","Healthy","Primeur"],veggie:["Falafels","Healthy","Primeur"],vegan:["Falafels","Healthy"],date:ENVIES[5].cats,romantique:ENVIES[5].cats,gastro:["Étoilé","Mérite une étoile"],etoile:["Étoilé","Mérite une étoile"],apero:["Apéro","Bar à cocktails","Planches"],boire:["Bar à cocktails","Apéro","Coffeeshop"],cocktail:["Bar à cocktails"],poulet:["Poulet","Poulet frit","Crousty"],fromage:["Fromagerie","Aligot"],soupe:["Ramen","Pho","Hot pot"],nouilles:["Ramen","Pho","Pad thaï","Nouilles"]};
+// envies pour « On mange où ? » : plus de choix, toutes basées sur les catégories plaquées
+const GENV=[
+  {k:"asie",t:"🥢 Envie d'Asie",cats:ASIA},
+  {k:"street",t:"🌯 Street-food",cats:["Kebab","Burger","Frites","Tacos","French Tacos","Poulet frit","Crousty","Sandwich","Shawarma","Falafels"]},
+  {k:"burger",t:"🍔 Burger",cats:["Burger"]},
+  {k:"pizza",t:"🍕 Pizza & pâtes",cats:["Pizza","Vraie carbo","Pâtes fraîches"]},
+  {k:"soupe",t:"🍜 Nouilles & soupes",cats:["Ramen","Pho","Nouilles","Pad thaï","Hot pot","Bobun"]},
+  {k:"japon",t:"🍣 Japonais",cats:["Ramen","Sushi","Gyoza","Onigiri"]},
+  {k:"viet",t:"🇻🇳 Vietnamien",cats:["Pho","Bobun","Banh mi","Loc lac"]},
+  {k:"chine",t:"🥟 Raviolis & dim sum",cats:["Xiao long bao","Dumpling","Raviolis","Gyoza","Hot pot"]},
+  {k:"poulet",t:"🍗 Poulet",cats:["Poulet","Poulet frit","Crousty","Cordon bleu"]},
+  {k:"orient",t:"🧆 Orient & Maghreb",cats:["Kebab","Shawarma","Falafels","Couscous","Tagine","Grillades"]},
+  {k:"afrique",t:"🍛 Afrique",cats:["Mafé","Thiep","Couscous"]},
+  {k:"indien",t:"🍛 Indien & curry",cats:["Curry","Naan"]},
+  {k:"latino",t:"🌮 Latino",cats:["Tacos","French Tacos","Empanadas"]},
+  {k:"leger",t:"🥗 Plutôt léger",cats:["Salade César","Bibimbap","Falafels","Pho","Sushi","Onigiri"]},
+  {k:"reconfort",t:"🧀 Réconfort",cats:["Aligot","Croque","Cordon bleu","Quiche","Vraie carbo","Couscous","Mafé","Frites"]},
+  {k:"partage",t:"🍢 À partager",cats:["Planches","Grillades","Hot pot","Empanadas","Gyoza"]},
+  {k:"sandwich",t:"🥪 Sur le pouce",cats:["Sandwich","Banh mi","Croque","Kebab","Onigiri","Quiche"]}
+];
 const QUICK=["Burger","Ramen","Pizza","Kebab","Brunch","Sushi","Flan","Pho","Tacos","Coffeeshop"];
 
 // --- géographie : chaque plaqué a des coordonnées réelles (approchées pour la démo) ---
@@ -2500,10 +2520,10 @@ function openGroup(pre=[]){
     <div class="sect"><div class="blk__h"><b>Avec qui ?</b><span class="eyebrow">${G.who.size?`TOI + ${G.who.size}`:"QUE TOI ?"}</span></div><div class="recent">${FRIENDS.map((f,k)=>`<button class="chip ${G.who.has(k)?"is-on":""}" data-who="${k}"><i class="dotc" style="background:${f.c}"></i>${esc(f.n)}</button>`).join("")}</div>
       <button class="link" data-glink>${icon("copy")} <span>Ou envoie le lien au groupe : <b>lgu.app/g/XK42</b></span></button></div>
     <div class="sect"><div class="blk__h"><b>Budget</b></div><div class="recent">${["€","€€","€€€","€€€€"].map(x=>`<button class="chip ${G.price.includes(x)?"is-on":""}" data-gp="${x}">${x}</button>`).join("")}</div></div>
-    <div class="sect"><div class="blk__h"><b>Une envie ?</b><span>FACULTATIF</span></div><div class="recent"><button class="chip ${!G.envie?"is-on":""}" data-ge="">Tout me va</button>${ENVIES.filter(e=>e.cats&&e.cats.some(hasArt)).map(e=>`<button class="chip ${G.envie===e.k?"is-on":""}" data-ge="${e.k}">${esc(e.t)}</button>`).join("")}</div></div>
+    <div class="sect"><div class="blk__h"><b>Une envie ?</b><span>FACULTATIF</span></div><div class="recent"><button class="chip ${!G.envie?"is-on":""}" data-ge="">Tout me va</button>${GENV.filter(e=>PLACES.some(p=>shown(p)&&e.cats.includes(p.c))).map(e=>`<button class="chip ${G.envie===e.k?"is-on":""}" data-ge="${e.k}">${esc(e.t)}</button>`).join("")}</div></div>
     <div class="sect" style="padding-bottom:30px"><button class="btn btn--red btn--block" data-go2>C'est parti · ${pool().length} adresses</button><p class="note" style="text-align:center;margin:0">Ouverts maintenant, autour de toi.</p></div>`;
   };
-  const pool=()=>{ const en=ENVIES.find(e=>e.k===G.envie); return PLACES.filter(p=>shown(p)&&p.city==="Paris"&&isOpen(p)&&G.price.includes(p.p)&&(!en||en.cats.includes(p.c))).sort((a,b)=>distM(a)-distM(b)).slice(0,10); };
+  const pool=()=>{ const en=GENV.find(e=>e.k===G.envie); return PLACES.filter(p=>shown(p)&&p.city==="Paris"&&isOpen(p)&&G.price.includes(p.p)&&(!en||en.cats.includes(p.c))).sort((a,b)=>distM(a)-distM(b)).slice(0,10); };
   const likes={me:new Set()};
   const swipe=()=>{
     const L=pool(); let k=0;
@@ -2884,7 +2904,7 @@ function ueTile(c,on){ const ill=ILL[c]||PLAQUE_ART[c]; return `<button class="u
 const ONB=["splash","name","envies","bande"];
 let O=0, OD=null, ONB_ALL=false;
 function startOnb(){ closeAll(); O=0; ONB_ALL=false; if(OD) OD.remove(); OD=document.createElement("div"); OD.className="onb"; $("#app").appendChild(OD); $("#nav").classList.add("is-hidden"); drawOnb(); }
-function endOnb(){ S.onb=true; save(); if(OD){ OD.remove(); OD=null; } $("#nav").classList.remove("is-hidden"); go("map"); setTimeout(notifMock,2500); }
+function endOnb(){ S.onb=true; save(); if(OD){ OD.remove(); OD=null; } $("#nav").classList.remove("is-hidden"); go("map"); setTimeout(notifMock,180000); }
 function drawOnb(){
   const step=ONB[O]; let body="", foot="";
   S.cities=S.cities||["Paris"];
@@ -3052,7 +3072,7 @@ function boot(){
   $$("[data-jump]").forEach(b=>b.onclick=()=>jump(b.dataset.jump));
   go("map");
   const h=(location.hash||"").slice(1);
-  if(h) jump(h); else if(!S.onb) startOnb(); else setTimeout(notifMock,2500);
+  if(h) jump(h); else if(!S.onb) startOnb(); else setTimeout(notifMock,180000);
 }
 function jump(k){
   if(k!=="notif") notifMock.done=true;
