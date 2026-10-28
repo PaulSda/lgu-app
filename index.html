@@ -1596,7 +1596,7 @@ function toast(msg){ const t=$("#toast"); t.innerHTML=msg; t.classList.add("is-o
 function cardHTML(c,o={}){
   const r = RAR[c]; const resto = o.resto || "";
   let art;
-  if(PLAQUE_ART[c]) art = `<div class="card__art card__art--plaque" style="background-image:url(${IMG[PLAQUE_ART[c]]})"></div>${resto?`<div class="card__name"><span>${esc(resto)}</span></div>`:""}`;
+  if(PLAQUE_ART[c]) art = `<div class="card__art card__art--plaque" style="background-image:url(${IMG[PLAQUE_ART[c]]})"></div>${resto?`<div class="card__name"><span>${esc(resto.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[đĐ]/g,"d"))}</span></div>`:""}`;
   else if(ILL[c]) art = `<div class="card__art" style="background-image:url(${IMG[ILL[c]]})"></div>`;
   else art = `<div class="card__art" style="background:${TYPO_G[hash(c)%TYPO_G.length]}"></div><div class="card__typo"><span class="${c.length>10?"long":""}">${esc(c)}</span></div>${o.wip===false?"":`<div class="card__wip">ILLUS EN COURS</div>`}`;
   const top = PLAQUE_ART[c] ? "" : `<img class="card__badge" src="${IMG.badge}" alt=""><img class="card__wm" src="${IMG.wordmark}" alt="">`;
@@ -2530,7 +2530,7 @@ function afterScan(id,done){
 // ---------- PROFIL (partageable) ----------
 function compatOf(i){ const mine=new Set(allCards().map(x=>x.p)); const common=(FR_OWN[i]||[]).filter(p=>mine.has(p)); return {pct:FR_COMPAT[i],common}; }
 function topsHTML(own,rankFn,max=4){
-  const cats=Object.keys(own).sort((a,b)=>own[b].length-own[a].length||a.localeCompare(b)).slice(0,max);
+  const cats=Object.keys(own).filter(c=>PLAQUE_ART[c]&&own[c].length).sort((a,b)=>own[b].length-own[a].length||a.localeCompare(b)).slice(0,max);
   return cats.map(c=>{ const r=rankFn(c); return `<div class="top"><span class="top__i" style="${ILL[c]?`background-image:url(${IMG[ILL[c]]})`:`background:${TYPO_G[hash(c)%TYPO_G.length]}`}"></span><div class="grow"><b>Top ${esc(c.toLowerCase())}</b><span>${r.slice(0,3).map((p,k)=>`${k+1}. ${esc(PL(p).n)}`).join("  ·  ")}</span></div></div>`; }).join("");
 }
 function openProfile(){ closeAll(); go("moi"); }
@@ -2540,10 +2540,10 @@ function renderMoi(){
   const html=`
   <div class="pf"><div class="pf__av">${esc((S.name||"?")[0])}</div><h1 class="h1" style="font-size:32px;text-align:center">${esc(S.name)}</h1><span class="eyebrow" style="text-align:center">${esc(handle())} · ${esc(S.city)}</span>
     <div class="pf__stats"><div><b>${cards.length}</b><span>cartes</span></div><div><b>${ownedCats().length}</b><span>catégories</span></div><div><b>${FRIENDS.length}</b><span>potes</span></div></div>
+    <button class="lvl" data-ladder style="text-align:left;width:100%;margin-top:2px"><div class="lvl__top"><div><div class="lvl__n">MES RÉCOMPENSES</div><div class="lvl__t">Ça arrive…</div></div><div class="lvl__pts">${fmtN(S.pts)}<small>POINTS</small></div></div><div class="lvl__next">Voir mes récompenses →</div></button>
     <div style="display:flex;gap:10px;width:100%"><button class="btn btn--black" style="flex:1.2" data-sharepf>${icon("share")} Mon profil</button><button class="btn btn--white" style="flex:1" data-invite>+ Inviter</button></div></div>
   <div class="sect"><div class="sect__h"><h2 class="h2">Compatibilité</h2><button data-group>On mange où ?</button></div>
     <div class="list">${FRIENDS.map((f,i)=>{const k=compatOf(i);return `<button class="li" data-friend="${i}">${avatar(f.n,f.c)}<span class="grow">${esc(f.n)}<small>${k.common.length} adresse${k.common.length>1?"s":""} en commun</small></span><span class="pct"><b>${k.pct}%</b><i style="width:${k.pct}%"></i></span></button>`;}).join("")}</div></div>
-  <div class="sect"><button class="lvl" data-ladder style="text-align:left;width:100%"><div class="lvl__top"><div><div class="lvl__n">MES RÉCOMPENSES</div><div class="lvl__t">Ça arrive…</div></div><div class="lvl__pts">${fmtN(S.pts)}<small>POINTS</small></div></div><div class="lvl__next">Voir mes récompenses →</div></button></div>
   <div class="sect"><div class="sect__h"><h2 class="h2">Mes tops</h2><span class="eyebrow">ZÉRO ÉTOILE</span></div><div class="tops">${topsHTML(S.own,myRank)}</div></div>
   <div class="sect"><div class="list">
     <button class="li" data-list="saved"><span class="ic" style="background:var(--jaune)">${icon("bookmark")}</span><span class="grow">À tester<small>${S.saved.length} adresses sauvées</small></span>${icon("back","chev")}</button>
@@ -2688,7 +2688,7 @@ function bandNotesHTML(pid){
   return `<div class="bn"><div class="sect__h"><span class="h3">Ce qu'en pense ta bande</span><span class="eyebrow">${L.length} AVIS</span></div>${L.map(({f,i})=>{const v=frVerdict(i,pid), r=frRank(i,pid); return `<button class="bn__r" data-friend="${i}">${avatar(f.n,f.c)}<span class="grow"><b>${esc(f.n)}</b><span>${r?`N°${r} de ses ${esc(PL(pid).c.toLowerCase())}${/[sx]$/.test(PL(pid).c)?"":"s"}`:""}</span></span><span class="vtag vtag--${norm(v)}">${v}</span></button>`;}).join("")}</div>`;
 }
 function feedItems(){
-  const it=[]; FRIENDS.forEach((f,i)=>(FR_OWN[i]||[]).slice(0,4).forEach((pid,k)=>it.push({i,pid,h:k*9+i*2+1,vid:(hash(f.n+pid)%3===0)})));
+  const it=[]; FRIENDS.forEach((f,i)=>(FR_OWN[i]||[]).filter(pid=>PL(pid)&&PLAQUE_ART[PL(pid).c]).slice(0,4).forEach((pid,k)=>it.push({i,pid,h:k*9+i*2+1,vid:(hash(f.n+pid)%3===0)})));
   const seen=new Set(); return it.sort((a,b)=>a.h-b.h).filter(x=>!seen.has(x.pid)&&seen.add(x.pid)).slice(0,14);
 }
 const ago = h => h<24?`il y a ${h} h`:`il y a ${Math.floor(h/24)} j`;
