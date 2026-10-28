@@ -1369,6 +1369,16 @@ html,body{background:var(--speck) 0 0/420px 420px repeat,#E6E3DC!important}
 .cbd__b i{display:block;height:100%;background:var(--rouge);border-radius:9px}
 .cbd__r em{width:36px;text-align:right;font:800 15px var(--f-cond);font-style:normal}
 
+/* ---------- NAV « F » : noir pleine largeur, scan rond jaune encastré ---------- */
+#nav{left:0!important;right:0!important;bottom:0!important;height:calc(64px + env(safe-area-inset-bottom))!important;padding-bottom:env(safe-area-inset-bottom);border-radius:0!important;background:#16130e;box-shadow:0 -1px 0 rgba(255,255,255,.06)!important;grid-template-columns:1fr 1fr 1fr 1fr 1fr!important}
+.nav__b{color:#9d9585;font-size:10.5px}
+.nav__b.is-on{color:var(--jaune)}
+.nav__scan{width:60px!important;height:60px!important;margin-top:-18px!important;background:var(--jaune)!important;color:#16130e!important;border:0!important;box-shadow:0 0 0 5px #16130e!important;font-size:0!important;gap:0!important}
+.nav__scan span{display:none}
+.nav__scan::before{border-color:rgba(255,206,24,.55)!important}
+.nav__scan svg{width:28px!important;height:28px!important}
+#phone #nav{border-radius:0 0 42px 42px!important}
+
 </style>
 
 <div id="stage">
