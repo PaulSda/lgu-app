@@ -3123,115 +3123,55 @@ loadData().catch(e=>console.warn(e)).finally(boot);
 
 <script>
 // =========================================================
-// VERSION TEAM : surprises pour l'équipe LGU (lien /team/ uniquement)
+// VERSION TEAM (lien /team/) : une seule surprise, « La team qui t'attend »
+// Après avoir tapé son prénom : l'équipe arrive une par une et se range autour de toi.
 // =========================================================
 (function(){
-const STANDALONE = (window.navigator.standalone===true) || matchMedia("(display-mode: standalone)").matches;
-const PREVIEW = /claude|anthropic/.test(location.hostname) || location.protocol==="file:";
 const st=document.createElement("style"); st.textContent=`
-.vid{position:fixed;inset:0;z-index:9999;background:#0E0C0A;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:calc(env(safe-area-inset-top) + 24px) 26px calc(env(safe-area-inset-bottom) + 24px);text-align:center;overflow-y:auto;font-family:'LGU Sans',-apple-system,sans-serif}
-.vid>*{flex-shrink:0}
-.vid__k{font:400 12px 'LGU Pixel',monospace;letter-spacing:.14em;color:#00DEB5;text-transform:uppercase}
-.vid__t{font:900 italic 40px/.92 'LGU Sans',sans-serif;letter-spacing:-.04em;margin:0;color:#FFCE18}
-.vid__p{font:600 italic 16px/1.4 'LGU Sans',sans-serif;color:#E6E3DC;margin:0;max-width:30ch}
-.vid__bar{width:min(280px,80vw);height:14px;border:2.5px solid #FFCE18;border-radius:99px;padding:2px}
-.vid__bar i{display:block;height:100%;width:0;border-radius:99px;background:repeating-linear-gradient(-45deg,#EE0001 0 8px,#FF5A3C 8px 16px);transition:width .5s}
-.vid__step{font:400 12px 'LGU Pixel',monospace;letter-spacing:.08em;color:#B9AC94;min-height:16px}
-.vid__guy{font-size:84px;line-height:1;animation:vidb 1.6s ease-in-out infinite}
-@keyframes vidb{50%{transform:translateY(-6px) rotate(-3deg)}}
-.vid__steps{width:100%;max-width:340px;display:flex;flex-direction:column;gap:10px;text-align:left}
-.vid__s{display:flex;gap:12px;align-items:flex-start;background:#1F1A14;border:2px solid #3b3228;border-radius:10px;padding:12px 14px}
-.vid__s b{flex:none;width:28px;height:28px;border-radius:50%;background:#FFCE18;color:#16130e;display:grid;place-items:center;font:900 italic 15px 'LGU Sans'}
-.vid__s span{font:700 italic 15px/1.3 'LGU Sans';color:#fff}.vid__s small{display:block;font:600 italic 12.5px/1.35 'LGU Sans';color:#B9AC94;margin-top:3px}
-.vid__arrow{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 4px);transform:translateX(-50%);font-size:46px;animation:vida 1s ease-in-out infinite;z-index:10000;pointer-events:none}
-@keyframes vida{50%{transform:translate(-50%,10px)}}
-.vid__skip{background:none;border:0;color:#5d574b;font:600 italic 12px 'LGU Sans';text-decoration:underline;margin-top:6px}
-.roast{position:fixed;inset:0;z-index:9998;background:#FFCE18;color:#16130e;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:30px 26px;text-align:center;font-family:'LGU Sans',sans-serif;overflow-y:auto}
-.roast>*{flex-shrink:0}
-.roast__ph{width:130px;height:130px;border-radius:50%;background:#f6f3ec center/cover;border:4px solid #16130e;box-shadow:0 6px 0 #16130e;display:grid;place-items:center;font:900 italic 54px 'LGU Sans';animation:pop .7s cubic-bezier(.2,1.6,.4,1) both}
-.roast h2{font:900 italic 40px/.92 'LGU Sans';letter-spacing:-.04em;margin:0}
-.roast p{font:700 italic 18px/1.35 'LGU Sans';margin:0;max-width:28ch}
-.roast .k{font:400 12px 'LGU Pixel';letter-spacing:.14em;text-transform:uppercase}
-.roast button{margin-top:8px;background:#16130e;color:#FFCE18;border:0;border-radius:99px;padding:15px 28px;font:900 italic 16px 'LGU Sans';text-transform:uppercase}
-.frite{position:fixed;top:-60px;z-index:9997;font-size:34px;pointer-events:none;animation:frite linear forwards}
-@keyframes frite{to{transform:translateY(calc(100vh + 120px)) rotate(var(--r))}}
-.secret{position:fixed;inset:0;z-index:9998;background:radial-gradient(circle at 50% 40%,#3a2a12,#0E0C0A 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:30px;text-align:center;color:#fff;font-family:'LGU Sans',sans-serif}
-.secret__c{width:220px;aspect-ratio:632/897;border-radius:22px;padding:7px;background:conic-gradient(from var(--a,0deg),#FF99B3,#FFCE18,#00DEB5,#6EA5FF,#FF99B3);animation:secspin 3s linear infinite;box-shadow:0 20px 50px rgba(255,206,24,.35)}
-@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
-@keyframes secspin{to{--a:360deg}}
-.secret__in{width:100%;height:100%;border-radius:16px;background:#FFCE18 center/88% no-repeat;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:16px 10px}
-.secret__in span{font:400 11px 'LGU Pixel';letter-spacing:.1em;color:#16130e}
-.secret h2{font:900 italic 34px/.95 'LGU Sans';color:#FFCE18;margin:0}
-.secret p{font:600 italic 15px/1.4 'LGU Sans';color:#E6E3DC;margin:0;max-width:28ch}
-.secret button{background:#FFCE18;color:#16130e;border:0;border-radius:99px;padding:14px 26px;font:900 italic 15px 'LGU Sans';text-transform:uppercase}
+.tw{position:fixed;inset:0;z-index:9999;background:#0E0C0A;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;font-family:'LGU Sans',-apple-system,sans-serif;animation:twIn .5s both}
+@keyframes twIn{from{opacity:0}}
+.tw__ring{position:relative;width:min(340px,86vw);aspect-ratio:1}
+.tw__me,.tw__p{position:absolute;left:50%;top:50%;border-radius:50%;background:#2a241c center/cover;display:grid;place-items:center}
+.tw__me{width:34%;aspect-ratio:1;transform:translate(-50%,-50%) scale(0);border:4px solid #FFCE18;box-shadow:0 0 0 0 rgba(255,206,24,.6);font:900 italic 46px 'LGU Sans';color:#16130e;background-color:#FFCE18;animation:twMe .7s .3s cubic-bezier(.2,1.6,.4,1) forwards, twPulse 2s 4.6s ease-out infinite}
+@keyframes twMe{to{transform:translate(-50%,-50%) scale(1)}}
+@keyframes twPulse{0%{box-shadow:0 0 0 0 rgba(255,206,24,.55)}100%{box-shadow:0 0 0 28px rgba(255,206,24,0)}}
+.tw__p{width:21%;aspect-ratio:1;border:3px solid #fff;opacity:0;transform:translate(calc(-50% + var(--fx)),calc(-50% + var(--fy))) scale(.4) rotate(var(--rot));animation:twFly .75s var(--d) cubic-bezier(.2,1.3,.4,1) forwards}
+@keyframes twFly{to{opacity:1;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1) rotate(0)}}
+.tw__p b{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:5px;font:900 italic 12.5px 'LGU Sans';white-space:nowrap;color:#fff}
+.tw__line{position:absolute;left:50%;top:50%;height:2px;width:var(--len);transform-origin:0 50%;transform:rotate(var(--ang)) scaleX(0);background:linear-gradient(90deg,rgba(255,206,24,.9),rgba(255,206,24,.1));animation:twLine .5s var(--d) ease-out forwards}
+@keyframes twLine{to{transform:rotate(var(--ang)) scaleX(1)}}
+.tw__t{margin:46px 0 0;font:900 italic clamp(34px,10vw,46px)/.95 'LGU Sans';letter-spacing:-.04em;color:#FFCE18;text-align:center;opacity:0;transform:translateY(14px);animation:twUp .6s var(--d) forwards}
+.tw__s{margin:10px 0 0;font:600 italic 15px/1.4 'LGU Sans';color:#E6E3DC;text-align:center;opacity:0;animation:twUp .6s var(--d) forwards}
+.tw__b{margin-top:26px;background:#FFCE18;color:#16130e;border:0;border-radius:99px;padding:16px 30px;font:900 italic 16px 'LGU Sans';text-transform:uppercase;opacity:0;animation:twUp .6s var(--d) forwards}
+@keyframes twUp{to{opacity:1;transform:none}}
 `; document.head.appendChild(st);
 
-// ---------- 1. LE VIDEUR (dans Safari, avant installation) ----------
-function bouncer(){
-  const d=document.createElement("div"); d.className="vid"; document.body.appendChild(d);
-  const LOAD=["Vérification de ta tenue…","Contrôle des baskets…","Négociation avec le kebab…","Préchauffage du four à pizza…","Comptage des frites (une par une)…","Consultation du videur…"];
-  d.innerHTML=`<span class="vid__k">Le Guide Ultime · entrée VIP</span><div class="vid__guy">🕶️</div><h1 class="vid__t">Une seconde…</h1><div class="vid__bar"><i id="vb"></i></div><div class="vid__step" id="vs">${LOAD[0]}</div>`;
-  let k=0; const iv=setInterval(()=>{ k++; const b=d.querySelector("#vb"), s=d.querySelector("#vs"); if(!b){clearInterval(iv);return;} b.style.width=Math.min(99,k*19)+"%"; if(LOAD[k]) s.textContent=LOAD[k]; if(k>=6){ clearInterval(iv); verdict(); } },700);
-  function verdict(){
-    d.innerHTML=`<span class="vid__k">Le videur a tranché</span><div class="vid__guy">🙅‍♂️</div><h1 class="vid__t">Désolé,<br>t'es pas<br>sur la liste.</h1>
-    <p class="vid__p">Sauf si tu m'installes sur ton écran d'accueil. Là, t'es VIP. C'est la règle, je l'ai pas inventée.</p>
-    <div class="vid__steps">
-      <div class="vid__s"><b>1</b><span>Touche le bouton Partager ⬆️ en bas de Safari<small>Pas trouvé ? Il se cache derrière les « ••• » en bas à droite. Oui, Apple aime les cachettes.</small></span></div>
-      <div class="vid__s"><b>2</b><span>« Sur l'écran d'accueil »<small>Fais défiler, c'est tout en bas. Courage, t'as déjà fait le plus dur.</small></span></div>
-      <div class="vid__s"><b>3</b><span>« Ajouter », puis ouvre l'icône LGU<small>Et là, le videur te fait la bise. Promis.</small></span></div>
-    </div>
-    <button class="vid__skip" data-skip>Je préfère rester dehors sous la pluie</button>`;
-    const ar=document.createElement("div"); ar.className="vid__arrow"; ar.textContent="👇"; document.body.appendChild(ar);
-    d.querySelector("[data-skip]").onclick=()=>{ d.querySelector(".vid__t").innerHTML="Bon…<br>vas-y, rentre."; d.querySelector(".vid__p").textContent="Mais l'appli est 10 fois mieux installée. Le videur t'a à l'œil."; setTimeout(()=>{ d.remove(); ar.remove(); },1800); };
-  }
-}
-
-// ---------- 2. L'ACCUEIL PERSONNALISÉ (après « On t'appelle comment ? ») ----------
 const N = s => String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim();
-const ROASTS = {
-  paul:     {t:"Le boss est là.", p:"Toutes les cartes sont à toi, mais on te laisse faire semblant de les décrocher. Par politesse."},
-  marianne: {t:"Marianne, la vraie.", p:"Ex-restauratrice : tu vas noter les plaqués sur leur mise en place. Le serveur est prévenu."},
-  adelie:   {t:"Adélie !!!", p:"« Veut tout goûter. » On a compté : il te reste 2 297 adresses. Bonne chance, on t'attend en 2031."},
-  manon:    {t:"Manon, la pâtissière.", p:"Les catégories sucrées arrivent bientôt. On a préféré te prévenir avant que tu fasses une scène."},
-  laura:    {t:"Laura la dénicheuse.", p:"Si un resto n'est pas dans l'appli, c'est que tu l'as pas encore trouvé. Au boulot."},
-  roch:     {t:"Roch, chef !", p:"Restaurateur ET dans la bande ? Conflit d'intérêts détecté. On ferme les yeux pour cette fois."},
-  mae:      {t:"Maé.", p:"Glace et pizz' : on a vérifié, techniquement ça fait un repas complet. Ta compatibilité avec le gelato : 112 %."},
-  opa:      {t:"OPA est dans la place.", p:"Rap et street food : t'as droit à une carte bonus si tu ramènes une rime sur le kebab."}
-};
-window.LGU_HOOK_NAME=(name,next)=>{
-  const r=ROASTS[N(name)]||{t:`Bienvenue ${name} !`, p:"T'es pas dans notre liste de la team… Le videur se pose des questions. Mais on t'aime déjà."};
-  const ph=(typeof photoOf==="function"&&photoOf(name))||null;
-  const d=document.createElement("div"); d.className="roast";
-  d.innerHTML=`<span class="k">On t'attendait</span><div class="roast__ph" style="${ph?`background-image:url(${ph})`:""}">${ph?"":(name||"?")[0].toUpperCase()}</div><h2>${r.t}</h2><p>${r.p}</p><button>Ok, on y va</button>`;
-  document.body.appendChild(d); if(typeof confetti==="function") confetti(160);
-  d.querySelector("button").onclick=()=>{ d.remove(); window.LGU_HOOK_NAME=null; next(); };
-};
+const TEAM=["Marianne","Adélie","Manon","Laura","Roch","Maé","Opa"];
 
-// ---------- 3. LES SECRETS ----------
-function fritesRain(){ for(let i=0;i<46;i++){ const f=document.createElement("span"); f.className="frite"; f.textContent=["🍟","🍟","🍟","🌭","🍔"][i%5]; f.style.left=(Math.random()*100)+"vw"; f.style.setProperty("--r",(Math.random()*720-360)+"deg"); f.style.animationDuration=(1.6+Math.random()*1.8)+"s"; f.style.animationDelay=(Math.random()*.8)+"s"; document.body.appendChild(f); setTimeout(()=>f.remove(),4000); } toast("🍟 Il pleut des frites. T'as trouvé le secret n°1."); }
-function secretCard(){
-  const d=document.createElement("div"); d.className="secret";
-  d.innerHTML=`<span class="vid__k" style="color:#00DEB5">Secret n°2 débloqué</span><div class="secret__c"><div class="secret__in" style="background-image:url(${IMG.st_team})"><span>CARTE SECRÈTE</span><span>LÉGENDAIRE · 1/1</span></div></div><h2>La Team Ultime</h2><p>Une seule carte au monde, et elle est à toi. Dis-le dans le Slack avant les autres.</p><button>Je frime</button>`;
-  document.body.appendChild(d); if(typeof confetti==="function") confetti(240);
-  d.querySelector("button").onclick=()=>d.remove();
+function teamWaits(name,next){
+  const me=TEAM.find(t=>N(t)===N(name));
+  const others=TEAM.filter(t=>t!==me);
+  const myPh=(typeof photoOf==="function"&&photoOf(me||name))||null;
+  const n=others.length, R=40; // rayon en % du cercle
+  let h=`<div class="tw__ring">`;
+  others.forEach((t,i)=>{ const a=-Math.PI/2+i*2*Math.PI/n, x=Math.cos(a)*R, y=Math.sin(a)*R, d=(1.1+i*.42).toFixed(2)+"s";
+    const fa=a+(i%2?0.9:-0.9), fx=Math.cos(fa)*160, fy=Math.sin(fa)*160;
+    h+=`<span class="tw__line" style="--len:${R}%;--ang:${a}rad;--d:${(1.1+i*.42+.35).toFixed(2)}s"></span>`;
+    const ph=photoOf(t);
+    h+=`<span class="tw__p" style="--x:${x*3.4}px;--y:${y*3.4}px;--fx:${fx*1.6}px;--fy:${fy*1.6}px;--rot:${i%2?40:-40}deg;--d:${d};${ph?`background-image:url(${ph})`:""}"><b>${t}</b></span>`; });
+  h+=`<span class="tw__me" style="${myPh?`background-image:url(${myPh});background-color:#2a241c`:""}">${myPh?"":esc((name||"?")[0].toUpperCase())}</span></div>`;
+  const end=(1.1+n*.42+.4).toFixed(2);
+  h+=`<h1 class="tw__t" style="--d:${end}s">Ta bande<br>t'attendait.</h1><p class="tw__s" style="--d:${(+end+.35).toFixed(2)}s">${others.length} potes sont déjà dans l'appli, ${esc(name)}.</p><button class="tw__b" style="--d:${(+end+.7).toFixed(2)}s">Rejoindre la bande</button>`;
+  const d=document.createElement("div"); d.className="tw"; d.innerHTML=h; document.body.appendChild(d);
+  // les positions sont en px relatifs à la taille réelle du cercle
+  const ring=d.querySelector(".tw__ring"), w=ring.getBoundingClientRect().width/100;
+  d.querySelectorAll(".tw__p").forEach((p,i)=>{ const a=-Math.PI/2+i*2*Math.PI/n; p.style.setProperty("--x",Math.cos(a)*R*w+"px"); p.style.setProperty("--y",Math.sin(a)*R*w+"px"); });
+  setTimeout(()=>{ if(typeof confetti==="function") confetti(180); if(navigator.vibrate) navigator.vibrate([30,40,60]); }, +end*1000);
+  d.querySelector(".tw__b").onclick=()=>{ d.style.transition="opacity .4s"; d.style.opacity=0; setTimeout(()=>d.remove(),400); window.LGU_HOOK_NAME=null; next(); };
 }
-let lp=null, taps=0, tapT=null;
-document.addEventListener("pointerdown",e=>{ if(e.target.closest(".idc__top img, .splash__logo, .notif img")){ lp=setTimeout(()=>{ lp=null; fritesRain(); },650); } },true);
-["pointerup","pointercancel","pointerleave"].forEach(ev=>document.addEventListener(ev,()=>{ if(lp){ clearTimeout(lp); lp=null; } },true));
-document.addEventListener("click",e=>{ if(e.target.closest(".idc__top em")){ taps++; clearTimeout(tapT); tapT=setTimeout(()=>taps=0,1500); if(taps>=5){ taps=0; secretCard(); } } },true);
-
-// ---------- 4. LA NOTIF À 3 MIN, version vanne ----------
-notifMock=function(){
-  if(notifMock.done || !S.onb) return; notifMock.done=true;
-  const scanned=allCards().length;
-  const n=document.createElement("button"); n.className="notif";
-  n.innerHTML=`<img src="${IMG.badge}" alt=""><span class="grow"><span class="notif__h"><b>LE GUIDE ULTIME</b><span>maintenant</span></span><b>${esc(S.name)}, ça fait 3 minutes…</b><span>Tu scrolles, tu scrolles. Les plaqués, eux, t'attendent. Va scanner un truc. 👀</span></span>`;
-  $("#app").appendChild(n); requestAnimationFrame(()=>n.classList.add("is-on"));
-  const hide=()=>{ n.classList.remove("is-on"); setTimeout(()=>n.remove(),400); };
-  n.onclick=()=>{ hide(); openScan(); }; setTimeout(hide,7000);
-};
-
-if(!STANDALONE && !PREVIEW && !/[?&]entrer\b/.test(location.search)) bouncer();
+window.LGU_HOOK_NAME=teamWaits;
+window.LGU_TEAM_DEMO=()=>teamWaits(S.name||"Paul",()=>{});
 })();
 
 </script>
