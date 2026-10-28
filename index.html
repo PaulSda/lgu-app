@@ -2339,7 +2339,7 @@ function openCreatorsList(){
 function openInvite(){
   const d=sheet(`<div class="h2">Ramène ta bande</div><p class="sub">+50 pts pour toi à chaque pote qui s'inscrit avec ton code. Et un bonus de bienvenue pour lui.</p>
   <div class="friends">${FRIENDS.slice(0,3).map(f=>`<div class="crow">${avatar(f.n,f.c)}<span class="grow"><b>${esc(f.n)}</b><span>${f.k} cartes · déjà sur LGU</span></span><span class="fol" style="background:var(--noir);color:var(--jaune)">Ami</span></div>`).join("")}
-  ${["Léa","Nassim","Chloé"].map((n,i)=>`<div class="crow">${avatar(n,["#FFE27A","#BDEFD9","#FFC9D6"][i])}<span class="grow"><b>${n}</b><span>Dans tes contacts</span></span><button class="fol" data-inv="${n}">Inviter</button></div>`).join("")}</div>
+  ${SUGG.map(x=>x.n).map((n,i)=>`<div class="crow">${avatar(n,SUGG[i].c)}<span class="grow"><b>${n}</b><span>Dans tes contacts</span></span><button class="fol" data-inv="${n}">Inviter</button></div>`).join("")}</div>
   <p class="note">Contacts d'exemple. Dans l'appli, le matching se fait sur des empreintes chiffrées sur ton tel, jamais en clair.</p>`);
   d.querySelector(".sheet__body").onclick=e=>{ const b=e.target.closest("[data-inv]"); if(!b) return; b.textContent="Invité ✓"; b.style.background="var(--cyan)"; toast(`Invitation envoyée à ${esc(b.dataset.inv)}`); };
 }
@@ -2741,7 +2741,7 @@ function openInstaDemo(){
 const VERDICTS=["Banger","Banger","Validé","Validé","Bof"];
 const SUGG=[{n:"Manon",c:"#FFD8B0",mut:"Adélie"},{n:"Opa",c:"#D7F5A8",mut:"Roch"}];
 // potes ajoutés pendant la démo : on les recrée au chargement
-(S.added||[]).forEach(a=>{ if(!FRIENDS.some(f=>f.n===a.n)) addFriendData(a); });
+(S.added||[]).forEach(a=>{ if(PH[a.n]&&!FRIENDS.some(f=>f.n===a.n)) addFriendData(a); });
 function addFriendData(a){ const i=FRIENDS.length; FRIENDS.push({n:a.n,c:a.c,k:6+hash(a.n)%20,w:0}); const R=rng(hash(a.n)); const pool=PLACES.filter(p=>p.city==="Paris"); FR_OWN[i]=[...Array(6)].map(()=>pool[Math.floor(R()*pool.length)].id).filter((v,k,s)=>s.indexOf(v)===k); FR_COMPAT[i]=58+hash(a.n+"c")%35; return i; }
 const frVerdict = (i,pid) => VERDICTS[hash(FRIENDS[i].n+pid)%VERDICTS.length];
 function frRank(i,pid){ const c=PL(pid).c; const l=(FR_OWN[i]||[]).filter(p=>PL(p).c===c); return l.indexOf(pid)+1; }
@@ -2782,13 +2782,13 @@ function renderPotes(){
   <div class="sect" style="padding-top:6px"><div class="sect__h"><h2 class="h2">T'es compatible avec qui ?</h2></div>
     <p class="crew__hint" style="margin:-4px 0 10px">On compare vos cartes et vos tops : plus le % est haut, plus vous aimez les mêmes adresses.</p><div class="crew">${FRIENDS.map((f,i)=>`<button class="crew__m" data-friend="${i}" style="--p:${FR_COMPAT[i]}"><span class="crew__av" style="${avBg(f.n,f.c)}">${avTxt(f.n)}</span><b>${esc(f.n)}</b><em>${FR_COMPAT[i]} %</em></button>`).join("")}<button class="crew__m crew__m--add" data-add><span class="crew__av">+</span><b>Ajouter</b><em>&nbsp;</em></button></div>
     <p class="crew__hint">Touche un pote pour voir ce que vous avez en commun.</p></div>
+  <div class="sect"><button class="omo" data-group><div class="omo__stack">${(S.booster.ids.length?S.booster.ids:[0,1,2].filter(PL)).slice(0,3).map((id,k)=>cardHTML(PL(id).c,{resto:PL(id).n,style:`transform:rotate(${(k-1)*10}deg)`})).join("")}</div><div class="grow"><b>On mange où ?</b><span>Chacun swipe, l'appli tranche. Fini les 40 messages.</span><span class="omo__go">Lancer une partie →</span></div></button></div>
   <div class="sect"><div class="sect__h"><h2 class="h2">Cette semaine</h2><span class="eyebrow">${F.length} NOUVEAUTÉS</span></div>
     <div class="list wk">${F.slice(0,5).map(x=>{const f=FRIENDS[x.i], p=PL(x.pid), v=frVerdict(x.i,x.pid); return `<button class="li wk__r" data-place="${p.id}">${avatar(f.n,f.c)}<span class="grow"><b>${esc(f.n)}</b> a décroché <b>${esc(p.n)}</b><small>${ago(x.h)} · ${esc(p.c)}</small></span><span class="vtag vtag--${norm(v)}">${v}</span><span class="wk__c">${cardHTML(p.c,{resto:p.n})}</span></button>`;}).join("")}</div>
     <button class="btn btn--white btn--block" data-allfeed style="margin-top:12px">Voir tout le fil →</button></div>
   ${SP.length?`<div class="sect"><div class="sect__h"><h2 class="h2">Vos spots en commun</h2><span class="eyebrow">VALIDÉ PAR LA BANDE</span></div>
     <div class="hscroll spots">${SP.map(o=>`<button class="spot" data-place="${o.p.id}"><span class="spot__c">${cardHTML(o.p.c,{resto:o.p.n})}</span><span class="avs">${o.me?avatar(S.name,"var(--jaune)"):""}${o.fr.slice(0,3).map(i=>avatar(FRIENDS[i].n,FRIENDS[i].c)).join("")}</span><b>${esc(o.p.n)}</b><small>${o.fr.length+(o.me?1:0)} de la bande y sont allés</small></button>`).join("")}</div></div>`:""}
   <div class="sect"><div class="sect__h"><h2 class="h2">Tu les connais peut-être</h2></div><div class="hscroll">${SUGG.filter(s=>!FRIENDS.some(f=>f.n===s.n)).slice(0,4).map(s=>`<div class="sugg">${avatar(s.n,s.c)}<b>${esc(s.n)}</b><span>Ami·e de ${esc(s.mut)}</span><button class="btn btn--sm" data-addname="${esc(s.n)}">Ajouter</button></div>`).join("")||`<p class="sub">T'as ajouté tout le monde. Respect.</p>`}</div></div>
-  <div class="omofab"><button class="btn btn--red btn--block" data-group>${icon("bande")} On mange où ?</button></div>
   </div>`;
   t.onclick=e=>bandeClick(t,e);
 }
