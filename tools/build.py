@@ -12,6 +12,9 @@ import base64, hashlib, json, os, re, shutil, sys, glob
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'source')
+import subprocess
+try: VERSION = subprocess.check_output(['git','-C',ROOT,'log','-1','--format=%h %cs','--','source'],text=True).strip() or 'dev'
+except Exception: VERSION = 'dev'
 ENVS = {
     'prod':   {'out': ROOT,                         'key': 'lgu-app-v7',  'title': 'LGU',      'name': 'Le Guide Ultime', 'ribbon': None,   'team': False},
     'test':   {'out': os.path.join(ROOT, 'test'),   'key': 'lgu-test-v7', 'title': 'LGU Test', 'name': 'LGU Test',        'ribbon': 'TEST', 'team': False},
@@ -40,9 +43,12 @@ def core(env):
     imgs = {os.path.basename(p)[:-5]: 'data:image/webp;base64,' + b64(p) for p in sorted(glob.glob(os.path.join(SRC, 'img', '*.webp')))}
     if env != 'apercu':
         imgs = {k: (('img/%s.webp' % k) if k.startswith(EXTERNAL) else v) for k, v in imgs.items()}
-    js = read('app', 'app.js')
+    js = read('app', 'app.js') + '\n' + read('app', 'track.js')
     assert js.count('const KEY = "lgu-app-v7";') == 1, 'clé de stockage introuvable'
     js = js.replace('const KEY = "lgu-app-v7";', 'const KEY = "%s";' % E['key'])
+    keys = json.load(open(os.path.join(SRC, 'pwa', 'posthog.json')))
+    envjs = 'window.LGU_ENV=' + json.dumps({'env': env, 'key': keys.get(env), 'host': keys.get('host', 'https://eu.i.posthog.com'), 'version': VERSION}) + ';'
+    js = envjs + '\n' + js
     html = read('app', 'index.html')
     for tag, val in (('/*%%FONTS%%*/', css), ('/*%%CSS%%*/', read('app', 'style.css')), ('/*%%IMG%%*/', 'const IMG=' + json.dumps(imgs) + ';'), ('/*%%JS%%*/', js)):
         assert html.count(tag) == 1, tag

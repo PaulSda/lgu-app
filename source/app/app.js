@@ -1213,6 +1213,7 @@ function renderMoi(){
     <button class="li" data-list="saved"><span class="ic" style="background:var(--jaune)">${icon("bookmark")}</span><span class="grow">À tester<small>${S.saved.length} adresses sauvées</small></span>${icon("back","chev")}</button>
     <button class="li" data-list="print"><span class="ic" style="background:var(--rose)">${icon("box")}</span><span class="grow">Imprimer mes cartes<small>${cards.filter(x=>!isPrinted(x.p)).length} pas encore imprimées</small></span>${icon("back","chev")}</button>
     <button class="li" data-list="creators"><span class="ic" style="background:var(--cyan)">${icon("play")}</span><span class="grow">Créateurs suivis<small>${S.follow.length} créateurs</small></span>${icon("back","chev")}</button>
+    <button class="li" data-list="mesure"><span class="ic" style="background:var(--beige)">${icon("check")}</span><span class="grow">Mesure d'audience<small>${S.consent===true?"Activée : merci de nous aider !":"Désactivée"}</small></span><span class="tag ${S.consent===true?"tag--own":""}">${S.consent===true?"Oui":"Non"}</span></button>
   </div>
   <div class="eyebrow" style="margin-top:6px">Démos du prototype</div><div class="list">
     <button class="li" data-demo="notif"><span class="ic" style="background:var(--jaune)">${icon("clock")}</span><span class="grow">Notif de 11h45<small>Le plat du jour de la rédac</small></span>${icon("back","chev")}</button>
@@ -1234,6 +1235,7 @@ function renderMoi(){
     else if(b.dataset.list==="saved") openSaved();
     else if(b.dataset.list==="print") openShop();
     else if(b.dataset.list==="creators") openCreatorsList();
+    else if(b.dataset.list==="mesure"){ TRK.setConsent(S.consent!==true); renderMoi(); toast(S.consent?"Mesure activée. Merci !":"Mesure désactivée."); }
     else if(b.dataset.demo==="insta") openInstaDemo();
     else if(b.dataset.demo==="verif") openVerif();
     else if(b.dataset.demo==="notif"){ closeAll(); notifMock.done=false; notifMock(); }

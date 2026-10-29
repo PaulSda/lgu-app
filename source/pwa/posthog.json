@@ -1,0 +1,7 @@
+{
+  "_aide": "Clés publiques des 2 projets PostHog (Europe). test = projet « LGU Test », prod = projet « LGU Prod ». Vide = aucune mesure.",
+  "host": "https://eu.i.posthog.com",
+  "test": null,
+  "prod": null,
+  "team": null
+}
