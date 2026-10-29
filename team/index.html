@@ -3120,7 +3120,6 @@ let rz; window.addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout((
 loadData().catch(e=>console.warn(e)).finally(boot);
 
 </script>
-
 <script>
 // =========================================================
 // VERSION TEAM (lien /team/) : une seule surprise, « La team qui t'attend »
@@ -3184,6 +3183,7 @@ window.LGU_TEAM_DEMO=()=>teamWaits(S.name||"Paul",()=>{});
 })();
 
 </script>
+
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>{navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});let done=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(done)return;done=true;location.reload();});});}</script>
 </body>
 </html>
