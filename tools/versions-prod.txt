@@ -1,2 +1,3 @@
 # Versions mises en prod (nom  commit  date  résumé). Rempli automatiquement par publier-prod.sh.
 prod-v34-avant-restructuration  2f35d66  2026-10-29  Version partagée à la team le 28/10
+prod-20261029-1054  d3b8f5b  2026-10-29  Mesure d'audience PostHog en ligne (avec accord, env=prod)
