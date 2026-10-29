@@ -1,7 +1,7 @@
 {
-  "_aide": "Clés publiques des 2 projets PostHog (Europe). test = projet « LGU Test », prod = projet « LGU Prod ». Vide = aucune mesure.",
+  "_aide": "Plan gratuit PostHog = 1 seul projet (LGU Prod). Test et Prod envoient dans le même projet, séparés par la propriété env (test/prod) ; un filtre global du projet exclut env=test des tableaux de bord.",
   "host": "https://eu.i.posthog.com",
-  "test": null,
-  "prod": null,
+  "test": "phc_Ae9gubHSMaFhR6NLNGvUWfHgoYXdhjXgYNiEFhWavMUj",
+  "prod": "phc_Ae9gubHSMaFhR6NLNGvUWfHgoYXdhjXgYNiEFhWavMUj",
   "team": null
 }
