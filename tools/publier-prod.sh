@@ -13,7 +13,7 @@ python3 tools/build.py prod
 node tools/check.js prod
 # 3. publier, puis noter la version (nom -> commit) pour pouvoir revenir en arrière
 NAME="prod-$(date +%Y%m%d-%H%M)"
-git add -A . ':!build'
+git add -A
 git commit -m "prod: [$NAME] $MSG"
 echo "$NAME  $(git rev-parse --short HEAD)  $(date +%F)  $MSG" >> tools/versions-prod.txt
 git add tools/versions-prod.txt && git commit -qm "versions: $NAME"
