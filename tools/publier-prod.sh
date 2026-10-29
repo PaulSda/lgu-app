@@ -11,12 +11,12 @@ if [ -n "$(git diff --name-only "$LAST_TEST" HEAD -- source)" ]; then echo "✗ 
 # 2. construire et vérifier la prod
 python3 tools/build.py prod
 node tools/check.js prod
-# 3. publier + étiquette de version pour pouvoir revenir en arrière
-TAG="prod-$(date +%Y%m%d-%H%M)"
+# 3. publier, puis noter la version (nom -> commit) pour pouvoir revenir en arrière
+NAME="prod-$(date +%Y%m%d-%H%M)"
 git add -A . ':!build'
-git commit -m "prod: $MSG"
-git tag -a "$TAG" -m "$MSG"
-git push -q && git push -q origin "$TAG"
-echo "✓ En PROD : $TAG"
-echo "  Retour arrière possible : tools/retour-arriere.sh $TAG-1 (ou une autre étiquette prod-…)"
-git tag -l 'prod-*' | tail -5
+git commit -m "prod: [$NAME] $MSG"
+echo "$NAME  $(git rev-parse --short HEAD)  $(date +%F)  $MSG" >> tools/versions-prod.txt
+git add tools/versions-prod.txt && git commit -qm "versions: $NAME"
+git push -q
+echo "✓ En PROD : $NAME"
+echo "  Versions disponibles pour un retour arrière :"; tail -5 tools/versions-prod.txt

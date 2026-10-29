@@ -28,7 +28,8 @@ tools/
   build.py           construit test / prod / team / apercu à partir de source/
   check.js           vérifications automatiques (4 tailles d'écran, tous les écrans, parcours de scan)
   publier-test.sh    construit + vérifie + met en ligne sur /test/
-  publier-prod.sh    met en prod EXACTEMENT ce qui a été validé en test (+ étiquette de version)
+  publier-prod.sh    met en prod EXACTEMENT ce qui a été validé en test (+ note la version dans versions-prod.txt)
+  versions-prod.txt  liste des versions mises en prod (nom → commit) pour le retour arrière
   retour-arriere.sh  remet la prod à une version précédente
 index.html, sw.js, img/…   ← PROD générée (ne jamais modifier à la main)
 test/                      ← TEST généré (ne jamais modifier à la main)
@@ -41,9 +42,9 @@ team/                      ← version team, figée
 2. Modifier **uniquement** `source/`.
 3. `tools/publier-test.sh "ce qui a changé"` → construit, lance `check.js` (bloque à la moindre erreur), met en ligne sur `/test/`.
 4. Montrer le résultat à Paul (captures + lien Test). **Attendre son « go ».**
-5. `tools/publier-prod.sh "résumé"` → refuse si le code a bougé depuis le Test ; reconstruit la prod depuis le même code, revérifie, publie, pose une étiquette `prod-AAAAMMJJ-HHMM`.
+5. `tools/publier-prod.sh "résumé"` → refuse si le code a bougé depuis le Test ; reconstruit la prod depuis le même code, revérifie, publie et note la version `prod-AAAAMMJJ-HHMM` dans `tools/versions-prod.txt`.
 6. Ajouter une ligne au journal des versions (doc du projet « Journal des versions »).
-7. En cas de souci en prod : `tools/retour-arriere.sh prod-…` (liste : `git tag -l 'prod-*'`).
+7. En cas de souci en prod : `tools/retour-arriere.sh prod-…` (liste : `tools/versions-prod.txt`). Les étiquettes git (tags) ne peuvent pas être envoyées depuis Claude : on utilise ce fichier à la place.
 
 Les téléphones récupèrent la nouvelle version à la prochaine ouverture (service worker « réseau d'abord », nom de cache = empreinte du contenu).
 
